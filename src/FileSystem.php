@@ -11,20 +11,22 @@ class FileSystem implements IFileSystem
 		$this->path = $path;
 	}
 	
-	public function makeDirectory($id = null)
+	public function makeDirectory()
 	{
-		if (is_null($id)) {
-			$id = $this->nextId();
-		}
-		
+		$id = $this->nextId();
+
 		$path = $this->path . '/' . $id;
 		mkdir($path);
+		
+		return $id;
 	}
 	
 	public function addLink($fromId, $toId)
 	{
 		$fromPath = $this->path . '/' . $fromId;
 		$toPath = $this->path . '/' . $toId;
+		var_dump($fromPath);
+		var_dump($toPath);
 		symlink($fromPath, $toPath);
 	}
 	

@@ -3,6 +3,6 @@ namespace Comode;
 
 interface IFileSystem
 {
-	public function makeDirectory($id = null);
+	public function makeDirectory();
 	public function addLink($fromId, $toId);
 }
