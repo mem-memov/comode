@@ -11,6 +11,12 @@ class FileSystem implements IFileSystem
 		$this->path = $path;
 	}
 	
+	public function directoryExists($id)
+	{
+		$path = $this->path . '/' . $id;
+		return file_exists($path);
+	}
+	
 	public function makeDirectory()
 	{
 		$id = $this->nextId();
@@ -23,11 +29,14 @@ class FileSystem implements IFileSystem
 	
 	public function addLink($fromId, $toId)
 	{
-		$fromPath = $this->path . '/' . $fromId;
+		$fromPath = $this->path . '/' . $fromId . '/' . $toId;
+		
+		if (file_exists($fromPath)) {
+			return;
+		}
+		
 		$toPath = $this->path . '/' . $toId;
-		var_dump($fromPath);
-		var_dump($toPath);
-		symlink($fromPath, $toPath);
+		symlink($toPath, $fromPath);
 	}
 	
 	private function nextId()

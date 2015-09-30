@@ -12,6 +12,10 @@ class Node implements INode
 		
 		if (is_null($id)) {
 			$id = $this->fileSystem->makeDirectory();
+		} else {
+			if (!$this->fileSystem->directoryExists($id)) {
+				throw new NoIdWhenRetrievingNode();
+			}
 		}
 		
 		$this->id = $id;
