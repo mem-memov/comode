@@ -6,7 +6,7 @@ class Factory implements IFactory {
     private $controllerFactory;
     
     public function __construct(
-        \WebApi\routerrequest\IRequest $request,
+        \WebApi\router\request\IRequest $request,
         \service\IFactory $serviceFactory,
         \domain\IFactory $domainFactory
     ) {
