@@ -1,5 +1,5 @@
 <?php
-namespace service\router;
+namespace WebApi\router;
 class PhpArray implements IRouter {
   
     private $partFactory;

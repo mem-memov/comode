@@ -1,5 +1,5 @@
 <?php
-namespace service\router\part;
+namespace WebApi\router\part;
 class Factory implements IFactory {
   
     private $actionFactory;

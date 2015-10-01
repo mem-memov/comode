@@ -1,5 +1,5 @@
 <?php
-namespace service\router\request;
+namespace WebApi\router\request;
 interface IRequest {
     
     public function hasPost($parameter);

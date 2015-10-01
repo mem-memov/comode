@@ -1,5 +1,5 @@
 <?php
-namespace service\router\action\controller\response;
+namespace WebApi\router\action\controller\response;
 class Factory implements IFactory {
     
     public function html($html) {

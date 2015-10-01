@@ -1,5 +1,5 @@
 <?php
-namespace service\router\action;
+namespace WebApi\router\action;
 interface IFactory {
   
     public function controller(array $data);

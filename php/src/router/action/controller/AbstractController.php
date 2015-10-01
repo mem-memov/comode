@@ -1,5 +1,5 @@
 <?php
-namespace service\router\action\controller;
+namespace WebApi\router\action\controller;
 abstract class AbstractController {
 
     protected $serviceFactory;

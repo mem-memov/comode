@@ -1,5 +1,5 @@
 <?php
-namespace service\router\action;
+namespace WebApi\router\action;
 class Controller implements IAction {
     
     private $controller;

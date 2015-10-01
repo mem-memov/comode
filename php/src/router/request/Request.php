@@ -1,5 +1,5 @@
 <?php
-namespace service\router\request;
+namespace WebApi\router\request;
 class Request implements IRequest {
   
     private $post;

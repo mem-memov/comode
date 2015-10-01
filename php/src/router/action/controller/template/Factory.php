@@ -1,5 +1,5 @@
 <?php
-namespace service\router\action\controller\template;
+namespace WebApi\router\action\controller\template;
 class Factory implements IFactory {
     
     private $baseDirectoryPath;
