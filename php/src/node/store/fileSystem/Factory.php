@@ -13,28 +13,8 @@ class Factory implements IFactory
     
     public function makeFileSystem()
     {
-        if (!$this->instances[__FUNCTION__]) {
-            $this->instances[__FUNCTION__] = new FileSystem($this->makeOs());
-            
-        }
-        
-        return $this->instances[__FUNCTION__];
-    }
-
-    private function makeOs()
-    {
-        if (!$this->instances[__FUNCTION__]) {
-            switch ($this->config['os']) {
-                case 'Windows':
-                    $this->instances[__FUNCTION__] = $this->makeWindows();
-                    break;
-                case 'Linux':
-                    $this->instances[__FUNCTION__] = $this->makeLinux();
-                    break;
-                default:
-                    throw new UnknownOsType();
-                    break;
-            }
+        if (!isset($this->instances[__FUNCTION__])) {
+            $this->instances[__FUNCTION__] = new FileSystem($this->config['path']);
             
         }
         

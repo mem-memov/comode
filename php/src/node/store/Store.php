@@ -1,20 +1,27 @@
 <?php
 namespace Comode\node\store;
 
-interface Store implements IStore
+class Store implements IStore
 {
-	public function itemExists($id)
-	{
-	    
-	}
-	
-	public function makeItem()
-	{
-	    
-	}
-	
-	public function linkItems($fromId, $toId)
-	{
-	    
-	}
+    private $store;
+    
+    public function __construct(IStore $store)
+    {
+        $this->store = $store;
+    }
+    
+    public function itemExists($id)
+    {
+        return $this->store->itemExists($id);
+    }
+
+    public function createItem()
+    {
+        return $this->store->createItem();
+    }
+
+    public function linkItems($fromId, $toId)
+    {
+        return $this->store->linkItems($fromId, $toId);
+    }
 }

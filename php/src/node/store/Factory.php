@@ -13,7 +13,7 @@ class Factory implements IFactory
     
     public function makeStore()
     {
-        if (!$this->instances[__FUNCTION__]) {
+        if (!isset($this->instances[__FUNCTION__])) {
             switch ($this->config['type']) {
                 case 'fileSystem':
                     $this->instances[__FUNCTION__] = $this->makeFileSystemStore();
@@ -30,17 +30,17 @@ class Factory implements IFactory
     
     private function makeFileSystemStore()
     {
-        if (!$this->instances[__FUNCTION__]) {
+        if (!isset($this->instances[__FUNCTION__])) {
             $this->instances[__FUNCTION__] = $this->makeFileSystemFactory()->makeFileSystem();
         }
-        
+
         return $this->instances[__FUNCTION__];
     }
     
     private function makeFileSystemFactory()
     {
-        if (!$this->instances[__FUNCTION__]) {
-            $this->instances[__FUNCTION__] = new fileSystem\Factory($this->config['fileSystem']);
+        if (!isset($this->instances[__FUNCTION__])) {
+            $this->instances[__FUNCTION__] = new fileSystem\Factory($this->config);
         }
         
         return $this->instances[__FUNCTION__];

@@ -1,19 +1,21 @@
 <?php
 namespace Comode\node;
 
+use Comode\node\store\IStore;
+
 class Node implements INode
 {
-	private $fileSystem;
+	private $store;
 	private $id;
 	
-	public function __construct(IFileSystem $fileSystem, $id = null)
+	public function __construct(IStore $store, $id = null)
 	{
-		$this->fileSystem = $fileSystem;
+		$this->store = $store;
 		
 		if (is_null($id)) {
-			$id = $this->fileSystem->makeDirectory();
+			$id = $this->store->createItem();
 		} else {
-			if (!$this->fileSystem->directoryExists($id)) {
+			if (!$this->store->itemExists($id)) {
 				throw new NoIdWhenRetrievingNode();
 			}
 		}
@@ -28,7 +30,7 @@ class Node implements INode
 	
 	public function addNode($id = null)
 	{
-		$addedNode = new Node($this->fileSystem, $id);
-		$this->fileSystem->addLink($this->id, $addedNode->getId());
+		$addedNode = new Node($this->store, $id);
+		$this->store->linkItems($this->id, $addedNode->getId());
 	}
 }

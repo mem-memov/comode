@@ -1,7 +1,7 @@
 <?php
-namespace Comode\node\store;
+namespace Comode\node\store\fileSystem;
 
 interface IFactory
 {
-    public function makeStore();
+    public function makeFileSystem();
 }

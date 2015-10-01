@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node\store;
 
-interface Factory
+interface IFactory
 {
     /**
      * @return Comode\node\store\IStore
