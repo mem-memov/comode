@@ -2,7 +2,6 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $config = require 'config.php';
-$path = realpath(__DIR__ . '/store');
-$fileSystem = new Comode\FileSystem($path);
-$node = new Comode\Node($fileSystem);
+$nodeFactory = new Comode\node\Factory($config['node']);
+$node = $nodeFactory->makeNode();
 $node->addNode();
