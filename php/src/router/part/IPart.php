@@ -4,7 +4,7 @@ interface IPart {
   
     public function run();
     public function setAction(
-        \service\router\action\IAction $action
+        \WebApi\routeraction\IAction $action
     );
   
 }

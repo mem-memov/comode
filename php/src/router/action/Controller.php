@@ -20,7 +20,7 @@ class Controller implements IAction {
     
     /**
      * 
-     * @return \service\router\IResponse
+     * @return \WebApi\routerIResponse
      */
     public function run() {
       //var_dump(get_class($this->controller));      

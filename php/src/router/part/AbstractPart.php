@@ -17,7 +17,7 @@ class AbstractPart implements IPart {
     }
     
     public function setAction(
-        \service\router\action\IAction $action
+        \WebApi\routeraction\IAction $action
     ) {
       
         $this->action = $action;

@@ -5,7 +5,7 @@ class Factory implements IFactory {
     private $actionFactory;
     
     public function __construct(
-        \service\router\action\IFactory $actionFactory
+        \WebApi\routeraction\IFactory $actionFactory
     ) {
       
         $this->actionFactory = $actionFactory;

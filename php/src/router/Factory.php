@@ -2,7 +2,7 @@
 namespace WebApi\router;
 class Factory implements IFactory {
 
-    /** @var \service\router\part\IFactory */
+    /** @var \WebApi\routerpart\IFactory */
     private $partFactory;
     
     public function __construct(
