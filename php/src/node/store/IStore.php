@@ -5,7 +5,8 @@ use Comode\node\value\IValue;
 
 interface IStore
 {
-	public function itemExists($id);
-	public function createItem(IValue $value = null);
-	public function linkItems($fromId, $toId);
+	public function idExists($id);
+	public function createId(IValue $value = null);
+	public function linkIds($fromId, $toId);
+        public function getChildIds($id);
 }

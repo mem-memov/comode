@@ -45,13 +45,13 @@ class FileSystem implements IStore
             }
 	}
 	
-	public function itemExists($id)
+	public function idExists($id)
 	{
             $path = $this->graphPath . '/' . $id;
             return file_exists($path);
 	}
 	
-	public function createItem(IValue $value = null)
+	public function createId(IValue $value = null)
 	{
 		$id = $this->nextId();
 
@@ -88,7 +88,7 @@ class FileSystem implements IStore
 		return $id;
 	}
 	
-	public function linkItems($fromId, $toId)
+	public function linkIds($fromId, $toId)
 	{
             $fromPath = $this->graphPath . '/' . $fromId . '/' . $toId;
 
@@ -99,6 +99,22 @@ class FileSystem implements IStore
             $toPath = $this->graphPath . '/' . $toId;
             symlink($toPath, $fromPath);
 	}
+        
+        public function getChildIds($id)
+        {
+            $path = $this->graphPath . '/' . $id;
+            $offset = strlen($path) + 1;
+            
+            $childPaths = glob($path . '/*');
+
+            $childIds = [];
+            foreach ($childPaths as $childPath) {
+                $childId = (int)substr($childPath, $offset);
+                array_push($childIds, $childId);
+            }
+            
+            return $childIds;
+        }
 	
 	private function nextId()
 	{

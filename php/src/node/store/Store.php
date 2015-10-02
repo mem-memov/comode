@@ -10,18 +10,23 @@ class Store implements IStore
         $this->store = $store;
     }
     
-    public function itemExists($id)
+    public function idExists($id)
     {
-        return $this->store->itemExists($id);
+        return $this->store->idExists($id);
     }
 
-    public function createItem()
+    public function createId()
     {
-        return $this->store->createItem();
+        return $this->store->createId();
     }
 
-    public function linkItems($fromId, $toId)
+    public function linkIds($fromId, $toId)
     {
-        return $this->store->linkItems($fromId, $toId);
+        return $this->store->linkIds($fromId, $toId);
+    }
+    
+    public function getChildIds($id)
+    {
+        return $this->store->getChildIds($id);
     }
 }

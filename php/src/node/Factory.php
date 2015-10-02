@@ -24,6 +24,22 @@ class Factory
         return new Node($store, $id, $value);
     }
     
+    public function getChildNodes(INode $node)
+    {
+        $store = $this->makeStore();
+        
+        $childIds = $store->getChildIds($node->getId());
+        
+        $childNodes = [];
+        
+        foreach ($childIds as $childId) {
+            $childNode = $this->makeNode($childId);
+            array_push($childNodes, $childNode);
+        }
+        
+        return $childNodes;
+    }
+    
     private function makeValue($value)
     {
         $valueFactory = $this->makeValueFactory();

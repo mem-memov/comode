@@ -6,7 +6,7 @@ use Comode\node\value\IValue;
 
 class Node implements INode
 {
-	private $store;
+        private $store;
 	private $id;
 	private $value;
 	
@@ -15,9 +15,9 @@ class Node implements INode
 		$this->store = $store;
 		
 		if (is_null($id)) {
-			$id = $this->store->createItem($value);
+			$id = $this->store->createId($value);
 		} else {
-			if (!$this->store->itemExists($id)) {
+			if (!$this->store->idExists($id)) {
 				throw new NoIdWhenRetrievingNode();
 			}
 		}
@@ -32,6 +32,16 @@ class Node implements INode
 	
 	public function addNode(INode $node)
 	{
-		$this->store->linkItems($this->id, $node->getId());
+		$this->store->linkIds($this->id, $node->getId());
 	}
+        
+        public function getChildNodes()
+        {
+            return $this->store->getChildIds($this->id);
+        }
+        
+        public function getValue()
+        {
+            
+        }
 }
