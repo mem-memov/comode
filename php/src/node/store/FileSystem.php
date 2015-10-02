@@ -46,7 +46,10 @@ class FileSystem implements IStore
 		
 		if (!is_null($value)) {
 		    $hashPath = $this->valuePath . '/' . $value->hash();
-		    mkdir($hashPath, 0777, true);
+                    if (!file_exists($hashPath)) {
+                        mkdir($hashPath, 0777, true);
+                    }
+		    
 		}
 		
 		return $id;
@@ -59,8 +62,6 @@ class FileSystem implements IStore
             if (file_exists($fromPath)) {
                 return;
             }
-            
-            mkdir($valuePath, 0777, true);
 
             $toPath = $this->graphPath . '/' . $toId;
             symlink($toPath, $fromPath);
