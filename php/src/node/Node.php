@@ -15,7 +15,7 @@ class Node implements INode
 		$this->store = $store;
 		
 		if (is_null($id)) {
-			$id = $this->store->createItem();
+			$id = $this->store->createItem($value);
 		} else {
 			if (!$this->store->itemExists($id)) {
 				throw new NoIdWhenRetrievingNode();

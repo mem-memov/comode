@@ -1,6 +1,8 @@
 <?php
 namespace Comode\node\store;
 
+use Comode\node\value\IValue;
+
 class FileSystem implements IStore
 {
 	private $path;
@@ -35,12 +37,17 @@ class FileSystem implements IStore
             return file_exists($path);
 	}
 	
-	public function createItem()
+	public function createItem(IValue $value = null)
 	{
 		$id = $this->nextId();
 
-		$path = $this->graphPath . '/' . $id;
-		mkdir($path, 0777, true);
+		$itemPath = $this->graphPath . '/' . $id;
+		mkdir($itemPath, 0777, true);
+		
+		if (!is_null($value)) {
+		    $hashPath = $this->valuePath . '/' . $value->hash();
+		    mkdir($hashPath, 0777, true);
+		}
 		
 		return $id;
 	}
@@ -52,6 +59,8 @@ class FileSystem implements IStore
             if (file_exists($fromPath)) {
                 return;
             }
+            
+            mkdir($valuePath, 0777, true);
 
             $toPath = $this->graphPath . '/' . $toId;
             symlink($toPath, $fromPath);
