@@ -2,13 +2,15 @@
 namespace Comode\node;
 
 use Comode\node\store\IStore;
+use Comode\node\value\IValue;
 
 class Node implements INode
 {
 	private $store;
 	private $id;
+	private $value;
 	
-	public function __construct(IStore $store, $id = null)
+	public function __construct(IStore $store, $id = null, IValue $value = null)
 	{
 		$this->store = $store;
 		
@@ -28,9 +30,8 @@ class Node implements INode
 		return $this->id;
 	}
 	
-	public function addNode($id = null)
+	public function addNode(INode $node)
 	{
-		$addedNode = new Node($this->store, $id);
-		$this->store->linkItems($this->id, $addedNode->getId());
+		$this->store->linkItems($this->id, $node->getId());
 	}
 }

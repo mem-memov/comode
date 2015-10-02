@@ -1,14 +1,11 @@
 <?php
-namespace Comode\node\store\fileSystem;
-
-use Comode\node\store\IStore;
-use Comode\node\store\fileSystem\os\IOs;
+namespace Comode\node\store;
 
 class FileSystem implements IStore
 {
 	private $path;
-        private $graphPath;
-        private $valuePath;
+    private $graphPath;
+    private $valuePath;
 	private $idFile = 'lastId';
 
 	public function __construct($path)
@@ -19,7 +16,7 @@ class FileSystem implements IStore
                 mkdir($this->path, 0777, true);
             }
             
-            $this->graphPath = $this->path . '/graph';
+            $this->graphPath = $this->path . '/node';
             
             if (!file_exists($this->graphPath)) {
                 mkdir($this->graphPath, 0777, true);

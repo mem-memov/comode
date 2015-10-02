@@ -1,33 +1,79 @@
 <?php
 namespace Comode\node;
 
-class Factory implements IFactory
+class Factory
 {
     private $config;
-    private $instances = [];
+    private $storeFactory;
+    private $valueFactory;
+    private $store;
 
     public function __construct($config)
     {
         $this->config = $config;
     }
     
-    public function makeNode($id = null)
+    public function makeNode($id = null, $value = null)
     {
-        $storeFactory = $this->makeStoreFactory();
-        $store = $storeFactory->makeStore();
-        return new Node($store, $id);
+        $store = $this->makeStore();
+        
+        if (!is_null($value)) {
+            $value = $this->makeValue($value);
+        }
+        
+        return new Node($store, $id, $value);
     }
     
-    /**
-     * 
-     * @return \Comode\node\store\IFactory
-     */
+    private function makeValue($value)
+    {
+        $valueFactory = $this->makeValueFactory();
+        
+        if (file_exists($value)) {
+            
+            return $valueFactory->makeFile($value);
+            
+        } else {
+            
+            return $valueFactory->makeString($value);
+            
+        }
+    }
+    
+    private function makeStore()
+    {
+        $storeFactory = $this->makeStoreFactory();
+        
+        if (!isset($this->store)) {
+            
+            switch ($this->config['store']['type']) {
+                case 'fileSystem':
+                    $this->store = $storeFactory->makeFileSystem();
+                    break;
+                default:
+                    throw new UnknownStoreType();
+                    break;
+            }
+            
+        }
+        
+        return $this->store;
+    }
+    
     private function makeStoreFactory()
     {
-        if (!isset($this->instances[__FUNCTION__])) {
-            $this->instances[__FUNCTION__] = new store\Factory($this->config['store']);
+        if (!isset($this->storeFactory)) {
+            $this->storeFactory = new store\Factory($this->config['store']);
         }
 
-        return $this->instances[__FUNCTION__];
+        return $this->storeFactory;
+    }
+    
+    private function makeValueFactory()
+    {
+        if (!isset($this->valueFactory)) {
+            $this->valueFactory = new value\Factory();
+        }
+
+        return $this->valueFactory;
     }
 }
