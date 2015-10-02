@@ -121,7 +121,7 @@ class FileSystem implements IStore
             $path = $this->valueToNodeIndexPath . '/' . $value->hash();
             $offset = strlen($path) + 1;
             
-            $paths = $childPaths = glob($path . '/*');
+            $paths = glob($path . '/*');
             
             $ids = [];
             foreach ($paths as $path) {
@@ -131,6 +131,15 @@ class FileSystem implements IStore
             
             return $ids;
         }
+        
+    public function getValue($id)
+    {
+        $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
+        
+        $paths = glob($nodeToValueIndexPath . '/*');
+        
+        
+    }
 	
 	private function nextId()
 	{

@@ -42,6 +42,6 @@ class Node implements INode
         
         public function getValue()
         {
-            
+            return $this->store->getValue($this->id);
         }
 }

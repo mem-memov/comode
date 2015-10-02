@@ -34,4 +34,9 @@ class Store implements IStore
     {
         return $this->store->getIdsByValue($value);
     }
+    
+    public function getValue($id)
+    {
+        return $this->store->getValue($id);
+    }
 }
