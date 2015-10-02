@@ -8,4 +8,4 @@ $node2 = $nodeFactory->makeNode();
 $node3 = $nodeFactory->makeNode();
 $node1->addNode($node2);
 $node1->addNode($node3);
-var_dump($nodeFactory->getChildNodes($node1));
+var_dump($nodeFactory->getNodesByValue('когда?'));

@@ -115,6 +115,22 @@ class FileSystem implements IStore
             
             return $childIds;
         }
+        
+        public function getIdsByValue(IValue $value)
+        {
+            $path = $this->valueToNodeIndexPath . '/' . $value->hash();
+            $offset = strlen($path) + 1;
+            
+            $paths = $childPaths = glob($path . '/*');
+            
+            $ids = [];
+            foreach ($paths as $path) {
+                $id = (int)substr($path, $offset);
+                array_push($ids, $id);
+            }
+            
+            return $ids;
+        }
 	
 	private function nextId()
 	{

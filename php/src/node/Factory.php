@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node;
 
-class Factory
+class Factory implements IFactory
 {
     private $config;
     private $storeFactory;
@@ -38,6 +38,21 @@ class Factory
         }
         
         return $childNodes;
+    }
+    
+    public function getNodesByValue($value)
+    {
+        $value = $this->makeValue($value);
+        $ids = $this->store->getIdsByValue($value);
+        
+        $nodes = [];
+        
+        foreach ($ids as $id) {
+            $node = $this->makeNode($id);
+            array_push($nodes, $node);
+        }
+        
+        return $nodes;
     }
     
     private function makeValue($value)

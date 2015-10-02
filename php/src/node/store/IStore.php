@@ -9,4 +9,5 @@ interface IStore
 	public function createId(IValue $value = null);
 	public function linkIds($fromId, $toId);
         public function getChildIds($id);
+        public function getIdsByValue(IValue $value);
 }

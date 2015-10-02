@@ -29,4 +29,9 @@ class Store implements IStore
     {
         return $this->store->getChildIds($id);
     }
+    
+    public function getIdsByValue(IValue $value)
+    {
+        return $this->store->getIdsByValue($value);
+    }
 }
