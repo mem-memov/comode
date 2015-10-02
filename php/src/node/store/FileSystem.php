@@ -5,10 +5,12 @@ use Comode\node\value\IValue;
 
 class FileSystem implements IStore
 {
-	private $path;
+    private $path;
     private $graphPath;
     private $valuePath;
-	private $idFile = 'lastId';
+    private $valueToNodeIndexPath;
+    private $nodeToValueIndexPath;
+    private $idFile = 'lastId';
 
 	public function __construct($path)
 	{
@@ -29,6 +31,18 @@ class FileSystem implements IStore
             if (!file_exists($this->valuePath)) {
                 mkdir($this->valuePath, 0777, true);
             }
+            
+            $this->valueToNodeIndexPath = $this->path . '/value_to_node';
+            
+            if (!file_exists($this->valueToNodeIndexPath)) {
+                mkdir($this->valueToNodeIndexPath, 0777, true);
+            }
+            
+            $this->nodeToValueIndexPath = $this->path . '/node_to_value';
+            
+            if (!file_exists($this->nodeToValueIndexPath)) {
+                mkdir($this->nodeToValueIndexPath, 0777, true);
+            }
 	}
 	
 	public function itemExists($id)
@@ -45,11 +59,30 @@ class FileSystem implements IStore
 		mkdir($itemPath, 0777, true);
 		
 		if (!is_null($value)) {
-		    $hashPath = $this->valuePath . '/' . $value->hash();
-                    if (!file_exists($hashPath)) {
-                        mkdir($hashPath, 0777, true);
+                    $valueHash = $value->hash();
+                    
+                    $valuePath = $this->valuePath . '/' . $valueHash;
+                    if (!file_exists($valuePath)) {
+                        mkdir($valuePath, 0777, true);
                     }
-		    
+                    $content = $value->get();
+                    if (file_exists($content)) {
+                        copy($content, $valuePath . basename($content));
+                    } else {
+                        file_put_contents($valuePath . '/value.txt', $content);
+                    }
+                    
+		    $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
+                    if (!file_exists($valueToNodeIndexPath)) {
+                        mkdir($valueToNodeIndexPath, 0777, true);
+                    }
+                    symlink($itemPath, $valueToNodeIndexPath . '/' . $id);
+                    
+		    $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
+                    if (!file_exists($nodeToValueIndexPath)) {
+                        mkdir($nodeToValueIndexPath, 0777, true);
+                    }
+                    symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
 		}
 		
 		return $id;
