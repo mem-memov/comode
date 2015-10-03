@@ -14,49 +14,37 @@ class FileSystem implements IStore
 
 	public function __construct($path)
 	{
-            $this->path = $path;
-            
-            if (!file_exists($this->path)) {
-                mkdir($this->path, 0777, true);
-            }
-            
-            $this->graphPath = $this->path . '/node';
-            
-            if (!file_exists($this->graphPath)) {
-                mkdir($this->graphPath, 0777, true);
-            }
-            
-            $this->valuePath = $this->path . '/value';
-            
-            if (!file_exists($this->valuePath)) {
-                mkdir($this->valuePath, 0777, true);
-            }
-            
-            $this->valueToNodeIndexPath = $this->path . '/value_to_node';
-            
-            if (!file_exists($this->valueToNodeIndexPath)) {
-                mkdir($this->valueToNodeIndexPath, 0777, true);
-            }
-            
-            $this->nodeToValueIndexPath = $this->path . '/node_to_value';
-            
-            if (!file_exists($this->nodeToValueIndexPath)) {
-                mkdir($this->nodeToValueIndexPath, 0777, true);
-            }
+        $this->path = $path;
+        
+        if (!file_exists($this->path)) {
+            mkdir($this->path, 0777, true);
+        }
+        
+        $this->graphPath = $this->path . '/node';
+        
+        if (!file_exists($this->graphPath)) {
+            mkdir($this->graphPath, 0777, true);
+        }
+        
+        $this->valuePath = $this->path . '/value';
+        
+        if (!file_exists($this->valuePath)) {
+            mkdir($this->valuePath, 0777, true);
+        }
+        
+        $this->valueToNodeIndexPath = $this->path . '/value_to_node';
+        
+        if (!file_exists($this->valueToNodeIndexPath)) {
+            mkdir($this->valueToNodeIndexPath, 0777, true);
+        }
+        
+        $this->nodeToValueIndexPath = $this->path . '/node_to_value';
+        
+        if (!file_exists($this->nodeToValueIndexPath)) {
+            mkdir($this->nodeToValueIndexPath, 0777, true);
+        }
 	}
-	
-	public function nodeExists(INode $node)
-	{
-            $path = $this->graphPath . '/' . $node->getId();
-            return file_exists($path);
-	}
-	
-	public function valueExists(IValue $value)
-	{
-	    $path = $this->valuePath . '/' . $this->hashValue($value);
-	    return file_exists($path);
-	}
-	
+
 	public function createNode()
 	{
 	    $id = $this->nextId();
@@ -65,7 +53,36 @@ class FileSystem implements IStore
 	    
 	    mkdir($itemPath, 0777, true);
 	    
-	    return new Node($id);
+	    return $id;
+	}
+	
+	public function createStringValue($string)
+	{
+	    $hash = $this->hashString($string);
+	    
+	    $valuePath = $this->buildValuePath($hash);
+	    
+        $this->createValueDirectory($valuePath);
+        
+        
+	    
+	    return $hash;
+	}
+	
+	public function createFileValue($path)
+	{
+	    $hash = $this->hashFile($content);
+	    
+	    $valuePath = $this->buildValuePath($hash);
+	    
+        $this->createValueDirectory($valuePath);
+        
+        $fromPath = $content;
+        $toPath = $valuePath . basename($content);
+        copy($path, $toPath);
+        $value = new Value($isFile, $toPath);
+	    
+	    return $hash;
 	}
 	
 	public function createValue($content)
@@ -87,15 +104,31 @@ class FileSystem implements IStore
             $fromPath = $content;
             $toPath = $valuePath . basename($content);
             copy($fromPath, $toPath);
+            $value = new Value($isFile, $toPath);
         } else {
-            $file
-            file_put_contents($valuePath . '/' . $hash . '.txt', $content);
+            $path = $valuePath . '/' . $this->nameStringValueFile($hash);
+            file_put_contents($path, $content);
+            $value = new Value($isFile, $content);
         }
+        
+        return $value;
 	}
 	
 	public function bindValueToNode(INode $node, IValue $value)
 	{
-
+		    $valueHash = $this->hashValue($value);
+		    
+		    $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
+            if (!file_exists($valueToNodeIndexPath)) {
+                mkdir($valueToNodeIndexPath, 0777, true);
+            }
+            symlink($itemPath, $valueToNodeIndexPath . '/' . $id);
+                    
+		    $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
+            if (!file_exists($nodeToValueIndexPath)) {
+                mkdir($nodeToValueIndexPath, 0777, true);
+            }
+            symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
 	}
 
 	
@@ -230,11 +263,16 @@ class FileSystem implements IStore
             return (int)$nextId;
 	}
 	
+	private function buildNodePath(INode $node)
+	{
+	    return $this->graphPath . '/' . $node->getId();
+	}
+	
 	private function nameStringValueFile($hash)
 	{
 	    return $hash . '.txt';
 	}
-	
+
 	private function hashValue(IValue $value)
 	{
 	    if ($value->isFile()) {
@@ -255,6 +293,18 @@ class FileSystem implements IStore
 	    }
 	    
 	    return $hash;
+	}
+	
+	private function createValueDirectory($valuePath)
+	{
+        if (!file_exists($valuePath)) {
+            mkdir($valuePath, 0777, true);
+        }
+	}
+	
+	private function buildValuePath($hash)
+	{
+	    return $this->valuePath . '/' . $hash;
 	}
 	
 	private function hashFile($path)
