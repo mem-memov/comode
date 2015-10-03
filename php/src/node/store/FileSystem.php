@@ -53,7 +53,6 @@ class FileSystem implements IStore
 	
 	public function valueExists(IValue $value)
 	{
-	    
 	    $path = $this->valuePath . '/' . $this->hashValue($value);
 	    return file_exists($path);
 	}
@@ -69,9 +68,34 @@ class FileSystem implements IStore
 	    return new Node($id);
 	}
 	
+	public function createValue($content)
+	{
+	    $isFile = file_exists($content);
+	    
+	    if ($isFile) {
+	        $hash = $this->hashFile($content);
+	    } else {
+	        $hash = $this->hashString($content);
+	    }
+	    
+	    $valuePath = $this->valuePath . '/' . $hash;
+        if (!file_exists($valuePath)) {
+            mkdir($valuePath, 0777, true);
+        }
+
+        if ($isFile) {
+            $fromPath = $content;
+            $toPath = $valuePath . basename($content);
+            copy($fromPath, $toPath);
+        } else {
+            $file
+            file_put_contents($valuePath . '/' . $hash . '.txt', $content);
+        }
+	}
+	
 	public function bindValueToNode(INode $node, IValue $value)
 	{
-	    
+
 	}
 
 	
@@ -206,14 +230,40 @@ class FileSystem implements IStore
             return (int)$nextId;
 	}
 	
+	private function nameStringValueFile($hash)
+	{
+	    return $hash . '.txt';
+	}
+	
 	private function hashValue(IValue $value)
 	{
 	    if ($value->isFile()) {
-	        $hash = hash_file('md5', $value->getContent());
+	        $hash = $this->hashFile($value->getContent());
 	    } else {
-	        $hash = md5($value->getContent());
+	        $hash = $this->hashString($value->getContent());
 	    }
 	    
 	    return $hash;
+	}
+	
+	private function hashValueContent($content)
+	{
+	    if (file_exists($content)) {
+	        $hash = $this->hashFile($content);
+	    } else {
+	        $hash = $this->hashString($content);
+	    }
+	    
+	    return $hash;
+	}
+	
+	private function hashFile($path)
+	{
+	    return hash_file('md5', $path);
+	}
+	
+	private function hashString($string)
+	{
+	    return md5($string);
 	}
 }
