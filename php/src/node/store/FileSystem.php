@@ -45,11 +45,35 @@ class FileSystem implements IStore
             }
 	}
 	
-	public function idExists($id)
+	public function nodeExists(INode $node)
 	{
-            $path = $this->graphPath . '/' . $id;
+            $path = $this->graphPath . '/' . $node->getId();
             return file_exists($path);
 	}
+	
+	public function valueExists(IValue $value)
+	{
+	    
+	    $path = $this->valuePath . '/' . $this->hashValue($value);
+	    return file_exists($path);
+	}
+	
+	public function createNode()
+	{
+	    $id = $this->nextId();
+	    
+	    $nodePath = $this->graphPath . '/' . $id;
+	    
+	    mkdir($itemPath, 0777, true);
+	    
+	    return new Node($id);
+	}
+	
+	public function bindValueToNode(INode $node, IValue $value)
+	{
+	    
+	}
+
 	
 	public function createId(IValue $value = null)
 	{
@@ -180,5 +204,16 @@ class FileSystem implements IStore
             file_put_contents($lastIdPath, $nextId);
 
             return (int)$nextId;
+	}
+	
+	private function hashValue(IValue $value)
+	{
+	    if ($value->isFile()) {
+	        $hash = hash_file('md5', $value->getContent());
+	    } else {
+	        $hash = md5($value->getContent());
+	    }
+	    
+	    return $hash;
 	}
 }
