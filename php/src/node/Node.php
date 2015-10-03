@@ -10,7 +10,11 @@ class Node implements INode
 	private $id;
 	private $value;
 	
-	public function __construct(IStore $store, $id = null, IValue $value = null)
+	public function __construct(
+		IStore $store, 
+		$id = null, 
+		IValue $value = null
+	)
 	{
 		$this->store = $store;
 		

@@ -69,7 +69,7 @@ class FileSystem implements IStore
                     if (file_exists($content)) {
                         copy($content, $valuePath . basename($content));
                     } else {
-                        file_put_contents($valuePath . '/value.txt', $content);
+                        file_put_contents($valuePath . '/' . $valueHash . '.txt', $content);
                     }
                     
 		    $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
@@ -138,6 +138,30 @@ class FileSystem implements IStore
         
         $paths = glob($nodeToValueIndexPath . '/*');
         
+        if (empty($paths)) {
+            throw new ValueNotFound();
+        }
+        
+        $link = $paths[0];
+        
+        $valueDirectory = readlink($link);
+        
+        $valueHash = basename($valueDirectory);
+        
+        $valuePaths = glob($valueDirectory . '/*');
+        
+        $valuePath = $valuePaths[0];
+        
+        $fileName = basename($valuePath);
+        
+        if ($fileName == $valueHash . '.txt') {
+            $content = file_get_contents($valuePath);
+            $value = new Value(false, $content);
+        } else {
+            $value = new Value(false, $valuePath);
+        }
+
+        return $value;
         
     }
 	

@@ -12,7 +12,7 @@ class Factory
     
     public function makeFileSystem()
     {
-        return new FileSystem($this->config['path']);
+        return new FileSystem($this->config['path'], $this->nodeFactory, $this->valueFactory);
     }
 
 }

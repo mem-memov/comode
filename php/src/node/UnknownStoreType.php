@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node;
 
-class UnknownStoreType extends Exception
+class UnknownStoreType extends \Exception
 {
     
 }

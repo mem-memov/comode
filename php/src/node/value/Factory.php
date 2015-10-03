@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node\value;
 
-class Factory
+class Factory implements IFactory
 {
     public function makeFile($path)
     {
