@@ -1,7 +1,8 @@
 <?php
 namespace WebApi\router;
-class Factory implements IFactory {
 
+class Factory implements IFactory
+{
     /** @var \WebApi\router\part\IFactory */
     private $partFactory;
     
@@ -10,15 +11,13 @@ class Factory implements IFactory {
         \domain\IFactory $domainFactory,
         array $commandLine
     ) {
-
         $requestFactory = new request\Factory($commandLine);
         $actionFactory = new action\Factory($requestFactory->request(), $serviceFactory, $domainFactory);
-        $this->partFactory = new part\Factory($actionFactory); 
- 
+        $this->partFactory = new part\Factory($actionFactory);
     }
     
-    public function phpArray($path) {
-      
+    public function phpArray($path)
+    {
         $pathParts = explode('/', $path);
         $pathParts[0] = '/';
 
@@ -27,6 +26,5 @@ class Factory implements IFactory {
             realpath(__DIR__ . '/../../../routes.php'),
             $this->partFactory
         );
-      
     }
 }

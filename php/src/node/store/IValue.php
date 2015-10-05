@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node\store;
 
-interface IValue
+interface Ivalue
 {
     public function isFile();
     public function getContent();

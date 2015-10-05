@@ -1,7 +1,8 @@
 <?php
 namespace WebApi\router\request;
-interface IRequest {
-    
+
+interface IRequest
+{
     public function hasPost($parameter);
     public function post($parameter);
     public function hasGet($parameter);
@@ -9,5 +10,4 @@ interface IRequest {
     public function isCommandLine();
     public function command();
     public function arguments();
-    
 }

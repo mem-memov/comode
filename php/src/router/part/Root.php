@@ -1,5 +1,6 @@
 <?php
 namespace WebApi\router\part;
-class Root extends AbstractPart {
-  
+
+class Root extends AbstractPart
+{
 }

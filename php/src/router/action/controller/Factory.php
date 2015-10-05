@@ -1,26 +1,25 @@
 <?php
 namespace WebApi\router\action\controller;
-class Factory implements IFactory {
 
+class Factory implements IFactory
+{
     private $serviceFactory;
     private $domainFactory;
     private $responseFactory;
     private $templateFactory;
     
     public function __construct(
-        \service\IFactory $serviceFactory, 
+        \service\IFactory $serviceFactory,
         \domain\IFactory $domainFactory
     ) {
-        
         $this->serviceFactory = $serviceFactory;
         $this->domainFactory = $domainFactory;
         $this->responseFactory = new response\Factory();
         $this->templateFactory = new template\Factory();
-        
     }
     
-    public function controller($name) {
-      
+    public function controller($name)
+    {
         $class = '\controller\\' . $name;
 
         return new $class(
@@ -30,7 +29,5 @@ class Factory implements IFactory {
             $this->responseFactory,
             $this->templateFactory
         );
-      
     }
-    
 }

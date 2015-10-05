@@ -3,20 +3,25 @@ namespace Comode\node\value;
 
 class File implements IValue
 {
-    private $value;
+    private $path;
+    private $hash;
     
-    public function __construct($value)
+    public function __construct($path)
     {
-        $this->value = $value;
+        $this->path = $path;
     }
     
     public function get()
     {
-        return $this->value;
+        return $this->path;
     }
     
     public function hash()
     {
-        return hash_file('md5', $this->value);
+        if (is_null($this->hash)) {
+            $this->hash = hash_file('md5', $this->path);
+        }
+        
+        return $this->hash;
     }
 }

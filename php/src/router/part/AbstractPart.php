@@ -1,7 +1,8 @@
 <?php
 namespace WebApi\router\part;
-class AbstractPart implements IPart {
-  
+
+class AbstractPart implements IPart
+{
     private $name;
     private $nextPart;
     private $action;
@@ -9,29 +10,24 @@ class AbstractPart implements IPart {
     public function __construct(
         $name
     ) {
-     
         $this->name = $name;
         $this->nextPart = null;
         $this->action = null;
-      
     }
     
     public function setAction(
         \WebApi\router\action\IAction $action
     ) {
-      
         $this->action = $action;
-      
     }
     
-    public function setNextPart(IPart $nextPart) {
-      
-      $this->nextPart = $nextPart;
-      
+    public function setNextPart(IPart $nextPart)
+    {
+        $this->nextPart = $nextPart;
     }
     
-    public function run() {
-      
+    public function run()
+    {
         $result = null;
         
         if (!is_null($this->action)) {
@@ -39,11 +35,9 @@ class AbstractPart implements IPart {
         }
 
         if (is_null($result) && !is_null($this->nextPart)) {
-          $result = $this->nextPart->run();
+            $result = $this->nextPart->run();
         }
 
         return $result;
-      
     }
-  
 }

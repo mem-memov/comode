@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router\action\controller\template;
-interface IConfiguration {
-  
+
+interface IConfiguration
+{
     public function siteTemplateDirectory();
-  
 }

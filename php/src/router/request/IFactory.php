@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router\request;
-interface IFactory {
-    
+
+interface IFactory
+{
     public function request();
-    
 }

@@ -1,7 +1,8 @@
 <?php
 namespace WebApi\router\action\controller;
-abstract class AbstractController {
 
+abstract class AbstractController
+{
     protected $serviceFactory;
     protected $domainFactory;
     protected $controllerFactory;
@@ -9,19 +10,16 @@ abstract class AbstractController {
     protected $templateFactory;
     
     public function __construct(
-        \service\IFactory $serviceFactory, 
+        \service\IFactory $serviceFactory,
         \domain\IFactory $domainFactory,
         IFactory $controllerFactory,
         response\IFactory $responseFactory,
         template\IFactory $templateFactory
     ) {
-        
         $this->serviceFactory = $serviceFactory;
         $this->domainFactory = $domainFactory;
         $this->controllerFactory = $controllerFactory;
         $this->responseFactory = $responseFactory;
         $this->templateFactory = $templateFactory;
-        
     }
-    
 }

@@ -1,7 +1,8 @@
 <?php
 namespace WebApi\router;
-class PhpArray implements IRouter {
-  
+
+class PhpArray implements IRouter
+{
     private $partFactory;
     private $route;
   
@@ -10,18 +11,14 @@ class PhpArray implements IRouter {
         $routeFilePath,
         part\IFactory $partFactory
     ) {
-      
         $this->partFactory = $partFactory;
         
         $data = require $routeFilePath;
         $this->route = $this->partFactory->make($pathNames, $data);
-      
     }
     
-    public function run() {
-      
+    public function run()
+    {
         return $this->route->run();
-      
     }
-  
 }

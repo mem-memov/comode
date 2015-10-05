@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router\action\controller\response;
-interface IResponse {
-    
+
+interface IResponse
+{
     public function send();
-    
 }

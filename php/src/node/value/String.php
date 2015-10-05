@@ -3,20 +3,20 @@ namespace Comode\node\value;
 
 class String implements IValue
 {
-    private $value;
+    private $string;
     
-    public function __construct($value)
+    public function __construct($string)
     {
-        $this->value = $value;
+        $this->string = $string;
     }
     
     public function get()
     {
-        return $this->value;
+        return $this->string;
     }
     
     public function hash()
     {
-        return md5($this->value);
+        return md5($this->string);
     }
 }

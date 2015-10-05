@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router;
-interface IFactory {
-  
+
+interface IFactory
+{
     public function phpArray($path);
-  
 }

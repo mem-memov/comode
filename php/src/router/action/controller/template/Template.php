@@ -1,17 +1,17 @@
 <?php
 namespace WebApi\router\action\controller\template;
-class Template implements ITemplate {
-    
+
+class Template implements ITemplate
+{
     private $templatefilePath;
     
-    public function __construct($templatefilePath) {
-        
+    public function __construct($templatefilePath)
+    {
         $this->templatefilePath = $templatefilePath;
-        
     }
     
-    public function render(array $data = array()) {
-        
+    public function render(array $data = array())
+    {
         ob_start();
         
         require $this->templatefilePath;
@@ -19,7 +19,5 @@ class Template implements ITemplate {
         $view = ob_get_clean();
         
         return $view;
-        
     }
-    
 }

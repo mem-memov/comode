@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router\action;
-interface IFactory {
-  
+
+interface IFactory
+{
     public function controller(array $data);
-  
 }

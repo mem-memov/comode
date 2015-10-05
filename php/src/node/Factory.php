@@ -28,7 +28,7 @@ class Factory implements IFactory
     {
         $store = $this->makeStore();
         
-        $childIds = $store->getChildIds($node->getId());
+        $childIds = $store->getChildNodes($node->getId());
         
         $childNodes = [];
         
@@ -43,7 +43,7 @@ class Factory implements IFactory
     public function getNodesByValue($value)
     {
         $value = $this->makeValue($value);
-        $ids = $this->store->getIdsByValue($value);
+        $ids = $this->store->getNodesByValue(new store\Value(file_exists($value), $value));
         
         $nodes = [];
         
@@ -60,13 +60,9 @@ class Factory implements IFactory
         $valueFactory = $this->makeValueFactory();
         
         if (file_exists($value)) {
-            
             return $valueFactory->makeFile($value);
-            
         } else {
-            
             return $valueFactory->makeString($value);
-            
         }
     }
     
@@ -75,7 +71,6 @@ class Factory implements IFactory
         $storeFactory = $this->makeStoreFactory();
         
         if (!isset($this->store)) {
-            
             switch ($this->config['store']['type']) {
                 case 'fileSystem':
                     $this->store = $storeFactory->makeFileSystem();
@@ -84,7 +79,6 @@ class Factory implements IFactory
                     throw new UnknownStoreType();
                     break;
             }
-            
         }
         
         return $this->store;

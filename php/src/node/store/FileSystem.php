@@ -1,7 +1,7 @@
 <?php
 namespace Comode\node\store;
 
-use Comode\node\value\IValue;
+use Comode\node\value\IFactory as IValueFactory;
 
 class FileSystem implements IStore
 {
@@ -12,9 +12,10 @@ class FileSystem implements IStore
     private $nodeToValueIndexPath;
     private $idFile = 'lastId';
 
-	public function __construct($path)
-	{
+    public function __construct($path)
+    {
         $this->path = $path;
+        $this->valueFactory = $valueFactory;
         
         if (!file_exists($this->path)) {
             mkdir($this->path, 0777, true);
@@ -43,179 +44,82 @@ class FileSystem implements IStore
         if (!file_exists($this->nodeToValueIndexPath)) {
             mkdir($this->nodeToValueIndexPath, 0777, true);
         }
-	}
+    }
 
-	public function createNode()
-	{
-	    $id = $this->nextId();
-	    
-	    $nodePath = $this->graphPath . '/' . $id;
-	    
-	    mkdir($itemPath, 0777, true);
-	    
-	    return $id;
-	}
-	
-	public function createStringValue($string)
-	{
-	    $hash = $this->hashString($string);
-	    
-	    $valuePath = $this->buildValuePath($hash);
-	    
-        $this->createValueDirectory($valuePath);
-        
-        
-	    
-	    return $hash;
-	}
-	
-	public function createFileValue($path)
-	{
-	    $hash = $this->hashFile($content);
-	    
-	    $valuePath = $this->buildValuePath($hash);
-	    
-        $this->createValueDirectory($valuePath);
-        
-        $fromPath = $content;
-        $toPath = $valuePath . basename($content);
-        copy($path, $toPath);
-        $value = new Value($isFile, $toPath);
-	    
-	    return $hash;
-	}
-	
-	public function createValue($content)
-	{
-	    $isFile = file_exists($content);
-	    
-	    if ($isFile) {
-	        $hash = $this->hashFile($content);
-	    } else {
-	        $hash = $this->hashString($content);
-	    }
-	    
-	    $valuePath = $this->valuePath . '/' . $hash;
-        if (!file_exists($valuePath)) {
-            mkdir($valuePath, 0777, true);
-        }
-
-        if ($isFile) {
-            $fromPath = $content;
-            $toPath = $valuePath . basename($content);
-            copy($fromPath, $toPath);
-            $value = new Value($isFile, $toPath);
-        } else {
-            $path = $valuePath . '/' . $this->nameStringValueFile($hash);
-            file_put_contents($path, $content);
-            $value = new Value($isFile, $content);
-        }
-        
-        return $value;
-	}
-	
-	public function bindValueToNode(INode $node, IValue $value)
-	{
-		    $valueHash = $this->hashValue($value);
-		    
-		    $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
-            if (!file_exists($valueToNodeIndexPath)) {
-                mkdir($valueToNodeIndexPath, 0777, true);
-            }
-            symlink($itemPath, $valueToNodeIndexPath . '/' . $id);
-                    
-		    $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
-            if (!file_exists($nodeToValueIndexPath)) {
-                mkdir($nodeToValueIndexPath, 0777, true);
-            }
-            symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
-	}
-
-	
-	public function createId(IValue $value = null)
-	{
-		$id = $this->nextId();
-
-		$itemPath = $this->graphPath . '/' . $id;
-		mkdir($itemPath, 0777, true);
-		
-		if (!is_null($value)) {
-                    $valueHash = $value->hash();
-                    
-                    $valuePath = $this->valuePath . '/' . $valueHash;
-                    if (!file_exists($valuePath)) {
-                        mkdir($valuePath, 0777, true);
-                    }
-                    $content = $value->get();
-                    if (file_exists($content)) {
-                        copy($content, $valuePath . basename($content));
-                    } else {
-                        file_put_contents($valuePath . '/' . $valueHash . '.txt', $content);
-                    }
-                    
-		    $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
-                    if (!file_exists($valueToNodeIndexPath)) {
-                        mkdir($valueToNodeIndexPath, 0777, true);
-                    }
-                    symlink($itemPath, $valueToNodeIndexPath . '/' . $id);
-                    
-		    $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
-                    if (!file_exists($nodeToValueIndexPath)) {
-                        mkdir($nodeToValueIndexPath, 0777, true);
-                    }
-                    symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
-		}
-		
-		return $id;
-	}
-	
-	public function linkIds($fromId, $toId)
-	{
-            $fromPath = $this->graphPath . '/' . $fromId . '/' . $toId;
-
-            if (file_exists($fromPath)) {
-                return;
-            }
-
-            $toPath = $this->graphPath . '/' . $toId;
-            symlink($toPath, $fromPath);
-	}
-        
-        public function getChildIds($id)
-        {
-            $path = $this->graphPath . '/' . $id;
-            $offset = strlen($path) + 1;
-            
-            $childPaths = glob($path . '/*');
-
-            $childIds = [];
-            foreach ($childPaths as $childPath) {
-                $childId = (int)substr($childPath, $offset);
-                array_push($childIds, $childId);
-            }
-            
-            return $childIds;
-        }
-        
-        public function getIdsByValue(IValue $value)
-        {
-            $path = $this->valueToNodeIndexPath . '/' . $value->hash();
-            $offset = strlen($path) + 1;
-            
-            $paths = glob($path . '/*');
-            
-            $ids = [];
-            foreach ($paths as $path) {
-                $id = (int)substr($path, $offset);
-                array_push($ids, $id);
-            }
-            
-            return $ids;
-        }
-        
-    public function getValue($id)
+    public function nodeExists($nodeId)
     {
-        $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $id;
+        return file_exists($this->buildNodePath($nodeId));
+    }
+    
+    public function createNode(IValue $value = null)
+    {
+        $nodeId = $this->nextId();
+        
+        $nodePath = $this->buildNodePath($nodeId);
+        
+        mkdir($itemPath, 0777, true);
+        
+        if (!is_null($value)) {
+            list($valueHash, $valuePath) = $this->createValue($value);
+            $this->bindValueToNode($nodeId, $nodePath, $valueHash, $valuePath);
+        }
+        
+        return $id;
+    }
+
+    public function linkNodes($originId, $targetId)
+    {
+        $originPath = $this->graphPath . '/' . $originId . '/' . $targetId;
+
+        if (file_exists($originPath)) {
+            return;
+        }
+
+        $targetPath = $this->graphPath . '/' . $targetId;
+        symlink($targetPath, $originPath);
+    }
+        
+    public function getChildNodes($parentId)
+    {
+        $path = $this->graphPath . '/' . $parentId;
+        $offset = strlen($path) + 1;
+            
+        $childPaths = glob($path . '/*');
+
+        $childIds = [];
+        foreach ($childPaths as $childPath) {
+            $childId = (int)substr($childPath, $offset);
+            array_push($childIds, $childId);
+        }
+            
+        return $childIds;
+    }
+        
+    public function getNodesByValue(IValue $value)
+    {
+        if ($value->isFile()) {
+            $valueHash = $this->hashFile($originPath);
+        } else {
+            $valueHash = $this->hashString($string);
+        }
+        
+        $indexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
+        $offset = strlen($indexPath) + 1;
+            
+        $nodePaths = glob($indexPath . '/*');
+            
+        $nodeIds = [];
+        foreach ($nodePaths as $nodePath) {
+            $nodeId = (int)substr($nodePath, $offset);
+            array_push($nodeIds, $nodeId);
+        }
+            
+        return $nodeIds;
+    }
+        
+    public function getValue($nodeId)
+    {
+        $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
         $paths = glob($nodeToValueIndexPath . '/*');
         
@@ -235,7 +139,7 @@ class FileSystem implements IStore
         
         $fileName = basename($valuePath);
         
-        if ($fileName == $valueHash . '.txt') {
+        if ($fileName == $this->nameStringValueFile($valueHash)) {
             $content = file_get_contents($valuePath);
             $value = new Value(false, $content);
         } else {
@@ -243,77 +147,95 @@ class FileSystem implements IStore
         }
 
         return $value;
-        
     }
-	
-	private function nextId()
-	{
-            $lastIdPath = $this->path . '/' . $this->idFile;
+    
+    private function nextId()
+    {
+        $lastIdPath = $this->path . '/' . $this->idFile;
 
-            if (!file_exists($lastIdPath)) {
-                file_put_contents($lastIdPath, 0);
-            }
+        if (!file_exists($lastIdPath)) {
+            file_put_contents($lastIdPath, 0);
+        }
 
-            $lastId = file_get_contents($lastIdPath);
+        $lastId = file_get_contents($lastIdPath);
 
-            $nextId = $lastId + 1;
+        $nextId = $lastId + 1;
 
-            file_put_contents($lastIdPath, $nextId);
+        file_put_contents($lastIdPath, $nextId);
 
-            return (int)$nextId;
-	}
-	
-	private function buildNodePath(INode $node)
-	{
-	    return $this->graphPath . '/' . $node->getId();
-	}
-	
-	private function nameStringValueFile($hash)
-	{
-	    return $hash . '.txt';
-	}
+        return (int)$nextId;
+    }
+    
+    private function createValue(IValue $value)
+    {
+        if ($value->isFile()) {
+            
+            $originPath = $value->getContent();
+            
+            $valueHash = $this->hashFile($originPath);
+            
+            $valuePath = $this->createValueDirectory($valueHash);
 
-	private function hashValue(IValue $value)
-	{
-	    if ($value->isFile()) {
-	        $hash = $this->hashFile($value->getContent());
-	    } else {
-	        $hash = $this->hashString($value->getContent());
-	    }
-	    
-	    return $hash;
-	}
-	
-	private function hashValueContent($content)
-	{
-	    if (file_exists($content)) {
-	        $hash = $this->hashFile($content);
-	    } else {
-	        $hash = $this->hashString($content);
-	    }
-	    
-	    return $hash;
-	}
-	
-	private function createValueDirectory($valuePath)
-	{
+            $targetPath = $valuePath . basename($originPath);
+            copy($originPath, $targetPath);
+
+        } else {
+            
+            $string = $value->getContent();
+            
+            $valueHash = $this->hashString($string);
+            
+            $valuePath = $this->createValueDirectory($valueHash);
+            
+            $targetPath = $valuePath . '/' . $this->nameStringValueFile($valueHash);
+            file_put_contents($targetPath, $string);
+
+        }
+
+        return [$valueHash, $valuePath];
+    }
+    
+    private function bindValueToNode($nodeId, $nodePath, $valueHash, $valuePath)
+    {
+        $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
+        if (!file_exists($valueToNodeIndexPath)) {
+            mkdir($valueToNodeIndexPath, 0777, true);
+        }
+        symlink($nodePath, $valueToNodeIndexPath . '/' . $nodeId);
+                    
+        $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
+        if (!file_exists($nodeToValueIndexPath)) {
+            mkdir($nodeToValueIndexPath, 0777, true);
+        }
+        symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
+    }
+    
+    private function createValueDirectory($hash)
+    {
+        $valuePath = $this->valuePath . '/' . $hash;
         if (!file_exists($valuePath)) {
             mkdir($valuePath, 0777, true);
         }
-	}
-	
-	private function buildValuePath($hash)
-	{
-	    return $this->valuePath . '/' . $hash;
-	}
-	
-	private function hashFile($path)
-	{
-	    return hash_file('md5', $path);
-	}
-	
-	private function hashString($string)
-	{
-	    return md5($string);
-	}
+        return $valuePath;
+    }
+    
+    private function buildNodePath($nodeId)
+    {
+        return $this->graphPath . '/' . $nodeId;
+    }
+    
+    private function nameStringValueFile($valueHash)
+    {
+        return $valueHash . '.txt';
+    }
+
+    private function hashFile($path)
+    {
+        return hash_file('md5', $path);
+    }
+    
+    private function hashString($string)
+    {
+        return md5($string);
+    }
 }

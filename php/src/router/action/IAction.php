@@ -1,7 +1,7 @@
 <?php
 namespace WebApi\router\action;
-interface IAction {
-  
+
+interface IAction
+{
     public function run();
-  
 }

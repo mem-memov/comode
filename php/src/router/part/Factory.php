@@ -1,19 +1,18 @@
 <?php
 namespace WebApi\router\part;
-class Factory implements IFactory {
-  
+
+class Factory implements IFactory
+{
     private $actionFactory;
     
     public function __construct(
         \WebApi\router\action\IFactory $actionFactory
     ) {
-      
         $this->actionFactory = $actionFactory;
-      
     }
     
-    public function make(array $partNames, array $data) {
-      
+    public function make(array $partNames, array $data)
+    {
         $name = array_shift($partNames);
         $partData = $data[$name];
 
@@ -31,34 +30,26 @@ class Factory implements IFactory {
         }
         
         return $part;
-      
     }
   
     private function directory(
-        $name, 
+        $name,
         array $data
     ) {
-      
         return new Directory($name);
-      
     }
     
     private function file(
-        $name, 
+        $name,
         array $data
     ) {
-      
         return new File($name);
-      
     }
     
     private function root(
-        $name, 
+        $name,
         array $data
     ) {
-      
         return new Root($name);
-      
     }
-  
 }
