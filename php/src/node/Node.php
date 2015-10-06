@@ -41,6 +41,19 @@ class Node implements INode
     public function getChildNodes()
     {
         return $this->store->getChildIds($this->id);
+        
+        $store = $this->makeStore();
+        
+        $childIds = $store->getChildNodes($node->getId());
+        
+        $childNodes = [];
+        
+        foreach ($childIds as $childId) {
+            $childNode = $this->makeNode($childId);
+            array_push($childNodes, $childNode);
+        }
+        
+        return $childNodes;
     }
         
     public function getValue()
