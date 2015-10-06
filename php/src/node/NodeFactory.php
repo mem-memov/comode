@@ -15,7 +15,7 @@ class NodeFactory implements INodeFactory
     
     public function setValueFactory(IValueFactory $valueFactory)
     {
-        $valueFactory = $this->valueFactory;
+        $this->valueFactory = $valueFactory;
     }
     
     public function makeNode($id = null, $isFile = null, $content = null)

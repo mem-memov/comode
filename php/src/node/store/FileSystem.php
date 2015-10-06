@@ -57,14 +57,14 @@ class FileSystem implements IStore {
         
         $nodePath = $this->buildNodePath($nodeId);
         
-        mkdir($itemPath, 0777, true);
+        mkdir($nodePath, 0777, true);
         
         if (!is_null($value)) {
             list($valueHash, $valuePath) = $this->createValue($value);
             $this->bindValueToNode($nodeId, $nodePath, $valueHash, $valuePath);
         }
         
-        return $id;
+        return $nodeId;
     }
 
     public function linkNodes($originId, $targetId)
@@ -98,8 +98,10 @@ class FileSystem implements IStore {
     public function getNodesByValue(IValue $value)
     {
         if ($value->isFile()) {
+            $originPath = $value->getContent();
             $valueHash = $this->hashFile($originPath);
         } else {
+            $string = $value->getContent();
             $valueHash = $this->hashString($string);
         }
         
@@ -121,7 +123,7 @@ class FileSystem implements IStore {
     {
         $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
-        $paths = glob($nodeToValueIndexPath . '/*');
+        $paths = glob($indexPath . '/*');
 
         if (empty($paths)) {
             throw new ValueNotFound();

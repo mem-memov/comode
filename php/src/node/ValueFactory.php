@@ -8,15 +8,14 @@ class ValueFactory implements IValueFactory
     private $store;
     private $nodeFactory;
     
-    public function __construct(IStore $store, INodeFactory $nodeFactory)
+    public function __construct(IStore $store)
     {
         $this->store = $store;
-        $this->nodeFactory = $nodeFactory;
     }
     
     public function setNodeFactory(INodeFactory $nodeFactory)
     {
-        $nodeFactory = $this->nodeFactory;
+        $this->nodeFactory = $nodeFactory;
     }
     
     public function makeValue($isFile, $content)

@@ -28,7 +28,7 @@ class Factory implements IFactory
     
     public function makeNode($id = null, $isFile = null, $content = null)
     {
-        return $this->nodeFactory->makeNode($id, $value);
+        return $this->nodeFactory->makeNode($id, $isFile, $content);
     }
 
     public function makeValue($isFile, $content)
