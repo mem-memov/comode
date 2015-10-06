@@ -8,6 +8,7 @@ class Node implements INode
 {
     private $store;
     private $valueFactory;
+    private $nodeFactory;
     private $id;
     private $value;
     
@@ -20,13 +21,14 @@ class Node implements INode
      * specify whether the value is a file or not and pass the path or text as the value content.
      *  - To retrieve an existing node by its id just pass the id
      */
-    public function __construct(IStore $store, IValueFactory $valueFactory, $id = null, $isFile = null, $content = null)
+    public function __construct(IStore $store, IValueFactory $valueFactory, INodeFactory $nodeFactory, $id = null, $isFile = null, $content = null)
     {
         $this->store = $store;
         $this->valueFactory = $valueFactory;
+        $this->nodeFactory = $nodeFactory;
         
         if (is_null($id)) {
-            $id = $this->store->createNode($value);
+            $id = $this->store->createNode(new store\Value($isFile, $content));
         } else {
             if (!$this->store->nodeExists($id)) {
                 throw new NoIdWhenRetrievingNode();
@@ -48,24 +50,22 @@ class Node implements INode
         
     public function getChildNodes()
     {
-        return $this->store->getChildNodes($this->id);
-        
-        $store = $this->makeStore();
-        
-        $childIds = $store->getChildNodes($node->getId());
+        $childIds = $this->store->getChildNodes($this->id);
         
         $childNodes = [];
         
         foreach ($childIds as $childId) {
-            $childNode = $this->makeNode($childId);
+            $childNode = $this->nodeFactory->makeNode($childId);
             array_push($childNodes, $childNode);
         }
-        
+
         return $childNodes;
     }
         
     public function getValue()
     {
-        return $this->store->getValue($this->id);
+        $storeValue = $this->store->getValue($this->id);
+        
+        return $this->valueFactory->makeValue($storeValue->isFile(), $storeValue->getContent());
     }
 }

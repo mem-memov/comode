@@ -1,5 +1,4 @@
 <?php
-
 namespace Comode\node\store;
 
 use Comode\node\value\IFactory as IValueFactory;
@@ -144,11 +143,13 @@ class FileSystem implements IStore {
             $content = file_get_contents($valuePath);
             $value = new Value(false, $content);
         } else {
-            $value = new Value(false, $valuePath);
+            $value = new Value(true, $valuePath);
         }
 
         return $value;
     }
+    
+    // private methods
 
     private function nextId()
     {
@@ -198,16 +199,22 @@ class FileSystem implements IStore {
     
     private function bindValueToNode($nodeId, $nodePath, $valueHash, $valuePath)
     {
+        // value to node
         $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
+        
         if (!file_exists($valueToNodeIndexPath)) {
             mkdir($valueToNodeIndexPath, 0777, true);
         }
+        
         symlink($nodePath, $valueToNodeIndexPath . '/' . $nodeId);
-                    
+         
+        // node to value           
         $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
+        
         if (!file_exists($nodeToValueIndexPath)) {
             mkdir($nodeToValueIndexPath, 0777, true);
         }
+        
         symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
     }
     
