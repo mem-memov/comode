@@ -31,4 +31,14 @@ class Value implements IValue
         
         return $nodes;
     }
+    
+    public function isFile()
+    {
+        return $this->isFile;
+    }
+    
+    public function getContent()
+    {
+        return $this->content;
+    }
 }

@@ -20,10 +20,6 @@ class NodeFactory implements INodeFactory
     
     public function makeNode($id = null, $isFile = null, $content = null)
     {
-        if (!is_null($value)) {
-            $value = $this->makeValue($value);
-        }
-        
-        return new Node($this->store, $id, $value);
+        return new Node($this->store, $id, $isFile, $content);
     }
 }
