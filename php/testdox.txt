@@ -1,4 +1,4 @@
-Factory
+Comode\graph\Factory
  [x] It creates a new node with no value
  [x] It creates a new node with a string value
  [x] It creates a new node with a file value

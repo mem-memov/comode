@@ -1,5 +1,6 @@
 <?php
-class FactoryTest extends PHPUnit_Framework_TestCase
+namespace Comode\graph;
+class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
@@ -12,7 +13,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
             ]
         ];
         
-        $this->factory = new Comode\graph\Factory($config);
+        $this->factory = new Factory($config);
     }
     
     protected function tearDown()
