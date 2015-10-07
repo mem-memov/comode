@@ -1,5 +1,5 @@
 <?php
-namespace Comode\node;
+namespace Comode\graph;
 
 class NoIdWhenRetrievingNode extends \Exception
 {

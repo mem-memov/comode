@@ -1,5 +1,5 @@
 <?php
-namespace Comode\node\store;
+namespace Comode\graph\store;
 
 interface IStore
 {

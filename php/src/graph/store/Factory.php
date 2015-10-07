@@ -1,7 +1,7 @@
 <?php
-namespace Comode\node\store;
+namespace Comode\graph\store;
 
-use Comode\node\value\IFactory as IValueFactory;
+use Comode\graph\value\IFactory as IValueFactory;
 
 class Factory
 {

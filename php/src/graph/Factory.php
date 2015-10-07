@@ -1,5 +1,5 @@
 <?php
-namespace Comode\node;
+namespace Comode\graph;
 
 class Factory implements IFactory
 {

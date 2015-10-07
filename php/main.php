@@ -2,7 +2,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $config = require 'config.php';
-$nodeFactory = new Comode\node\Factory($config['node']);
+$nodeFactory = new Comode\graph\Factory($config['node']);
 $node1 = $nodeFactory->makeNode(null, false, 'когда?');
 $node2 = $nodeFactory->makeNode();
 $node3 = $nodeFactory->makeNode();

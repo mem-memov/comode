@@ -1,7 +1,7 @@
 <?php
-namespace Comode\node;
+namespace Comode\graph;
 
-use Comode\node\store\IStore;
+use Comode\graph\store\IStore;
 
 class Value implements IValue
 {

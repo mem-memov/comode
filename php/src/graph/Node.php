@@ -1,8 +1,8 @@
 <?php
-namespace Comode\node;
+namespace Comode\graph;
 
-use Comode\node\store\IStore;
-use Comode\node\value\IValue;
+use Comode\graph\store\IStore;
+use Comode\graph\value\IValue;
 
 class Node implements INode
 {
