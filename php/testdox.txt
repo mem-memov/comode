@@ -1,5 +1,8 @@
 Factory
  [x] It creates a new node with no value
+ [x] It creates a new node with a string value
+ [x] It creates a new node with a file value
  [x] It retrieves a node by its id
  [x] It creates new instances of the same node
+ [x] It retrieves a string value
 

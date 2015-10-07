@@ -40,6 +40,21 @@ class FactoryTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Comode\graph\INode', $node);
     }
     
+    public function testItCreatesANewNodeWithAStringValue()
+    {
+        $node = $this->factory->makeNode(null, false, 'some text');
+        $this->assertInstanceOf('Comode\graph\INode', $node);
+    }
+    
+    public function testItCreatesANewNodeWithAFileValue()
+    {
+        $filePath = $this->path . '/myTestFile.txt';
+        file_put_contents($filePath, 'some file content');
+        
+        $node = $this->factory->makeNode(null, true, $filePath);
+        $this->assertInstanceOf('Comode\graph\INode', $node);
+    }
+    
     public function testItRetrievesANodeByItsId()
     {
         $createdNode = $this->factory->makeNode();
@@ -61,5 +76,12 @@ class FactoryTest extends PHPUnit_Framework_TestCase
 
         
         $this->assertEquals(false, $retreivedNode_1 === $retreivedNode_2);
+    }
+    
+    public function testItRetrievesAStringValue()
+    {
+        $node = $this->factory->makeNode(null, false, 'some text');
+        $value = $this->factory->makeValue(false, 'some text');
+        $this->assertInstanceOf('Comode\graph\IValue', $value);
     }
 }
