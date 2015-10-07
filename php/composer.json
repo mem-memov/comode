@@ -1,11 +1,11 @@
 {
     "autoload": {
         "psr-4": {
-            "Comode\\": "src/graph",
+            "Comode\\graph\\": "src/graph",
             "WebApi\\": ["src/controller", "src/router"]
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "5.0.*"
+        "phpunit/phpunit": "4.8.*"
     }
 }

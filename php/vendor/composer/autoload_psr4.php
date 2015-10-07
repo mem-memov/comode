@@ -6,5 +6,8 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Comode\\' => array($baseDir . '/src'),
+    'WebApi\\' => array($baseDir . '/src/controller', $baseDir . '/src/router'),
+    'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
+    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'Comode\\graph\\' => array($baseDir . '/src/graph'),
 );

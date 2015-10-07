@@ -1,0 +1,5 @@
+Factory
+ [x] It creates a new node with no value
+ [x] It retrieves a node by its id
+ [x] It creates new instances of the same node
+
