@@ -4,7 +4,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->path = __DIR__ . '/../../../data/tmp/test_' . time() . '_' . rand(1,10000);
-        
+
         $config = [
             'store' => [
                 'type' => 'fileSystem',
@@ -17,7 +17,7 @@ class FactoryTest extends PHPUnit_Framework_TestCase
     
     protected function tearDown()
     {
-        $r = $this->removeDirectory($this->path);
+        $this->removeDirectory($this->path);
     }
     
     protected function removeDirectory($dir)
@@ -83,5 +83,36 @@ class FactoryTest extends PHPUnit_Framework_TestCase
         $node = $this->factory->makeNode(null, false, 'some text');
         $value = $this->factory->makeValue(false, 'some text');
         $this->assertInstanceOf('Comode\graph\IValue', $value);
+    }
+    
+    public function testItCreatesNewInstancesOfTheSameStringValue()
+    {
+        $node = $this->factory->makeNode(null, false, 'some text');
+        $value_1 = $this->factory->makeValue(false, 'some text');
+        $value_2 = $this->factory->makeValue(false, 'some text');
+        $this->assertEquals(false, $value_1 === $value_2);
+    }
+    
+    public function testItRetrievesAFileValue()
+    {
+        $filePath = $this->path . '/myTestFile.txt';
+        file_put_contents($filePath, 'some file content');
+        
+        $node = $this->factory->makeNode(null, true, $filePath);
+
+        $value = $this->factory->makeValue(true, $filePath);
+
+        $this->assertInstanceOf('Comode\graph\IValue', $value);
+    }
+    
+    public function testItCreatesNewInstancesOfTheSameFileValue()
+    {
+        $filePath = $this->path . '/myTestFile.txt';
+        file_put_contents($filePath, 'some file content');
+        
+        $node = $this->factory->makeNode(null, true, $filePath);
+        $value_1 = $this->factory->makeValue(true, $filePath);
+        $value_2 = $this->factory->makeValue(true, $filePath);
+        $this->assertEquals(false, $value_1 === $value_2);
     }
 }

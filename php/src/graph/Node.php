@@ -28,7 +28,11 @@ class Node implements INode
         $this->nodeFactory = $nodeFactory;
         
         if (is_null($id)) {
-            $id = $this->store->createNode(new store\Value($isFile, $content));
+            if (is_bool($isFile) && !is_null($content)) {
+                $id = $this->store->createNode(new store\Value($isFile, $content));
+            } else {
+                $id = $this->store->createNode();
+            }
         } else {
             if (!$this->store->nodeExists($id)) {
                 throw new NoIdWhenRetrievingNode();

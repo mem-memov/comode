@@ -5,4 +5,7 @@ Factory
  [x] It retrieves a node by its id
  [x] It creates new instances of the same node
  [x] It retrieves a string value
+ [x] It creates new instances of the same string value
+ [x] It retrieves a file value
+ [x] It creates new instances of the same file value
 

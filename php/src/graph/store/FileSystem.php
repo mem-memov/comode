@@ -54,7 +54,7 @@ class FileSystem implements IStore {
     public function createNode(IValue $value = null)
     {
         $nodeId = $this->nextId();
-        
+       
         $nodePath = $this->buildNodePath($nodeId);
         
         mkdir($nodePath, 0777, true);
@@ -119,7 +119,7 @@ class FileSystem implements IStore {
         return $nodeIds;
     }
         
-    public function getValue($nodeId)
+    public function getValueByNodeId($nodeId)
     {
         $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
@@ -151,6 +151,22 @@ class FileSystem implements IStore {
         return $value;
     }
     
+    public function getValue($isFile, $content)
+    {
+        if (!$isFile) {
+            $value = new Value(false, $content);
+        } else {
+            $valueHash = $this->hashFile($content);
+            $valueDirectory = $this->createValueDirectory($valueHash);
+            $valuePaths = glob($valueDirectory . '/*');
+            
+            $valuePath = $valuePaths[0];
+            $value = new Value(true, $valuePath);
+        }
+        
+        return $value;
+    }
+    
     // private methods
 
     private function nextId()
@@ -175,12 +191,12 @@ class FileSystem implements IStore {
         if ($value->isFile()) {
             
             $originPath = $value->getContent();
-            
+
             $valueHash = $this->hashFile($originPath);
             
             $valuePath = $this->createValueDirectory($valueHash);
 
-            $targetPath = $valuePath . basename($originPath);
+            $targetPath = $valuePath . '/' . basename($originPath);
             copy($originPath, $targetPath);
 
         } else {

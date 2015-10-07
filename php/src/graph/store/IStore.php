@@ -8,5 +8,6 @@ interface IStore
     public function linkNodes($originId, $targetId);
     public function getChildNodes($parentId);
     public function getNodesByValue(IValue $value);
-    public function getValue($nodeId);
+    public function getValueByNodeId($nodeId);
+    public function getValue($isFile, $content);
 }

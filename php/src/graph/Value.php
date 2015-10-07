@@ -14,8 +14,10 @@ class Value implements IValue
     {
         $this->store = $store;
         $this->nodeFactory = $nodeFactory;
-        $this->isFile = $isFile;
-        $this->content = $content;
+        
+        $storeValue = $this->store->getValue($isFile, $content);
+        $this->isFile = $storeValue->isFile();
+        $this->content = $storeValue->getContent();
     }
     
     public function getNodes()
