@@ -3,5 +3,6 @@ namespace Comode\graph;
 
 interface IValueFactory
 {
-    public function makeValue($isFile, $content);
+    public function makeStringValue($content);
+    public function makeFileValue($path);
 }

@@ -17,9 +17,24 @@ class NodeFactory implements INodeFactory
     {
         $this->valueFactory = $valueFactory;
     }
-    
-    public function makeNode($id = null, $isFile = null, $content = null)
+
+    public function createNode()
     {
-        return new Node($this->store, $this->valueFactory, $this, $id, $isFile, $content);
+        return new Node($this->store, $this->valueFactory, $this, null, null, null);
+    }
+    
+    public function createFileNode($path)
+    {
+        return new Node($this->store, $this->valueFactory, $this, null, true, $path);
+    }
+    
+    public function createStringNode($content)
+    {
+        return new Node($this->store, $this->valueFactory, $this, null, false, $content);
+    }
+    
+    public function readNode($nodeId)
+    {
+        return new Node($this->store, $this->valueFactory, $this, $nodeId, null, null);
     }
 }

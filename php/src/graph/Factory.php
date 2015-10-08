@@ -25,15 +25,35 @@ class Factory implements IFactory
         $this->valueFactory->setNodeFactory($this->nodeFactory);
 
     }
-    
-    public function makeNode($id = null, $isFile = null, $content = null)
+
+    public function createNode()
     {
-        return $this->nodeFactory->makeNode($id, $isFile, $content);
+        return $this->nodeFactory->createNode();
+    }
+    
+    public function createFileNode($path)
+    {
+         return $this->nodeFactory->createFileNode($path);
+    }
+    
+    public function createStringNode($content)
+    {
+         return $this->nodeFactory->createStringNode($content);
+    }
+    
+    public function readNode($nodeId)
+    {
+         return $this->nodeFactory->readNode($nodeId);
     }
 
-    public function makeValue($isFile, $content)
+    public function makeStringValue($content)
     {
-        return $this->valueFactory->makeValue($isFile, $content);
+        return $this->valueFactory->makeStringValue($content);
+    }
+    
+    public function makeFileValue($path)
+    {
+        return $this->valueFactory->makeFileValue($path);
     }
 
 }

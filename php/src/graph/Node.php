@@ -60,7 +60,7 @@ class Node implements INode
         $childNodes = [];
         
         foreach ($childIds as $childId) {
-            $childNode = $this->nodeFactory->makeNode($childId);
+            $childNode = $this->nodeFactory->readNode($childId);
             array_push($childNodes, $childNode);
         }
 
@@ -71,6 +71,10 @@ class Node implements INode
     {
         $storeValue = $this->store->getValueByNodeId($this->id);
 
-        return $this->valueFactory->makeValue($storeValue->isFile(), $storeValue->getContent());
+        if ($storeValue->isFile()) {
+            return $this->valueFactory->makeFileValue($storeValue->getContent());
+        } else {
+            return $this->valueFactory->makeStringValue($storeValue->getContent());
+        }
     }
 }

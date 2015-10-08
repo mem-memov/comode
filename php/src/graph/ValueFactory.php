@@ -18,8 +18,13 @@ class ValueFactory implements IValueFactory
         $this->nodeFactory = $nodeFactory;
     }
     
-    public function makeValue($isFile, $content)
+    public function makeStringValue($content)
     {
-        return new Value($this->store, $this->nodeFactory, $isFile, $content);
+        return new Value($this->store, $this->nodeFactory, false, $content);
+    }
+    
+    public function makeFileValue($path)
+    {
+        return new Value($this->store, $this->nodeFactory, true, $path);
     }
 }

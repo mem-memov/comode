@@ -37,13 +37,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItCreatesANewNodeWithNoValue()
     {
-        $node = $this->factory->makeNode();
+        $node = $this->factory->createNode();
         $this->assertInstanceOf('Comode\graph\INode', $node);
     }
     
     public function testItCreatesANewNodeWithAStringValue()
     {
-        $node = $this->factory->makeNode(null, false, 'some text');
+        $node = $this->factory->createStringNode('some text');
         $this->assertInstanceOf('Comode\graph\INode', $node);
     }
     
@@ -52,16 +52,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filePath = $this->path . '/myTestFile.txt';
         file_put_contents($filePath, 'some file content');
         
-        $node = $this->factory->makeNode(null, true, $filePath);
+        $node = $this->factory->createFileNode($filePath);
         $this->assertInstanceOf('Comode\graph\INode', $node);
     }
     
     public function testItRetrievesANodeByItsId()
     {
-        $createdNode = $this->factory->makeNode();
+        $createdNode = $this->factory->createNode();
         $createdNodeId = $createdNode->getId();
         
-        $retreivedNode = $this->factory->makeNode($createdNodeId);
+        $retreivedNode = $this->factory->readNode($createdNodeId);
         $retreivedNodeId = $retreivedNode->getId();
         
         $this->assertEquals($createdNodeId, $retreivedNodeId);
@@ -69,29 +69,29 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesNewInstancesOfTheSameNode()
     {
-        $createdNode = $this->factory->makeNode();
+        $createdNode = $this->factory->createNode();
         $createdNodeId = $createdNode->getId();
         
-        $retreivedNode_1 = $this->factory->makeNode($createdNodeId);
-        $retreivedNode_2 = $this->factory->makeNode($createdNodeId);
+        $retreivedNode_1 = $this->factory->readNode($createdNodeId);
+        $retreivedNode_2 = $this->factory->readNode($createdNodeId);
 
         
-        $this->assertEquals(false, $retreivedNode_1 === $retreivedNode_2);
+        $this->assertFalse($retreivedNode_1 === $retreivedNode_2);
     }
     
     public function testItRetrievesAStringValue()
     {
-        $node = $this->factory->makeNode(null, false, 'some text');
-        $value = $this->factory->makeValue(false, 'some text');
+        $node = $this->factory->createStringNode('some text');
+        $value = $this->factory->makeStringValue('some text');
         $this->assertInstanceOf('Comode\graph\IValue', $value);
     }
     
     public function testItCreatesNewInstancesOfTheSameStringValue()
     {
-        $node = $this->factory->makeNode(null, false, 'some text');
-        $value_1 = $this->factory->makeValue(false, 'some text');
-        $value_2 = $this->factory->makeValue(false, 'some text');
-        $this->assertEquals(false, $value_1 === $value_2);
+        $node = $this->factory->createStringNode('some text');
+        $value_1 = $this->factory->makeStringValue('some text');
+        $value_2 = $this->factory->makeStringValue('some text');
+        $this->assertFalse($value_1 === $value_2);
     }
     
     public function testItRetrievesAFileValue()
@@ -99,9 +99,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filePath = $this->path . '/myTestFile.txt';
         file_put_contents($filePath, 'some file content');
         
-        $node = $this->factory->makeNode(null, true, $filePath);
+        $node = $this->factory->createFileNode($filePath);
 
-        $value = $this->factory->makeValue(true, $filePath);
+        $value = $this->factory->makeFileValue($filePath);
 
         $this->assertInstanceOf('Comode\graph\IValue', $value);
     }
@@ -111,9 +111,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filePath = $this->path . '/myTestFile.txt';
         file_put_contents($filePath, 'some file content');
         
-        $node = $this->factory->makeNode(null, true, $filePath);
-        $value_1 = $this->factory->makeValue(true, $filePath);
-        $value_2 = $this->factory->makeValue(true, $filePath);
+        $node = $this->factory->createFileNode($filePath);
+        $value_1 = $this->factory->makeFileValue($filePath);
+        $value_2 = $this->factory->makeFileValue($filePath);
         $this->assertEquals(false, $value_1 === $value_2);
     }
 }

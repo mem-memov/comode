@@ -21,5 +21,5 @@ Comode\graph\Node
  [x] It copies its value file to an internal location
 
 Comode\graph\Value
- [ ] It provides all nodes that have the value
+ [x] It provides all nodes that have the value
 

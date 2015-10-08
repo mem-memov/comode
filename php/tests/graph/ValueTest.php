@@ -43,14 +43,14 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     {
         $stringContent = 'some text';
         
-        $stringNode_1 = $this->factory->makeNode(null, false, $stringContent);
-        $stringNode_2 = $this->factory->makeNode(null, false, $stringContent);
-        $stringNode_3 = $this->factory->makeNode(null, false, $stringContent);
+        $stringNode_1 = $this->factory->createStringNode($stringContent);
+        $stringNode_2 = $this->factory->createStringNode($stringContent);
+        $stringNode_3 = $this->factory->createStringNode($stringContent);
 
-        $fileNode_1 = $this->factory->makeNode(null, true, $this->originFilePath);
-        $fileNode_2 = $this->factory->makeNode(null, true, $this->originFilePath);
+        $fileNode_1 = $this->factory->createFileNode($this->originFilePath);
+        $fileNode_2 = $this->factory->createFileNode($this->originFilePath);
 
-        $stringValue = $this->factory->makeValue(false, $stringContent);
+        $stringValue = $this->factory->makeStringValue($stringContent);
         
         $nodes = $stringValue->getNodes();
         $this->assertCount(3, $nodes);
@@ -62,7 +62,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(2, $ids);
         $this->assertContains(3, $ids);
         
-        $fileValue = $this->factory->makeValue(false, $this->originFilePath);
+        $fileValue = $this->factory->makeFileValue($this->originFilePath);
         
         $nodes = $fileValue->getNodes();
         $this->assertCount(2, $nodes);

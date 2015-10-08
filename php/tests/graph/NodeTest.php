@@ -15,16 +15,16 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         
         $factory = new Factory($config);
         
-        $this->emptyNode = $factory->makeNode(null); // id = 1
+        $this->emptyNode = $factory->createNode(); // id = 1
         
         $this->stringContent = 'some text';
-        $this->stringNode = $factory->makeNode(null, false, $this->stringContent); // id = 2
+        $this->stringNode = $factory->createStringNode($this->stringContent); // id = 2
         
         $this->originFilePath = $this->path . '/myTestFile.txt';
         $this->originFileContent = 'some file content';
         file_put_contents($this->originFilePath, $this->originFileContent);
         
-        $this->fileNode = $factory->makeNode(null, true, $this->originFilePath); // id = 3
+        $this->fileNode = $factory->createFileNode($this->originFilePath); // id = 3
     }
     
     protected function tearDown()
