@@ -27,7 +27,7 @@ class Value implements IValue
         $nodes = [];
         
         foreach ($ids as $id) {
-            $node = $this->makeNode($id);
+            $node = $this->nodeFactory->makeNode($id);
             array_push($nodes, $node);
         }
         

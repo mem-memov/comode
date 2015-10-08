@@ -20,3 +20,6 @@ Comode\graph\Node
  [x] It does not provide a value when it is empty
  [x] It copies its value file to an internal location
 
+Comode\graph\Value
+ [ ] It provides all nodes that have the value
+
