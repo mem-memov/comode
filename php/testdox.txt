@@ -9,3 +9,14 @@ Comode\graph\Factory
  [x] It retrieves a file value
  [x] It creates new instances of the same file value
 
+Comode\graph\Node
+ [x] It provides its own id
+ [x] Its id is an integer
+ [x] It can be connected to other nodes
+ [x] It produces an error when you try to connect it to something else
+ [x] It provides all nodes it is connected to
+ [x] Provided nodes are of the node type
+ [x] It provides its value
+ [x] It does not provide a value when it is empty
+ [x] It copies its value file to an internal location
+

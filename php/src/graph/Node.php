@@ -2,6 +2,7 @@
 namespace Comode\graph;
 
 use Comode\graph\store\IStore;
+use Comode\graph\store\ValueNotFound;
 use Comode\graph\value\IValue;
 
 class Node implements INode
@@ -52,7 +53,7 @@ class Node implements INode
         $this->store->linkNodes($this->id, $node->getId());
     }
         
-    public function getChildNodes()
+    public function getNodes()
     {
         $childIds = $this->store->getChildNodes($this->id);
         
@@ -68,8 +69,8 @@ class Node implements INode
         
     public function getValue()
     {
-        $storeValue = $this->store->getValue($this->id);
-        
+        $storeValue = $this->store->getValueByNodeId($this->id);
+
         return $this->valueFactory->makeValue($storeValue->isFile(), $storeValue->getContent());
     }
 }
