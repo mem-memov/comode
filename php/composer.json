@@ -2,6 +2,7 @@
     "autoload": {
         "psr-4": {
             "Comode\\graph\\": "src/graph",
+            "Comode\\syntax\\": "src/syntax",
             "WebApi\\": ["src/controller", "src/router"]
         }
     },
