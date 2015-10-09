@@ -1,0 +1,25 @@
+<?php
+namespace Comode\syntax;
+class FileAnswerTest extends \PHPUnit_Framework_TestCase
+{
+    protected function setUp()
+    {
+        require_once('GraphFixture.php');
+        $this->graphFixture = new \GraphFixture();
+        $graphFactory = $this->graphFixture->setUp();
+        
+        $this->answerFactory = new AnswerFactory($graphFactory);
+    }
+    
+    protected function tearDown()
+    {
+        $this->graphFixture->tearDown();
+    }
+    
+    public function testItsValueCanBeSetWithAPath()
+    {
+        $fileAnswer = $this->answerFactory->createFileAnswer();
+        
+        $fileAnswer->set('/this/path/takes/you/nowhere');
+    }
+}

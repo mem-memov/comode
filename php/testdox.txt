@@ -23,3 +23,22 @@ Comode\graph\Node
 Comode\graph\Value
  [x] It provides all nodes that have the value
 
+Comode\syntax\Fact
+ [x] Its answer can be set as a string
+ [x] Its answer can be set as a file
+
+Comode\syntax\Factory
+ [x] It creates statements
+
+Comode\syntax\FileAnswer
+ [x] Its value can be set with a path
+
+Comode\syntax\Question
+ [x] Its value can be set with a string
+
+Comode\syntax\Statement
+ [x] Facts can be added to it
+
+Comode\syntax\StringAnswer
+ [x] Its value can be set with a string
+

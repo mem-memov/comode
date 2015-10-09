@@ -9,5 +9,6 @@ return array(
     'WebApi\\' => array($baseDir . '/src/controller', $baseDir . '/src/router'),
     'Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
+    'Comode\\syntax\\' => array($baseDir . '/src/syntax'),
     'Comode\\graph\\' => array($baseDir . '/src/graph'),
 );

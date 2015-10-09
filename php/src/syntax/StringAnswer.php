@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class Question implements IQuestion
+class StringAnswer implements IAnswer
 {
     private $string;
     
