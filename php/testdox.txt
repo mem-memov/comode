@@ -30,15 +30,6 @@ Comode\syntax\Fact
 Comode\syntax\Factory
  [x] It creates statements
 
-Comode\syntax\FileAnswer
- [x] Its value can be set with a path
-
-Comode\syntax\Question
- [x] Its value can be set with a string
-
 Comode\syntax\Statement
  [x] Facts can be added to it
-
-Comode\syntax\StringAnswer
- [x] Its value can be set with a string
 

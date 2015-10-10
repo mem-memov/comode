@@ -1,12 +1,16 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
+
 class Question implements IQuestion
 {
+    private $node;
     private $string;
     
-    public function set($string)
+    public function __construct($string, INode $node)
     {
         $this->string = $string;
+        $this->node = $node;
     }
 }

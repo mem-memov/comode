@@ -1,38 +1,40 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
+
 class Fact implements IFact
 {
+    private $node;
     private $question;
     private $answer;
-    private $graphFactory;
     private $questionFactory;
     private $answerFactory;
     
-    public function __construct($graphFactory, $questionFactory, $answerFactory)
+    public function __construct($questionFactory, $answerFactory, INode $node)
     {
-        $this->graphFactory = $graphFactory;
         $this->questionFactory = $questionFactory;
         $this->answerFactory = $answerFactory;
+        $this->node = $node;
     }
     
-    public function setQuestion()
+    public function setQuestion($string)
     {
-        $this->question = $this->questionFactory->createQuestion();
+        $this->question = $this->questionFactory->createQuestion($string, $this->node);
         
         return $this->question;
     }
     
-    public function setStringAnswer()
+    public function setStringAnswer($string)
     {
-        $this->answer = $this->answerFactory->createStringAnswer();
+        $this->answer = $this->answerFactory->createStringAnswer($string, $this->node);
         
         return $this->answer;
     }
     
-    public function setFileAnswer()
+    public function setFileAnswer($path)
     {
-        $this->answer = $this->answerFactory->createFileAnswer();
+        $this->answer = $this->answerFactory->createFileAnswer($path, $this->node);
         
         return $this->answer;
     }

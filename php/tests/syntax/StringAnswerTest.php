@@ -16,10 +16,5 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
         $this->graphFixture->tearDown();
     }
     
-    public function testItsValueCanBeSetWithAString()
-    {
-        $stringAnswer = $this->answerFactory->createStringAnswer();
-        
-        $stringAnswer->set('Mr. Obvious');
-    }
+
 }

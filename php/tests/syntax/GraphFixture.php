@@ -24,6 +24,14 @@ class GraphFixture
         $this->removeDirectory($this->path);
     }
     
+    public function createFile($fileName = 'myTestFile.txt', $content = 'some file content')
+    {
+        $filePath = $this->path . '/' . $fileName;
+        file_put_contents($filePath, $content);
+        
+        return $filePath;
+    }
+    
     protected function removeDirectory($dir)
     {
         $files = array_diff(scandir($dir), array('.','..'));

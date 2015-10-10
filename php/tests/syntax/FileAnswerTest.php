@@ -16,10 +16,5 @@ class FileAnswerTest extends \PHPUnit_Framework_TestCase
         $this->graphFixture->tearDown();
     }
     
-    public function testItsValueCanBeSetWithAPath()
-    {
-        $fileAnswer = $this->answerFactory->createFileAnswer();
-        
-        $fileAnswer->set('/this/path/takes/you/nowhere');
-    }
+
 }

@@ -1,12 +1,16 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
+
 class FileAnswer implements IAnswer
 {
+    private $node;
     private $path;
     
-    public function set($value)
+    public function __construct($path, INode $node)
     {
-        $this->path = $value;
+        $this->path = $path;
+        $this->node = $node;
     }
 }

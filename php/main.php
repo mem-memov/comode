@@ -2,10 +2,10 @@
 require __DIR__ . '/vendor/autoload.php';
 
 $config = require 'config.php';
-$nodeFactory = new Comode\graph\Factory($config['node']);
-$node1 = $nodeFactory->makeNode(null, false, 'когда?');
-$node2 = $nodeFactory->makeNode();
-$node3 = $nodeFactory->makeNode();
-$node1->addNode($node2);
-$node1->addNode($node3);
-var_dump($node1->getValue());
+$graphFactory = new Comode\graph\Factory($config['graph']);
+$syntaxFactory = new Comode\syntax\Factory($graphFactory);
+$statement = $syntaxFactory->createStatement();
+$fact = $statement->addFact();
+$question = $fact->setQuestion('when');
+$answer = $fact->setStringAnswer('today');
+var_dump($question);

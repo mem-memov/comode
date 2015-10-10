@@ -1,6 +1,7 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
 class FactFactory implements IFactFactory
@@ -16,9 +17,14 @@ class FactFactory implements IFactFactory
         $this->answerFactory = $answerFactory;
     }
     
-    public function createFact()
+    public function createFact(INode $statementNode)
     {
-        $fact = new Fact($this->graphFactory, $this->questionFactory, $this->answerFactory);
+        $factNode = $this->graphFactory->createNode();
+        
+        $factNode->addNode($statementNode);
+        $statementNode->addNode($factNode);
+        
+        $fact = new Fact($this->questionFactory, $this->answerFactory, $factNode);
         
         return $fact;
     }

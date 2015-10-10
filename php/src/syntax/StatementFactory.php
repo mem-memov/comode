@@ -16,7 +16,9 @@ class StatementFactory implements IStatementFactory
     
     public function createStatement()
     {
-        $statement = new Statement($this->factFactory);
+        $node = $this->graphFactory->createNode();
+        
+        $statement = new Statement($this->factFactory, $node);
         
         return $statement;
     }

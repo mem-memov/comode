@@ -17,6 +17,8 @@ class Factory implements IFactory
     
     public function createStatement()
     {
-        return $this->statementFactory->createStatement();
+        $statement = $this->statementFactory->createStatement();
+        
+        return $statement;
     }
 }

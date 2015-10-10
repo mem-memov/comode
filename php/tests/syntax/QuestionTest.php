@@ -16,10 +16,5 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
         $this->graphFixture->tearDown();
     }
 
-    public function testItsValueCanBeSetWithAString()
-    {
-        $question = $this->questionFactory->createQuestion();
-        
-        $question->set('who');
-    }
+
 }

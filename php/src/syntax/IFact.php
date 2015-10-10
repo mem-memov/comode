@@ -3,7 +3,7 @@ namespace Comode\syntax;
 
 interface IFact
 {
-    public function setQuestion();
-    public function setStringAnswer();
-    public function setFileAnswer();
+    public function setQuestion($string);
+    public function setStringAnswer($string);
+    public function setFileAnswer($path);
 }
