@@ -13,4 +13,9 @@ class StringAnswer implements IAnswer
         $this->string = $string;
         $this->node = $node;
     }
+    
+    public function bindAnswerToQuestion(operation\BindAnswerToQuestion $operation)
+    {
+        $operation->setAnswerNode($this->node);
+    }
 }

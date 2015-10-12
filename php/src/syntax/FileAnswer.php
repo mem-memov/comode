@@ -13,4 +13,9 @@ class FileAnswer implements IAnswer
         $this->path = $path;
         $this->node = $node;
     }
+    
+    public function bindAnswerToQuestion(operation\BindAnswerToQuestion $operation)
+    {
+        $operation->setAnswerNode($this->node);
+    }
 }

@@ -12,12 +12,14 @@ class Fact implements IFact
     private $answer;
     private $questionFactory;
     private $answerFactory;
+    private $statementNode;
     
-    public function __construct(IGraphFactory $graphFactory, IQuestionFactory $questionFactory, IAnswerFactory $answerFactory)
+    public function __construct(IGraphFactory $graphFactory, IQuestionFactory $questionFactory, IAnswerFactory $answerFactory, INode $statementNode)
     {
         $this->graphFactory = $graphFactory;
         $this->questionFactory = $questionFactory;
         $this->answerFactory = $answerFactory;
+        $this->statementNode = $statementNode;
     }
     
     public function setQuestion($string)
@@ -31,7 +33,7 @@ class Fact implements IFact
     {
         $this->answer = $this->answerFactory->createStringAnswer($string, $this->node);
         
-        $this->createNode();
+        $this->setNode();
         
         return $this->answer;
     }
@@ -40,19 +42,21 @@ class Fact implements IFact
     {
         $this->answer = $this->answerFactory->createFileAnswer($path, $this->node);
         
-        $this->createNode();
+        $this->setNode();
         
         return $this->answer;
     }
     
-    private function createNode()
+    private function setNode()
     {
         if (isset($this->node)) {
             throw new exception\FactCanNotBeRedefinedAfterItsQuestionAndAnswerAreSet();
         }
         
         if (isset($this->question) && isset($this->answer)) {
-            $this->node = $this->graphFactory->createNode();
+            $bindAnswerToQuestion = new operation\BindAnswerToQuestion($this->graphFactory, $this->answer, $this->question, $this->statementNode);
+            $bindAnswerToQuestion->run();
+            $this->node = $bindAnswerToQuestion->getFactNode();
         }
     }
 }

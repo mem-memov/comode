@@ -33,7 +33,7 @@ class Factory implements IFactory
     
     public function createFileNode($path)
     {
-         return $this->nodeFactory->createFileNode($path);
+        return $this->nodeFactory->createFileNode($path);
     }
     
     public function createStringNode($content)

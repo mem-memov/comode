@@ -5,6 +5,6 @@ use Comode\graph\INode;
 
 interface IAnswerFactory
 {
-    public function createStringAnswer($string, INode $factNode);
-    public function createFileAnswer($path, INode $factNode);
+    public function createStringAnswer($string);
+    public function createFileAnswer($path);
 }

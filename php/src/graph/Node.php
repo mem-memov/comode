@@ -3,7 +3,6 @@ namespace Comode\graph;
 
 use Comode\graph\store\IStore;
 use Comode\graph\store\ValueNotFound;
-use Comode\graph\value\IValue;
 
 class Node implements INode
 {
@@ -76,5 +75,22 @@ class Node implements INode
         } else {
             return $this->valueFactory->makeStringValue($storeValue->getContent());
         }
+    }
+    
+    public function getCommonNodes(INode $node)
+    {
+        $childIdsHere = $this->store->getChildNodes($this->id);
+        $childIdsThere = $this->store->getChildNodes($node->getId());
+
+        $commonIds = array_intersect($childIdsHere, $childIdsThere);
+        
+        $commonNodes = [];
+        
+        foreach ($commonIds as $commomId) {
+            $commonNode = $this->nodeFactory->readNode($commomId);
+            array_push($commonNodes, $commonNode);
+        }
+        
+        return $commonNodes;
     }
 }

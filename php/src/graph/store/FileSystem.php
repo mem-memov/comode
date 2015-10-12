@@ -53,17 +53,24 @@ class FileSystem implements IStore {
     
     public function createNode(IValue $value = null)
     {
+        if (!is_null($value)) {
+            $nodeId = $this->getValueNode($value);
+            if (!is_null($nodeId)) {
+                return $nodeId;
+            }
+        }
+
         $nodeId = $this->nextId();
        
         $nodePath = $this->buildNodePath($nodeId);
         
         mkdir($nodePath, 0777, true);
-        
+            
         if (!is_null($value)) {
             list($valueHash, $valuePath) = $this->createValue($value);
             $this->bindValueToNode($nodeId, $nodePath, $valueHash, $valuePath);
         }
-        
+
         return $nodeId;
     }
 
@@ -94,8 +101,8 @@ class FileSystem implements IStore {
             
         return $childIds;
     }
-        
-    public function getNodesByValue(IValue $value)
+
+    public function getValueNode(IValue $value)
     {
         if ($value->isFile()) {
             $originPath = $value->getContent();
@@ -109,17 +116,21 @@ class FileSystem implements IStore {
         $offset = strlen($indexPath) + 1;
             
         $nodePaths = glob($indexPath . '/*');
-            
-        $nodeIds = [];
-        foreach ($nodePaths as $nodePath) {
-            $nodeId = (int)substr($nodePath, $offset);
-            array_push($nodeIds, $nodeId);
+
+        $nodeCount = count($nodePaths);
+
+        if ($nodeCount == 0) {
+            $nodeId = null;
+        } elseif ($nodeCount == 1) {
+            $nodeId = (int)substr($nodePaths[0], $offset);
+        } else {
+            throw new \Exception();
         }
-            
-        return $nodeIds;
+        
+        return $nodeId;
     }
         
-    public function getValueByNodeId($nodeId)
+    public function getNodeValue($nodeId)
     {
         $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
@@ -223,7 +234,7 @@ class FileSystem implements IStore {
         if (!file_exists($valueToNodeIndexPath)) {
             mkdir($valueToNodeIndexPath, 0777, true);
         }
-        
+
         symlink($nodePath, $valueToNodeIndexPath . '/' . $nodeId);
          
         // node to value           

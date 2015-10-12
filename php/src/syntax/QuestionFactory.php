@@ -13,13 +13,10 @@ class QuestionFactory implements IQuestionFactory
         $this->graphFactory = $graphFactory;
     }
     
-    public function createQuestion($string, INode $factNode)
+    public function createQuestion($string)
     {
         $questionNode = $this->graphFactory->createStringNode($string);
-        
-        $questionNode->addNode($factNode);
-        $factNode->addNode($questionNode);
-        
+
         $question = new Question($string, $questionNode);
         
         return $question;

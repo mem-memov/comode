@@ -5,5 +5,5 @@ use Comode\graph\INode;
 
 interface IQuestionFactory
 {
-    public function createQuestion($string, INode $factNode);
+    public function createQuestion($string);
 }

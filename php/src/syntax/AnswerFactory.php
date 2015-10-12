@@ -13,25 +13,19 @@ class AnswerFactory implements IAnswerFactory
         $this->graphFactory = $graphFactory;
     }
     
-    public function createStringAnswer($string, INode $factNode)
+    public function createStringAnswer($string)
     {
         $answerNode = $this->graphFactory->createStringNode($string);
-        
-        $answerNode->addNode($factNode);
-        $factNode->addNode($answerNode);
-        
+
         $stringAnswer = new StringAnswer($string, $answerNode);
         
         return $stringAnswer;
     }
     
-    public function createFileAnswer($path, INode $factNode)
+    public function createFileAnswer($path)
     {
         $answerNode = $this->graphFactory->createFileNode($path);
-        
-        $answerNode->addNode($factNode);
-        $factNode->addNode($answerNode);
-        
+
         $fileAnswer = new FileAnswer($path, $answerNode);
         
         return $fileAnswer;

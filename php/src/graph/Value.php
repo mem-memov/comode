@@ -20,18 +20,16 @@ class Value implements IValue
         $this->content = $storeValue->getContent();
     }
     
-    public function getNodes()
+    public function getNode()
     {
-        $ids = $this->store->getNodesByValue(new store\Value($this->isFile, $this->content));
+        $id = $this->store->getValueNode(new store\Value($this->isFile, $this->content));
         
-        $nodes = [];
-        
-        foreach ($ids as $id) {
-            $node = $this->nodeFactory->readNode($id);
-            array_push($nodes, $node);
+        if (is_null($id)) {
+            return null;
         }
         
-        return $nodes;
+        $node = $this->nodeFactory->readNode($id);
+        return $node;
     }
     
     public function isFile()

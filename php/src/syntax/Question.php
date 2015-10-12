@@ -13,4 +13,9 @@ class Question implements IQuestion
         $this->string = $string;
         $this->node = $node;
     }
+    
+    public function bindAnswerToQuestion(operation\BindAnswerToQuestion $operation)
+    {
+        $operation->setQuestionNode($this->node);
+    }
 }
