@@ -3,7 +3,7 @@ require __DIR__ . '/vendor/autoload.php';
 
 $config = require 'config.php';
 $graphFactory = new Comode\graph\Factory($config['graph']);
-$syntaxFactory = new Comode\syntax\Factory($graphFactory);
+$syntaxFactory = new Comode\syntax\Factory($config['syntax'], $graphFactory);
 $statement = $syntaxFactory->createStatement();
 
 $fact = $statement->addFact();

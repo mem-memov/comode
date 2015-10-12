@@ -7,12 +7,14 @@ class Factory implements IFactory
 {
     private $statementFactory;
     
-    public function __construct(IGraphFactory $graphFactory)
+    public function __construct(array $config, IGraphFactory $graphFactory)
     {
-        $questionFactory = new QuestionFactory($graphFactory);
-        $answerFactory = new AnswerFactory($graphFactory);
-        $factFactory = new FactFactory($graphFactory, $questionFactory, $answerFactory);
-        $this->statementFactory = new StatementFactory($graphFactory, $factFactory);
+        $spaceMap = new SpaceMap($graphFactory, $config['spaceDirectory']);
+        
+        $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
+        $answerFactory = new AnswerFactory($graphFactory, $spaceMap);
+        $factFactory = new FactFactory($graphFactory, $questionFactory, $answerFactory, $spaceMap);
+        $this->statementFactory = new StatementFactory($graphFactory, $factFactory, $spaceMap);
     }
     
     public function createStatement()
@@ -21,4 +23,5 @@ class Factory implements IFactory
         
         return $statement;
     }
+
 }

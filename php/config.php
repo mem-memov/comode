@@ -7,6 +7,9 @@ return [
             'os' => 'Linux'
         ]
     ],
+    'syntax' => [
+        'spaceDirectory' => __DIR__ . '/../data/Comode',
+    ],
     'router' => [
         
     ]

@@ -9,12 +9,14 @@ class FactFactory implements IFactFactory
     private $graphFactory;
     private $questionFactory;
     private $answerFactory;
+    private $spaceMap;
     
-    public function __construct(IGraphFactory $graphFactory, IQuestionFactory $questionFactory, IAnswerFactory $answerFactory)
+    public function __construct(IGraphFactory $graphFactory, IQuestionFactory $questionFactory, IAnswerFactory $answerFactory, ISpaceMap $spaceMap)
     {
         $this->graphFactory = $graphFactory;
         $this->questionFactory = $questionFactory;
         $this->answerFactory = $answerFactory;
+        $this->spaceMap = $spaceMap;
     }
     
     public function createFact(INode $statementNode)

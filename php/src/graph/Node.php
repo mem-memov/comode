@@ -54,7 +54,7 @@ class Node implements INode
         
     public function getNodes()
     {
-        $childIds = $this->store->getChildNodes($this->id);
+        $childIds = $this->store->getLinkedNodes($this->id);
         
         $childNodes = [];
         
@@ -64,6 +64,11 @@ class Node implements INode
         }
 
         return $childNodes;
+    }
+    
+    public function hasNode(INode $node)
+    {
+        $this->store->isLinkedToNode($this->id, $node->getId());
     }
         
     public function getValue()
@@ -79,8 +84,8 @@ class Node implements INode
     
     public function getCommonNodes(INode $node)
     {
-        $childIdsHere = $this->store->getChildNodes($this->id);
-        $childIdsThere = $this->store->getChildNodes($node->getId());
+        $childIdsHere = $this->store->getLinkedNodes($this->id);
+        $childIdsThere = $this->store->getLinkedNodes($node->getId());
 
         $commonIds = array_intersect($childIdsHere, $childIdsThere);
         

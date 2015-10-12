@@ -7,10 +7,12 @@ use Comode\graph\IFactory as IGraphFactory;
 class AnswerFactory implements IAnswerFactory
 {
     private $graphFactory;
+    private $spaceMap;
     
-    public function __construct(IGraphFactory $graphFactory)
+    public function __construct(IGraphFactory $graphFactory, ISpaceMap $spaceMap)
     {
         $this->graphFactory = $graphFactory;
+        $this->spaceMap = $spaceMap;
     }
     
     public function createStringAnswer($string)

@@ -7,11 +7,13 @@ class StatementFactory implements IStatementFactory
 {
     private $graphFactory;
     private $factFactory;
+    private $spaceMap;
     
-    public function __construct(IGraphFactory $graphFactory, IFactFactory $factFactory)
+    public function __construct(IGraphFactory $graphFactory, IFactFactory $factFactory, ISpaceMap $spaceMap)
     {
         $this->graphFactory = $graphFactory;
         $this->factFactory = $factFactory;
+        $this->spaceMap = $spaceMap;
     }
     
     public function createStatement()

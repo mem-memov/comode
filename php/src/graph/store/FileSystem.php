@@ -86,20 +86,29 @@ class FileSystem implements IStore {
         symlink($targetPath, $originPath);
     }
         
-    public function getChildNodes($parentId)
+    public function isLinkedToNode($originId, $targetId)
     {
-        $path = $this->graphPath . '/' . $parentId;
+        $originPath = $this->buildNodePath($originId);
+        
+        $linkPath = $originPath . '/' . $targetId;
+        
+        return file_exists($linkPath);
+    }
+    
+    public function getLinkedNodes($nodeId)
+    {
+        $path = $this->buildNodePath($nodeId);
         $offset = strlen($path) + 1;
             
-        $childPaths = glob($path . '/*');
+        $linkedPaths = glob($path . '/*');
 
-        $childIds = [];
-        foreach ($childPaths as $childPath) {
-            $childId = (int)substr($childPath, $offset);
-            array_push($childIds, $childId);
+        $linkedIds = [];
+        foreach ($linkedPaths as $linkedPath) {
+            $linkedId = (int)substr($linkedPath, $offset);
+            array_push($linkedIds, $linkedId);
         }
             
-        return $childIds;
+        return $linkedIds;
     }
 
     public function getValueNode(IValue $value)
