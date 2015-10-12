@@ -68,7 +68,7 @@ class Node implements INode
         
     public function getValue()
     {
-        $storeValue = $this->store->getValueByNodeId($this->id);
+        $storeValue = $this->store->getNodeValue($this->id);
 
         if ($storeValue->isFile()) {
             return $this->valueFactory->makeFileValue($storeValue->getContent());

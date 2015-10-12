@@ -39,38 +39,26 @@ class ValueTest extends \PHPUnit_Framework_TestCase
         return rmdir($dir);
     }
     
-    public function testItProvidesAllNodesThatHaveTheValue()
+    public function testItProvidesItsNode()
     {
+        // string value
         $stringContent = 'some text';
         
-        $stringNode_1 = $this->factory->createStringNode($stringContent);
-        $stringNode_2 = $this->factory->createStringNode($stringContent);
-        $stringNode_3 = $this->factory->createStringNode($stringContent);
-
-        $fileNode_1 = $this->factory->createFileNode($this->originFilePath);
-        $fileNode_2 = $this->factory->createFileNode($this->originFilePath);
+        $stringNode = $this->factory->createStringNode($stringContent);
 
         $stringValue = $this->factory->makeStringValue($stringContent);
         
-        $nodes = $stringValue->getNodes();
-        $this->assertCount(3, $nodes);
-        $ids = [];
-        foreach ($nodes as $node) {
-            array_push($ids, $node->getId());
-        }
-        $this->assertContains(1, $ids);
-        $this->assertContains(2, $ids);
-        $this->assertContains(3, $ids);
+        $valueNode = $stringValue->getNode();
+        
+        $this->assertEquals($stringNode->getId(), $valueNode->getId());
+
+        // file value
+        $fileNode = $this->factory->createFileNode($this->originFilePath);
         
         $fileValue = $this->factory->makeFileValue($this->originFilePath);
         
-        $nodes = $fileValue->getNodes();
-        $this->assertCount(2, $nodes);
-        $ids = [];
-        foreach ($nodes as $node) {
-            array_push($ids, $node->getId());
-        }
-        $this->assertContains(4, $ids);
-        $this->assertContains(5, $ids);
+        $valueNode = $fileValue->getNode();
+        
+        $this->assertEquals($fileNode->getId(), $valueNode->getId());
     }
 }

@@ -21,7 +21,7 @@ Comode\graph\Node
  [x] It copies its value file to an internal location
 
 Comode\graph\Value
- [x] It provides all nodes that have the value
+ [x] It provides its node
 
 Comode\syntax\Fact
  [x] Its answer can be set as a string
