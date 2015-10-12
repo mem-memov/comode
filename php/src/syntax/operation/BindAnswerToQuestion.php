@@ -55,10 +55,7 @@ class BindAnswerToQuestion implements IBindAnswerToQuestion
         } elseif ($count == 0) {
             
             $this->factNode = $this->graphFactory->createNode();
-            
-            $this->statementNode->addNode($this->factNode);
-            $this->factNode->addNode($this->statementNode);
-            
+
             $this->answerNode->addNode($this->factNode);
             $this->factNode->addNode($this->answerNode);
             
@@ -66,6 +63,9 @@ class BindAnswerToQuestion implements IBindAnswerToQuestion
             $this->factNode->addNode($this->questionNode);
             
         }
+        
+        $this->statementNode->addNode($this->factNode);
+        $this->factNode->addNode($this->statementNode);
     }
     
     public function getFactNode()
