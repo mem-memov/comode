@@ -19,12 +19,10 @@ class FactFactory implements IFactFactory
     
     public function createFact(INode $statementNode)
     {
-        $factNode = $this->graphFactory->createNode();
-        
         $factNode->addNode($statementNode);
         $statementNode->addNode($factNode);
         
-        $fact = new Fact($this->questionFactory, $this->answerFactory, $factNode);
+        $fact = new Fact($this->graphFactory, $this->questionFactory, $this->answerFactory);
         
         return $fact;
     }
