@@ -15,21 +15,21 @@ class ComplimentFactory implements IComplimentFactory
         $this->spaceMap = $spaceMap;
     }
     
-    public function createStringCompliment($string)
+    public function provideStringCompliment($string)
     {
-        $answerNode = $this->graphFactory->createStringNode($string);
+        $complimentNode = $this->graphFactory->createStringNode($string);
 
-        $stringAnswer = new StringAnswer($string, $answerNode);
+        $stringCompliment = new StringCompliment($complimentNode);
         
-        return $stringAnswer;
+        return $stringCompliment;
     }
     
-    public function createFileCompliment($path)
+    public function provideFileCompliment($path)
     {
-        $answerNode = $this->graphFactory->createFileNode($path);
+        $complimentNode = $this->graphFactory->createFileNode($path);
 
-        $fileAnswer = new FileAnswer($path, $answerNode);
+        $fileCompliment = new FileCompliment($complimentNode);
         
-        return $fileAnswer;
+        return $fileCompliment;
     }
 }

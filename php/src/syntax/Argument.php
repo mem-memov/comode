@@ -7,15 +7,11 @@ class Argument implements IArgument
 {
     private $complimentFactory;
     private $node;
-    private $predicate;
-    private $question;
 
-    public function __construct(IComplimentFactory $complimentFactory, INode $node,)
+    public function __construct(IComplimentFactory $complimentFactory, INode $node)
     {
         $this->complimentFactory = $complimentFactory;
         $this->node = $node;
-        $this->predicate = $predicate;
-        $this->question = $question;
     }
     
     public function addClause(INode $clauseNode)
@@ -30,11 +26,19 @@ class Argument implements IArgument
     
     public function provideStringCompliment($string)
     {
-        $compliment = $this->complimentFactory->createStringCompliment($string);
+        $compliment = $this->complimentFactory->provideStringCompliment($string);
+        
+        if (!$compliment->hasArgument($this->node)) {
+            $compliment->addArgument($this->node);
+        }
     }
     
     public function provideFileCompliment($path)
     {
-        $this->complimentFactory->createFileCompliment($path);
+        $compliment = $this->complimentFactory->provideFileCompliment($path);
+        
+        if (!$compliment->hasArgument($this->node)) {
+            $compliment->addArgument($this->node);
+        }
     }
 }

@@ -3,5 +3,6 @@ namespace Comode\syntax;
 
 interface ICompliment
 {
-    public function bindAnswerToQuestion(operation\BindAnswerToQuestion $operation);
+    public function hasArgument(INode $argumentNode);
+    public function addArgument(INode $argumentNode);
 }

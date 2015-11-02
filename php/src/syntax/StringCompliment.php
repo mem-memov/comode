@@ -3,13 +3,7 @@ namespace Comode\syntax;
 
 use Comode\graph\INode;
 
-class StringCompliment implements ICompliment
+class StringCompliment extends Compliment
 {
-    private $node;
-
-    public function __construct(INode $node)
-    {
-        $this->node = $node;
-    }
 
 }

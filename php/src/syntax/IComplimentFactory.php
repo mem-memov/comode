@@ -5,6 +5,6 @@ use Comode\graph\INode;
 
 interface IComplimentFactory
 {
-    public function createStringCompliment($string);
-    public function createFileCompliment($path);
+    public function provideStringCompliment($string);
+    public function provideFileCompliment($path);
 }
