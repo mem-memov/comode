@@ -23,13 +23,6 @@ Comode\graph\Node
 Comode\graph\Value
  [x] It provides its node
 
-Comode\syntax\Fact
- [x] Its answer can be set as a string
- [x] Its answer can be set as a file
-
 Comode\syntax\Factory
- [x] It creates statements
-
-Comode\syntax\Statement
- [x] Facts can be added to it
+ [x] It creates clauses
 

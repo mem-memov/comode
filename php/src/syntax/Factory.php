@@ -5,23 +5,26 @@ use Comode\graph\IFactory as IGraphFactory;
 
 class Factory implements IFactory
 {
-    private $statementFactory;
+    private $clauseFactory;
     
     public function __construct(array $config, IGraphFactory $graphFactory)
     {
         $spaceMap = new SpaceMap($graphFactory, $config['spaceDirectory']);
-        
-        $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
+
         $complimentFactory = new ComplimentFactory($graphFactory, $spaceMap);
-        $argumentFactory = new ArgumentFactory($graphFactory, $questionFactory, $complimentFactory, $spaceMap);
-        $this->sentenceFactory = new SentenceFactory($graphFactory, $argumentFactory, $spaceMap);
+        $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
+        $argumentFactory = new ArgumentFactory($graphFactory, $spaceMap, $questionFactory, $complimentFactory);
+        $predicateFactory = new PredicateFactory($graphFactory, $spaceMap);
+        $argumentFactory->setPredicateFactory($predicateFactory);
+        $this->clauseFactory = new ClauseFactory($graphFactory, $spaceMap, $predicateFactory, $argumentFactory, $questionFactory);
+        $argumentFactory->setClauseFactory($this->clauseFactory);
     }
     
-    public function createSentence()
+    public function createClause()
     {
-        $sentence = $this->sentenceFactory->createSentence();
+        $clause = $this->clauseFactory->createClause();
         
-        return $sentence;
+        return $clause;
     }
 
 }

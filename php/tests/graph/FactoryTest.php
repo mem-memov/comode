@@ -4,7 +4,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        $this->path = __DIR__ . '/../../../data/tmp/test_' . time() . '_' . rand(1,10000);
+        require_once __DIR__ . '/../DirectoryFixture.php';
+        $this->directoryFixture = new \DirectoryFixture();
+        
+        $this->path = $this->directoryFixture->createDirectory();
 
         $config = [
             'store' => [
@@ -18,21 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     
     protected function tearDown()
     {
-        $this->removeDirectory($this->path);
-    }
-    
-    protected function removeDirectory($dir)
-    {
-        $files = array_diff(scandir($dir), array('.','..'));
-        foreach ($files as $file) {
-            $path = $dir . '/' . $file;
-            if (is_dir($path) && !is_link($path)) {
-                $this->removeDirectory($path);
-            } else {
-                unlink($path);
-            }
-        }
-        return rmdir($dir);
+        $this->directoryFixture->removeDirectory();
     }
 
     public function testItCreatesANewNodeWithNoValue()

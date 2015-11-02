@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-interface IFactory
+interface IClauseFactory
 {
     public function createClause();
 }

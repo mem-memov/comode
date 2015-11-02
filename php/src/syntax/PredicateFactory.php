@@ -7,13 +7,11 @@ use Comode\graph\IFactory as IGraphFactory;
 class PredicateFactory implements IPredicateFactory
 {
     private $graphFactory;
-    private $argumentFactory;
     private $spaceMap;
 
-    public function __construct(IGraphFactory $graphFactory, IArgumentFactory $argumentFactory, ISpaceMap $spaceMap)
+    public function __construct(IGraphFactory $graphFactory, ISpaceMap $spaceMap)
     {
         $this->graphFactory = $graphFactory;
-        $this->argumentFactory = $argumentFactory;
         $this->spaceMap = $spaceMap;
     }
     

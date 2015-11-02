@@ -1,6 +1,7 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
 class ArgumentFactory implements IArgumentFactory
@@ -15,8 +16,6 @@ class ArgumentFactory implements IArgumentFactory
     public function __construct(
         IGraphFactory $graphFactory, 
         ISpaceMap $spaceMap,
-        IClauseFactory $clauseFactory,
-        IPredicateFactory $predicateFactory,
         IQuestionFactory $questionFactory, 
         IComplimentFactory $complimentFactory
     )
@@ -24,9 +23,18 @@ class ArgumentFactory implements IArgumentFactory
         $this->graphFactory = $graphFactory;
         $this->spaceMap = $spaceMap;
         $this->clauseFactory = $clauseFactory;
-        $this->predicateFactory = $predicateFactory;
         $this->questionFactory = $questionFactory;
         $this->complimentFactory = $complimentFactory;
+    }
+    
+    public function setClauseFactory(IClauseFactory $clauseFactory)
+    {
+        $this->clauseFactory = $clauseFactory;
+    }
+    
+    public function setPredicateFactory(IPredicateFactory $predicateFactory)
+    {
+        $this->predicateFactory = $predicateFactory;
     }
     
     public function provideArgument(IPredicate $predicate, IQiestion $question)
@@ -44,6 +52,18 @@ class ArgumentFactory implements IArgumentFactory
     {
         $argumentNodes = $this->spaceMap->getArgumentNodes($clauseNode);
         
+        return $this->makeArguments($argumentNodes);
+    }
+    
+    public function getArgumentsByPredicate(INode $predicateNode)
+    {
+        $argumentNodes = $this->spaceMap->getArgumentNodes($predicateNode);
+
+        return $this->makeArguments($argumentNodes);
+    }
+    
+    private function makeArguments(array $argumentNodes)
+    {
         $arguments = [];
         
         foreach ($argumentNodes as $argumentNode) {

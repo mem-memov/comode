@@ -19,7 +19,7 @@ class Clause implements IClause
     {
         $this->predicateFactory = $predicateFactory;
         $this->argumentFactory = $argumentFactory;
-        $this->questionFactory = @questionFactoryl
+        $this->questionFactory = $questionFactory;
         $this->node = $node;
     }
 
