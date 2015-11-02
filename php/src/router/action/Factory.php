@@ -7,12 +7,10 @@ class Factory implements IFactory
     private $controllerFactory;
     
     public function __construct(
-        \WebApi\router\request\IRequest $request,
-        \service\IFactory $serviceFactory,
-        \domain\IFactory $domainFactory
+        \WebApi\router\request\IRequest $request
     ) {
         $this->request = $request;
-        $this->controllerFactory = new controller\Factory($serviceFactory, $domainFactory);
+        $this->controllerFactory = new controller\Factory();
     }
     
     public function controller(array $data)

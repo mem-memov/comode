@@ -7,12 +7,10 @@ class Factory implements IFactory
     private $partFactory;
     
     public function __construct(
-        \service\IFactory $serviceFactory,
-        \domain\IFactory $domainFactory,
         array $commandLine
     ) {
         $requestFactory = new request\Factory($commandLine);
-        $actionFactory = new action\Factory($requestFactory->request(), $serviceFactory, $domainFactory);
+        $actionFactory = new action\Factory($requestFactory->request());
         $this->partFactory = new part\Factory($actionFactory);
     }
     
