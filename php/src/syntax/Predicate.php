@@ -20,7 +20,7 @@ class Predicate implements IPredicate
     public function addClause(INode $clauseNode)
     {
         if ($this->node->hasNode($clauseNode)) {
-            throw new exception\ClauseMustHaveOnePredicate();
+            throw new exception\ClauseMustHaveOnePredicate('Predicate '. $this->node->getId . ' is already linked to clause ' . $clauseNode->getId());
         }
         
         $clauseNode->addNode($this->node);
@@ -37,9 +37,9 @@ class Predicate implements IPredicate
         return $this->argumentFactory->getArgumentsByPredicate($this->node);
     }
     
-    public function provideArgument(IArgumentProvider $argumentProvider)
+    public function provideArgument(operation\IArgumentNodeProvider $argumentNodeProvider)
     {
-        $argumentProvider->setPredicateNode($this->node);
+        $argumentNodeProvider->setPredicateNode($this->node);
     }
 
 }

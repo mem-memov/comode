@@ -17,7 +17,7 @@ class ComplimentFactory implements IComplimentFactory
     
     public function provideStringCompliment($string)
     {
-        $complimentNode = $this->graphFactory->createStringNode($string);
+        $complimentNode = $this->spaceMap->createStringComplimentNode($string);
 
         $stringCompliment = new StringCompliment($complimentNode);
         
@@ -26,7 +26,7 @@ class ComplimentFactory implements IComplimentFactory
     
     public function provideFileCompliment($path)
     {
-        $complimentNode = $this->graphFactory->createFileNode($path);
+        $complimentNode = $this->spaceMap->createFileComplimentNode($path);
 
         $fileCompliment = new FileCompliment($complimentNode);
         

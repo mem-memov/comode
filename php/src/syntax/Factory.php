@@ -14,9 +14,10 @@ class Factory implements IFactory
         $complimentFactory = new ComplimentFactory($graphFactory, $spaceMap);
         $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
         $argumentFactory = new ArgumentFactory($graphFactory, $spaceMap, $questionFactory, $complimentFactory);
-        $predicateFactory = new PredicateFactory($graphFactory, $spaceMap);
+        $predicateFactory = new PredicateFactory($graphFactory, $spaceMap, $argumentFactory);
         $argumentFactory->setPredicateFactory($predicateFactory);
         $this->clauseFactory = new ClauseFactory($graphFactory, $spaceMap, $predicateFactory, $argumentFactory, $questionFactory);
+        $predicateFactory->setClauseFactory($this->clauseFactory);
         $argumentFactory->setClauseFactory($this->clauseFactory);
     }
     

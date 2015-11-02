@@ -15,11 +15,11 @@ class QuestionFactory implements IQuestionFactory
         $this->spaceMap = $spaceMap;
     }
     
-    public function createQuestion($string)
+    public function provideQuestion($string)
     {
-        $questionNode = $this->graphFactory->createStringNode($string);
+        $questionNode = $this->spaceMap->createQuestionNode($string);
 
-        $question = new Question($string, $questionNode);
+        $question = new Question($questionNode);
         
         return $question;
     }

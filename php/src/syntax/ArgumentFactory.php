@@ -37,9 +37,9 @@ class ArgumentFactory implements IArgumentFactory
         $this->predicateFactory = $predicateFactory;
     }
     
-    public function provideArgument(IPredicate $predicate, IQiestion $question)
+    public function provideArgument(IPredicate $predicate, IQuestion $question)
     {
-        $argumentProvider = new operation\ArgumentProvider($this->graphFactory, $this->spaceMap, $predicate, $question);
+        $argumentProvider = new operation\ArgumentNodeProvider($this->graphFactory, $this->spaceMap, $predicate, $question);
 
         $argumentNode = $argumentProvider->provideArgumentNode();
         
@@ -75,6 +75,6 @@ class ArgumentFactory implements IArgumentFactory
     
     private function makeArgument($argumentNode)
     {
-        return new Argument($this->clauseFactory, $this->predecateFactory, $this->questionFactory, $this->complimentFactory, $argumentNode);
+        return new Argument($this->clauseFactory, $this->predicateFactory, $this->questionFactory, $this->complimentFactory, $argumentNode);
     }
 }

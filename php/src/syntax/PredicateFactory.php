@@ -8,16 +8,27 @@ class PredicateFactory implements IPredicateFactory
 {
     private $graphFactory;
     private $spaceMap;
+    private $clauseFactory;
+    private $argumentFactory;
 
-    public function __construct(IGraphFactory $graphFactory, ISpaceMap $spaceMap)
-    {
+    public function __construct(
+        IGraphFactory $graphFactory, 
+        ISpaceMap $spaceMap,
+        IArgumentFactory $argumentFactory
+    ) {
         $this->graphFactory = $graphFactory;
         $this->spaceMap = $spaceMap;
+        $this->argumentFactory = $argumentFactory;
+    }
+    
+    public function setClauseFactory(IClauseFactory $clauseFactory)
+    {
+        $this->clauseFactory = $clauseFactory;
     }
     
     public function providePredicate($predicateString)
     {
-        $predicateNode = $this->graphFactory->createStringNode($predicateString);
+        $predicateNode = $this->spaceMap->createPredicateNode($predicateString);
 
         $predicate = $this->makePredicate($predicateNode);
         
@@ -27,7 +38,7 @@ class PredicateFactory implements IPredicateFactory
     public function providePredicatesByClause(INode $clauseNode)
     {
         $predicateNodes = $this->spaceMap->getPredicateNodes($clauseNode);
-        
+
         $predicates = [];
         
         foreach ($predicateNodes as $predicateNode) {
@@ -39,6 +50,6 @@ class PredicateFactory implements IPredicateFactory
     
     private function makePredicate($predicateNode)
     {
-        return new Predicate($predicateNode);
+        return new Predicate($this->clauseFactory, $this->argumentFactory, $predicateNode);
     }
 }

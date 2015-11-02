@@ -5,11 +5,22 @@ use Comode\graph\INode;
 
 class Argument implements IArgument
 {
+    private $clauseFactory;
+    private $predicateFactory;
+    private $questionFactory;
     private $complimentFactory;
     private $node;
 
-    public function __construct(IComplimentFactory $complimentFactory, INode $node)
-    {
+    public function __construct(
+        IClauseFactory $clauseFactory,
+        IPredicateFactory $predicateFactory,
+        IQuestionFactory $questionFactory,
+        IComplimentFactory $complimentFactory, 
+        INode $node
+    ) {
+        $this->clauseFactory = $clauseFactory; 
+        $this->predicateFactory = $predicateFactory;
+        $this->questionFactory = $questionFactory;
         $this->complimentFactory = $complimentFactory;
         $this->node = $node;
     }

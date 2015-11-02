@@ -23,6 +23,10 @@ Comode\graph\Node
 Comode\graph\Value
  [x] It provides its node
 
+Comode\syntax\Clause
+ [x] It gets a predicate
+ [x] It gets arguments
+
 Comode\syntax\Factory
  [x] It creates clauses
 

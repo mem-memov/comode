@@ -42,10 +42,10 @@ class Clause implements IClause
     public function getPredicate()
     {
         $predicates = $this->predicateFactory->providePredicatesByClause($this->node);
-        
+
         $predicateCount = count($predicates);
         if ($predicateCount != 1) {
-            throw new exception\ClauseMustHaveOnePredicate();
+            throw new exception\ClauseMustHaveOnePredicate('Clause ' . $this->node->getId() . ' has ' . $predicateCount . ' predicates.');
         }
         
         $predicate = $predicates[0];

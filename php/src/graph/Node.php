@@ -68,7 +68,7 @@ class Node implements INode
     
     public function hasNode(INode $node)
     {
-        $this->store->isLinkedToNode($this->id, $node->getId());
+        return $this->store->isLinkedToNode($this->id, $node->getId());
     }
         
     public function getValue()

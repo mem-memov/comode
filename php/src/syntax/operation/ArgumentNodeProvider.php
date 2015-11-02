@@ -1,8 +1,13 @@
 <?php
-namespace Comode\syntax;
+namespace Comode\syntax\operation;
+
+use Comode\graph\IFactory as IGraphFactory;
+use Comode\syntax\ISpaceMap;
+use Comode\syntax\IPredicate;
+use Comode\syntax\IQuestion;
 
 use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
+
 
 class ArgumentNodeProvider implements IArgumentNodeProvider
 {
@@ -53,7 +58,7 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
             
         } elseif ($count == 0) {
             
-            $argumentNode = $this->graphFactory->createNode();
+            $argumentNode = $this->spaceMap->createArgumentNode();
             $this->bindToPredicateAnQuestion($argumentNode);
             
         }

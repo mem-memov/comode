@@ -12,9 +12,9 @@ class Question implements IQuestion
         $this->node = $node;
     }
     
-    public function provideArgument(IArgumentProvider $argumentProvider)
+    public function provideArgument(operation\IArgumentNodeProvider $argumentNodeProvider)
     {
-        $argumentProvider->setQuestionNode($this->node);
+        $argumentNodeProvider->setQuestionNode($this->node);
     }
 
 }

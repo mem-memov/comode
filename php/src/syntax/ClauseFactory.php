@@ -29,7 +29,7 @@ class ClauseFactory implements IClauseFactory
     
     public function createClause()
     {
-        $node = $this->graphFactory->createNode();
+        $node = $this->spaceMap->createClauseNode();
         
         return $this->makeClause($node);
     }
