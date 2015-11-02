@@ -26,4 +26,11 @@ abstract class Compliment implements ICompliment
         $this->node->addNode($argumentNode);
         $argumentNode->addNode($this->node);
     }
+    
+    public function getValue()
+    {
+        return $this->node->getValue()->getContent();
+    }
+    
+    abstract public function isFile();
 }

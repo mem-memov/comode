@@ -52,4 +52,17 @@ class Argument implements IArgument
             $compliment->addArgument($this->node);
         }
     }
+    
+    public function getQuestion()
+    {
+        $questions = $this->questionFactory->provideQuestionsByPredicate($this->node);
+        
+        $questionCount = count($questions);
+        
+        if ($questionCount != 1) {
+            throw new exception\PredicateAndQuestionHaveOneCommonArgument('Argument ' . $this->node->getId() . ' has ' . $questionCount . ' questions.');
+        }
+        
+        return $questions[0];
+    }
 }

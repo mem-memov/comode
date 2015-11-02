@@ -25,8 +25,13 @@ Comode\graph\Value
 
 Comode\syntax\Clause
  [x] It gets a predicate
+ [x] It keeps its predicate
  [x] It gets arguments
+ [x] It keeps its arguments
 
 Comode\syntax\Factory
  [x] It creates clauses
+
+Comode\syntax\Predicate
+ [x] It keeps its value
 

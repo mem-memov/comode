@@ -17,6 +17,11 @@ class Predicate implements IPredicate
         $this->node = $node;
     }
     
+    public function getValue()
+    {
+        return $this->node->getValue()->getContent();
+    }
+    
     public function addClause(INode $clauseNode)
     {
         if ($this->node->hasNode($clauseNode)) {

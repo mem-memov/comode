@@ -16,5 +16,10 @@ class Question implements IQuestion
     {
         $argumentNodeProvider->setQuestionNode($this->node);
     }
+    
+    public function getValue()
+    {
+        return $this->node->getValue()->getContent();
+    }
 
 }

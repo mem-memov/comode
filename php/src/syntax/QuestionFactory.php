@@ -19,8 +19,26 @@ class QuestionFactory implements IQuestionFactory
     {
         $questionNode = $this->spaceMap->createQuestionNode($string);
 
-        $question = new Question($questionNode);
+        $question = $this->makeQuestion($questionNode);
         
         return $question;
+    }
+    
+    public function provideQuestionsByPredicate(INode $predicateNode)
+    {
+        $questionNodes = $this->spaceMap->getQuestionNodes($predicateNode);
+        
+        $questions = [];
+        
+        foreach ($questionNodes as $questionNode) {
+            $questions[] = $this->makeQuestion($questionNode);
+        }
+        
+        return $questions;
+    }
+    
+    private function makeQuestion(INode $questionNode)
+    {
+        return new Question($questionNode);
     }
 }
