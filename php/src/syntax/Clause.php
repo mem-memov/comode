@@ -22,6 +22,11 @@ class Clause implements IClause
         $this->questionFactory = $questionFactory;
         $this->node = $node;
     }
+    
+    public function getId()
+    {
+        return $this->node->getId();
+    }
 
     public function setPredicate($predicateString)
     {

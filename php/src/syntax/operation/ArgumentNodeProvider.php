@@ -2,17 +2,19 @@
 namespace Comode\syntax\operation;
 
 use Comode\graph\IFactory as IGraphFactory;
-use Comode\syntax\ISpaceMap;
+use Comode\syntax\node\IFactory as INodeFactory;
 use Comode\syntax\IPredicate;
 use Comode\syntax\IQuestion;
 
-use Comode\graph\INode;
+use Comode\syntax\node\IPredicate as IPredicateNode;
+use Comode\syntax\node\IQuestion as IQuestionNode;
+use Comode\syntax\node\IArgument as IArgumentNode;
 
 
 class ArgumentNodeProvider implements IArgumentNodeProvider
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     private $predicate;
     private $question;
     private $predicateNode;
@@ -20,22 +22,22 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
 
     public function __construct(
         IGraphFactory $graphFactory, 
-        ISpaceMap $spaceMap, 
+        INodeFactory $nodeFactory, 
         IPredicate $predicate, 
         IQuestion $question
     ) {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
         $this->predicate = $predicate;
         $this->question = $question;
     }
     
-    public function setPredicateNode(INode $predicateNode)
+    public function setPredicateNode(IPredicateNode $predicateNode)
     {
         $this->predicateNode = $predicateNode;
     }
     
-    public function setQuestionNode(INode $questionNode)
+    public function setQuestionNode(IQuestionNode $questionNode)
     {
         $this->questionNode = $questionNode;
     }
@@ -58,7 +60,7 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
             
         } elseif ($count == 0) {
             
-            $argumentNode = $this->spaceMap->createArgumentNode();
+            $argumentNode = $this->nodeFactory->createArgumentNode();
             $this->bindToPredicateAnQuestion($argumentNode);
             
         }
@@ -88,7 +90,7 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
         $argumentNodes = [];
         
         foreach ($commonNodes as $commonNode) {
-            if ($this->spaceMap->isArgumentNode($commonNode)) {
+            if ($commonNode instanceof \Comode\syntax\node\IArgument) {
                 $argumentNodes[] = $commonNode;
             }
         }
@@ -96,7 +98,7 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
         return $argumentNodes;
     }
     
-    private function bindToPredicateAnQuestion(INode $argumentNode)
+    private function bindToPredicateAnQuestion(IArgumentNode $argumentNode)
     {
         $argumentNode->addNode($this->predicateNode);
         $this->predicateNode->addNode($argumentNode);

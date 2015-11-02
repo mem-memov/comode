@@ -1,11 +1,12 @@
 <?php
 namespace Comode\syntax\operation;
 
-use Comode\graph\INode;
+use Comode\syntax\node\IPredicate as IPredicateNode;
+use Comode\syntax\node\IQuestion as IQuestionNode;
 
 interface IArgumentNodeProvider
 {
-    public function setPredicateNode(INode $predicateNode);
-    public function setQuestionNode(INode $questionNode);
+    public function setPredicateNode(IPredicateNode $predicateNode);
+    public function setQuestionNode(IQuestionNode $questionNode);
     public function provideArgumentNode();
 }

@@ -13,23 +13,23 @@ class SyntaxFactoryFixture
 
         $spaceDirectory = $this->directoryFixture->createDirectory();
         
-        $spaceMap = new Comode\syntax\SpaceMap($graphFactory, $spaceDirectory);
+        $nodeFactory = new Comode\syntax\node\Factory($graphFactory, $spaceDirectory);
         
-        $complimentFactory = new Comode\syntax\ComplimentFactory($graphFactory, $spaceMap);
-        $questionFactory = new Comode\syntax\QuestionFactory($graphFactory, $spaceMap);
-        $argumentFactory = new Comode\syntax\ArgumentFactory($graphFactory, $spaceMap, $questionFactory, $complimentFactory);
-        $predicateFactory = new Comode\syntax\PredicateFactory($graphFactory, $spaceMap, $argumentFactory);
+        $complimentFactory = new Comode\syntax\ComplimentFactory($graphFactory, $nodeFactory);
+        $questionFactory = new Comode\syntax\QuestionFactory($graphFactory, $nodeFactory);
+        $argumentFactory = new Comode\syntax\ArgumentFactory($graphFactory, $nodeFactory, $questionFactory, $complimentFactory);
+        $predicateFactory = new Comode\syntax\PredicateFactory($graphFactory, $nodeFactory, $argumentFactory);
         $argumentFactory->setPredicateFactory($predicateFactory);
-        $clauseFactory = new Comode\syntax\ClauseFactory($graphFactory, $spaceMap, $predicateFactory, $argumentFactory, $questionFactory);
+        $clauseFactory = new Comode\syntax\ClauseFactory($graphFactory, $nodeFactory, $predicateFactory, $argumentFactory, $questionFactory);
         $predicateFactory->setClauseFactory($clauseFactory);
         $argumentFactory->setClauseFactory($clauseFactory);
         
+        $this->nodeFactory = $nodeFactory;
         $this->complimentFactory = $complimentFactory;
         $this->questionFactory = $questionFactory;
         $this->argumentFactory = $argumentFactory;
         $this->predicateFactory = $predicateFactory;
         $this->clauseFactory = $clauseFactory;
-        
     }
     
     public function tearDown()

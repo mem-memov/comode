@@ -17,12 +17,17 @@ class Predicate implements IPredicate
         $this->node = $node;
     }
     
+    public function getId()
+    {
+        return $this->node->getId();
+    }
+    
     public function getValue()
     {
         return $this->node->getValue()->getContent();
     }
     
-    public function addClause(INode $clauseNode)
+    public function addClause(node\IClause $clauseNode)
     {
         if ($this->node->hasNode($clauseNode)) {
             throw new exception\ClauseMustHaveOnePredicate('Predicate '. $this->node->getId . ' is already linked to clause ' . $clauseNode->getId());

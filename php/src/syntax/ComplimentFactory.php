@@ -7,17 +7,19 @@ use Comode\graph\IFactory as IGraphFactory;
 class ComplimentFactory implements IComplimentFactory
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     
-    public function __construct(IGraphFactory $graphFactory, ISpaceMap $spaceMap)
-    {
+    public function __construct(
+        IGraphFactory $graphFactory, 
+        node\IFactory $nodeFactory
+    ) {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
     }
     
     public function provideStringCompliment($string)
     {
-        $complimentNode = $this->spaceMap->createStringComplimentNode($string);
+        $complimentNode = $this->nodeFactory->createStringComplimentNode($string);
 
         $stringCompliment = new StringCompliment($complimentNode);
         
@@ -26,7 +28,7 @@ class ComplimentFactory implements IComplimentFactory
     
     public function provideFileCompliment($path)
     {
-        $complimentNode = $this->spaceMap->createFileComplimentNode($path);
+        $complimentNode = $this->nodeFactory->createFileComplimentNode($path);
 
         $fileCompliment = new FileCompliment($complimentNode);
         

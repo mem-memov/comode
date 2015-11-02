@@ -7,17 +7,17 @@ use Comode\graph\IFactory as IGraphFactory;
 class PredicateFactory implements IPredicateFactory
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     private $clauseFactory;
     private $argumentFactory;
 
     public function __construct(
         IGraphFactory $graphFactory, 
-        ISpaceMap $spaceMap,
+        node\IFactory $nodeFactory,
         IArgumentFactory $argumentFactory
     ) {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
         $this->argumentFactory = $argumentFactory;
     }
     
@@ -28,16 +28,16 @@ class PredicateFactory implements IPredicateFactory
     
     public function providePredicate($predicateString)
     {
-        $predicateNode = $this->spaceMap->createPredicateNode($predicateString);
+        $predicateNode = $this->nodeFactory->createPredicateNode($predicateString);
 
         $predicate = $this->makePredicate($predicateNode);
         
         return $predicate;
     }
     
-    public function providePredicatesByClause(INode $clauseNode)
+    public function providePredicatesByClause(node\IClause $clauseNode)
     {
-        $predicateNodes = $this->spaceMap->getPredicateNodes($clauseNode);
+        $predicateNodes = $this->nodeFactory->getPredicateNodes($clauseNode);
 
         $predicates = [];
         
@@ -48,7 +48,7 @@ class PredicateFactory implements IPredicateFactory
         return $predicates;
     }
     
-    private function makePredicate($predicateNode)
+    private function makePredicate(node\IPredicate $predicateNode)
     {
         return new Predicate($this->clauseFactory, $this->argumentFactory, $predicateNode);
     }

@@ -3,8 +3,9 @@ namespace Comode\syntax;
 
 interface ICompliment
 {
-    public function hasArgument(INode $argumentNode);
-    public function addArgument(INode $argumentNode);
+    public function getId();
+    public function hasArgument(node\IArgument $argumentNode);
+    public function addArgument(node\IArgument $argumentNode);
     public function getValue();
     public function isFile();
 }

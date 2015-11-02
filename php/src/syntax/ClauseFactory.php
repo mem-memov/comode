@@ -7,21 +7,21 @@ use Comode\graph\IFactory as IGraphFactory;
 class ClauseFactory implements IClauseFactory
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     private $predicateFactory;
     private $argumentFactory;
     private $questionFactory;
     
    public function __construct(
         IGraphFactory $graphFactory,
-        ISpaceMap $spaceMap,
+        node\IFactory $nodeFactory,
         IPredicateFactory $predicateFactory, 
         IArgumentFactory $argumentFactory, 
         IQuestionFactory $questionFactory
     )
     {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
         $this->predicateFactory = $predicateFactory;
         $this->argumentFactory = $argumentFactory;
         $this->questionFactory = $questionFactory;
@@ -29,14 +29,14 @@ class ClauseFactory implements IClauseFactory
     
     public function createClause()
     {
-        $node = $this->spaceMap->createClauseNode();
+        $node = $this->nodeFactory->createClauseNode();
         
         return $this->makeClause($node);
     }
     
-    public function getClausesByPredicate(INode $predicateNode)
+    public function getClausesByPredicate(node\IPredicate $predicateNode)
     {
-        $clauseNodes = $this->spaceMap->getClauseNodes($predicateNode);
+        $clauseNodes = $this->nodeFactory->getClauseNodes($predicateNode);
         
         $clauses = [];
         
@@ -47,7 +47,7 @@ class ClauseFactory implements IClauseFactory
         return $clauses;
     }
     
-    private function makeClause(INode $clauseNode)
+    private function makeClause(node\IClause $clauseNode)
     {
         return new Clause(
             $this->predicateFactory,

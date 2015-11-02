@@ -25,7 +25,12 @@ class Argument implements IArgument
         $this->node = $node;
     }
     
-    public function addClause(INode $clauseNode)
+    public function getId()
+    {
+        return $this->node->getId();
+    }
+    
+    public function addClause(node\IClause $clauseNode)
     {
         if ($this->node->hasNode($clauseNode)) {
             throw new exception\ClauseArgumentMayNotRepeat();

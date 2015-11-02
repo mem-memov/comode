@@ -34,4 +34,5 @@ Comode\syntax\Factory
 
 Comode\syntax\Predicate
  [x] It keeps its value
+ [x] It gets linked to a clause
 

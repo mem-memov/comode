@@ -7,26 +7,28 @@ use Comode\graph\IFactory as IGraphFactory;
 class QuestionFactory implements IQuestionFactory
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     
-    public function __construct(IGraphFactory $graphFactory, ISpaceMap $spaceMap)
-    {
+    public function __construct(
+        IGraphFactory $graphFactory, 
+        node\IFactory $nodeFactory
+    ) {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
     }
     
     public function provideQuestion($string)
     {
-        $questionNode = $this->spaceMap->createQuestionNode($string);
+        $questionNode = $this->nodeFactory->createQuestionNode($string);
 
         $question = $this->makeQuestion($questionNode);
         
         return $question;
     }
     
-    public function provideQuestionsByPredicate(INode $predicateNode)
+    public function provideQuestionsByPredicate(node\IPredicate $predicateNode)
     {
-        $questionNodes = $this->spaceMap->getQuestionNodes($predicateNode);
+        $questionNodes = $this->nodeFactory->getQuestionNodes($predicateNode);
         
         $questions = [];
         
@@ -37,7 +39,7 @@ class QuestionFactory implements IQuestionFactory
         return $questions;
     }
     
-    private function makeQuestion(INode $questionNode)
+    private function makeQuestion(node\IQuestion $questionNode)
     {
         return new Question($questionNode);
     }

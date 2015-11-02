@@ -7,7 +7,7 @@ use Comode\graph\IFactory as IGraphFactory;
 class ArgumentFactory implements IArgumentFactory
 {
     private $graphFactory;
-    private $spaceMap;
+    private $nodeFactory;
     private $clauseFactory;
     private $predicateFactory;
     private $questionFactory;
@@ -15,13 +15,13 @@ class ArgumentFactory implements IArgumentFactory
 
     public function __construct(
         IGraphFactory $graphFactory, 
-        ISpaceMap $spaceMap,
+        node\IFactory $nodeFactory,
         IQuestionFactory $questionFactory, 
         IComplimentFactory $complimentFactory
     )
     {
         $this->graphFactory = $graphFactory;
-        $this->spaceMap = $spaceMap;
+        $this->nodeFactory = $nodeFactory;
         $this->clauseFactory = $clauseFactory;
         $this->questionFactory = $questionFactory;
         $this->complimentFactory = $complimentFactory;
@@ -39,7 +39,7 @@ class ArgumentFactory implements IArgumentFactory
     
     public function provideArgument(IPredicate $predicate, IQuestion $question)
     {
-        $argumentProvider = new operation\ArgumentNodeProvider($this->graphFactory, $this->spaceMap, $predicate, $question);
+        $argumentProvider = new operation\ArgumentNodeProvider($this->graphFactory, $this->nodeFactory, $predicate, $question);
 
         $argumentNode = $argumentProvider->provideArgumentNode();
         
@@ -48,16 +48,16 @@ class ArgumentFactory implements IArgumentFactory
         return $argument;
     }
     
-    public function provideArgumentsByClause(INode $clauseNode)
+    public function provideArgumentsByClause(node\IClause $clauseNode)
     {
-        $argumentNodes = $this->spaceMap->getArgumentNodes($clauseNode);
+        $argumentNodes = $this->nodeFactory->getArgumentNodes($clauseNode);
         
         return $this->makeArguments($argumentNodes);
     }
     
-    public function getArgumentsByPredicate(INode $predicateNode)
+    public function getArgumentsByPredicate(node\IPredicate $predicateNode)
     {
-        $argumentNodes = $this->spaceMap->getArgumentNodes($predicateNode);
+        $argumentNodes = $this->nodeFactory->getArgumentNodes($predicateNode);
 
         return $this->makeArguments($argumentNodes);
     }
@@ -73,7 +73,7 @@ class ArgumentFactory implements IArgumentFactory
         return $arguments;
     }
     
-    private function makeArgument($argumentNode)
+    private function makeArgument(node\IArgument $argumentNode)
     {
         return new Argument($this->clauseFactory, $this->predicateFactory, $this->questionFactory, $this->complimentFactory, $argumentNode);
     }

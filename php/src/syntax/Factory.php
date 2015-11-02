@@ -9,14 +9,14 @@ class Factory implements IFactory
     
     public function __construct(array $config, IGraphFactory $graphFactory)
     {
-        $spaceMap = new SpaceMap($graphFactory, $config['spaceDirectory']);
+        $nodeFactory = new node\Factory($graphFactory, $config['spaceDirectory']);
 
-        $complimentFactory = new ComplimentFactory($graphFactory, $spaceMap);
-        $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
-        $argumentFactory = new ArgumentFactory($graphFactory, $spaceMap, $questionFactory, $complimentFactory);
-        $predicateFactory = new PredicateFactory($graphFactory, $spaceMap, $argumentFactory);
+        $complimentFactory = new ComplimentFactory($graphFactory, $nodeFactory);
+        $questionFactory = new QuestionFactory($graphFactory, $nodeFactory);
+        $argumentFactory = new ArgumentFactory($graphFactory, $nodeFactory, $questionFactory, $complimentFactory);
+        $predicateFactory = new PredicateFactory($graphFactory, $nodeFactory, $argumentFactory);
         $argumentFactory->setPredicateFactory($predicateFactory);
-        $this->clauseFactory = new ClauseFactory($graphFactory, $spaceMap, $predicateFactory, $argumentFactory, $questionFactory);
+        $this->clauseFactory = new ClauseFactory($graphFactory, $nodeFactory, $predicateFactory, $argumentFactory, $questionFactory);
         $predicateFactory->setClauseFactory($this->clauseFactory);
         $argumentFactory->setClauseFactory($this->clauseFactory);
     }

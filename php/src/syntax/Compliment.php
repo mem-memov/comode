@@ -12,12 +12,17 @@ abstract class Compliment implements ICompliment
         $this->node = $node;
     }
     
-    public function hasArgument(INode $argumentNode)
+    public function getId()
+    {
+        return $this->node->getId();
+    }
+    
+    public function hasArgument(node\IArgument $argumentNode)
     {
         return $this->node->hasNode($argumentNode);
     }
     
-    public function addArgument(INode $argumentNode)
+    public function addArgument(node\IArgument $argumentNode)
     {
         if ($this->hasArgument($argumentNode)) {
             throw new exception\ArgumentComplimentsMayNotRepeat();

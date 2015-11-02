@@ -12,6 +12,11 @@ class Question implements IQuestion
         $this->node = $node;
     }
     
+    public function getId()
+    {
+        return $this->node->getId();
+    }
+    
     public function provideArgument(operation\IArgumentNodeProvider $argumentNodeProvider)
     {
         $argumentNodeProvider->setQuestionNode($this->node);
