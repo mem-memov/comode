@@ -4,7 +4,7 @@ namespace Comode\syntax;
 use Comode\graph\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
-class AnswerFactory implements IAnswerFactory
+class ComplimentFactory implements IComplimentFactory
 {
     private $graphFactory;
     private $spaceMap;
@@ -15,7 +15,7 @@ class AnswerFactory implements IAnswerFactory
         $this->spaceMap = $spaceMap;
     }
     
-    public function createStringAnswer($string)
+    public function createStringCompliment($string)
     {
         $answerNode = $this->graphFactory->createStringNode($string);
 
@@ -24,7 +24,7 @@ class AnswerFactory implements IAnswerFactory
         return $stringAnswer;
     }
     
-    public function createFileAnswer($path)
+    public function createFileCompliment($path)
     {
         $answerNode = $this->graphFactory->createFileNode($path);
 

@@ -12,16 +12,16 @@ class Factory implements IFactory
         $spaceMap = new SpaceMap($graphFactory, $config['spaceDirectory']);
         
         $questionFactory = new QuestionFactory($graphFactory, $spaceMap);
-        $answerFactory = new AnswerFactory($graphFactory, $spaceMap);
-        $factFactory = new FactFactory($graphFactory, $questionFactory, $answerFactory, $spaceMap);
-        $this->statementFactory = new StatementFactory($graphFactory, $factFactory, $spaceMap);
+        $complimentFactory = new ComplimentFactory($graphFactory, $spaceMap);
+        $argumentFactory = new ArgumentFactory($graphFactory, $questionFactory, $complimentFactory, $spaceMap);
+        $this->sentenceFactory = new SentenceFactory($graphFactory, $argumentFactory, $spaceMap);
     }
     
-    public function createStatement()
+    public function createSentence()
     {
-        $statement = $this->statementFactory->createStatement();
+        $sentence = $this->sentenceFactory->createSentence();
         
-        return $statement;
+        return $sentence;
     }
 
 }

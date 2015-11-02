@@ -6,16 +6,15 @@ use Comode\graph\INode;
 class Question implements IQuestion
 {
     private $node;
-    private $string;
-    
-    public function __construct($string, INode $node)
+
+    public function __construct(INode $node)
     {
-        $this->string = $string;
         $this->node = $node;
     }
     
-    public function bindAnswerToQuestion(operation\BindAnswerToQuestion $operation)
+    public function provideArgument(IArgumentProvider $argumentProvider)
     {
-        $operation->setQuestionNode($this->node);
+        $argumentProvider->setQuestionNode($this->node);
     }
+
 }

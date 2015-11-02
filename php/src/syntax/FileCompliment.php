@@ -3,14 +3,14 @@ namespace Comode\syntax;
 
 use Comode\graph\INode;
 
-class StringAnswer implements IAnswer
+class FileCompliment implements ICompliment
 {
     private $node;
-    private $string;
+    private $path;
     
-    public function __construct($string, INode $node)
+    public function __construct($path, INode $node)
     {
-        $this->string = $string;
+        $this->path = $path;
         $this->node = $node;
     }
     

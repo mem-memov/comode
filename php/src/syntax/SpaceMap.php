@@ -1,6 +1,7 @@
 <?php
 namespace Comode\syntax;
 
+use Comode\graph\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
 class SpaceMap implements ISpaceMap
@@ -12,26 +13,56 @@ class SpaceMap implements ISpaceMap
         $this->setMap($graphFactory, $spaceDirectory);
     }
     
-    public function getQuestionNode()
+    public function isClauseNode(INode $node)
     {
-        return $this->map['question'];
+        return $this->isNodeOfType($node, 'clause');
+    }
+
+    public function getClauseNodes(INode $node)
+    {
+        return $this->selectLinkedNodes($node, 'clause');
     }
     
-    public function getAnswerNode()
+    public function isPredicateNode(INode $node)
     {
-        return $this->map['answer'];
+        return $this->isNodeOfType($node, 'predicate');
     }
     
-    public function getFactNode()
+    public function getPredicateNodes(INode $node)
     {
-        return $this->map['fact'];
+        return $this->selectLinkedNodes($node, 'predicate');
     }
     
-    public function getStatementNode()
+    public function isArgumentNode(INode $node)
     {
-        return $this->map['statement'];
+        return $this->isNodeOfType($node, 'argument');
     }
     
+    public function getArgumentNodes(INode $node)
+    {
+        return $this->selectLinkedNodes($node, 'argument');
+    }
+    
+    public function isQuestionNode(INode $node)
+    {
+        return $this->isNodeOfType($node, 'question');
+    }
+    
+    public function getQuestionNodes(INode $node)
+    {
+        return $this->selectLinkedNodes($node, 'question');
+    }
+    
+    public function isComplimentNode(INode $node)
+    {
+        return $this->isNodeOfType($node, 'compliment');
+    }
+    
+    public function getComplimentNodes(INode $node)
+    {
+        return $this->selectLinkedNodes($node, 'compliment');
+    }
+
     private function setMap(IGraphFactory $graphFactory, $spaceDirectory)
     {
         if (!file_exists($spaceDirectory)) {
@@ -42,10 +73,11 @@ class SpaceMap implements ISpaceMap
         
         if (!file_exists($mappingPath)) {
             $map = [
+                'clause' => $graphFactory->createNode()->getId(),
+                'predicate' => $graphFactory->createNode()->getId(),
+                'argument' => $graphFactory->createNode()->getId(),
                 'question' => $graphFactory->createNode()->getId(),
-                'answer' => $graphFactory->createNode()->getId(),
-                'fact' => $graphFactory->createNode()->getId(),
-                'statement' => $graphFactory->createNode()->getId()
+                'compliment' => $graphFactory->createNode()->getId()
             ];
             $fileContent = '<?php return ' . var_export($map, true) . ';';
             file_put_contents($mappingPath, $fileContent);
@@ -58,5 +90,27 @@ class SpaceMap implements ISpaceMap
         }
         
         $this->map = $map;
+    }
+    
+    private function selectLinkedNodes(INode $node, $type)
+    {
+        $linkedNodes = $node->getNodes();
+        
+        $selectedNodes = [];
+        
+        foreach ($linkedNodes as $linkedNode) {
+            if ($this->isNodeOfType($linkedNode, $type)) {
+                $selectedNodes[] = $linkedNode;
+            }
+        }
+        
+        return $selectedNodes;
+    }
+    
+    private function isNodeOfType(INode $node, $type)
+    {
+        $typeNode = $this->map[$type];
+        
+        return $node->hasNode($typeNode);
     }
 }
