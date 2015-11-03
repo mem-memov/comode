@@ -51,6 +51,11 @@ class Node implements INode
     {
         $this->store->linkNodes($this->id, $node->getId());
     }
+    
+    public function removeNode(INode $node)
+    {
+        $this->store->separateNodes($this->id, $node->getId());
+    }
         
     public function getNodes()
     {

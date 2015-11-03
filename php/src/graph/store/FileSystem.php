@@ -85,6 +85,17 @@ class FileSystem implements IStore {
         $targetPath = $this->graphPath . '/' . $targetId;
         symlink($targetPath, $originPath);
     }
+    
+    public function separateNodes($originId, $targetId)
+    {
+        $originPath = $this->graphPath . '/' . $originId . '/' . $targetId;
+        
+        if (!file_exists($originPath)) {
+            return;
+        }
+        
+        unlink($originPath);
+    }
         
     public function isLinkedToNode($originId, $targetId)
     {
@@ -186,7 +197,7 @@ class FileSystem implements IStore {
         
         return $value;
     }
-    
+
     // private methods
 
     private function nextId()
