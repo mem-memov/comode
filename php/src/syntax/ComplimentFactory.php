@@ -1,19 +1,13 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
-
 class ComplimentFactory implements IComplimentFactory
 {
-    private $graphFactory;
     private $nodeFactory;
     
     public function __construct(
-        IGraphFactory $graphFactory, 
         node\IFactory $nodeFactory
     ) {
-        $this->graphFactory = $graphFactory;
         $this->nodeFactory = $nodeFactory;
     }
     

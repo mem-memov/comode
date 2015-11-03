@@ -1,7 +1,6 @@
 <?php
 namespace Comode\syntax\operation;
 
-use Comode\graph\IFactory as IGraphFactory;
 use Comode\syntax\node\IFactory as INodeFactory;
 use Comode\syntax\IPredicate;
 use Comode\syntax\IQuestion;
@@ -13,7 +12,6 @@ use Comode\syntax\node\IArgument as IArgumentNode;
 
 class ArgumentNodeProvider implements IArgumentNodeProvider
 {
-    private $graphFactory;
     private $nodeFactory;
     private $predicate;
     private $question;
@@ -21,12 +19,10 @@ class ArgumentNodeProvider implements IArgumentNodeProvider
     private $questionNode;
 
     public function __construct(
-        IGraphFactory $graphFactory, 
         INodeFactory $nodeFactory, 
         IPredicate $predicate, 
         IQuestion $question
     ) {
-        $this->graphFactory = $graphFactory;
         $this->nodeFactory = $nodeFactory;
         $this->predicate = $predicate;
         $this->question = $question;

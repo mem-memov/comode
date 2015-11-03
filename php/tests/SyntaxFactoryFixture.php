@@ -15,12 +15,12 @@ class SyntaxFactoryFixture
         
         $nodeFactory = new Comode\syntax\node\Factory($graphFactory, $spaceDirectory);
         
-        $complimentFactory = new Comode\syntax\ComplimentFactory($graphFactory, $nodeFactory);
-        $questionFactory = new Comode\syntax\QuestionFactory($graphFactory, $nodeFactory);
-        $argumentFactory = new Comode\syntax\ArgumentFactory($graphFactory, $nodeFactory, $questionFactory, $complimentFactory);
-        $predicateFactory = new Comode\syntax\PredicateFactory($graphFactory, $nodeFactory, $argumentFactory);
+        $complimentFactory = new Comode\syntax\ComplimentFactory($nodeFactory);
+        $questionFactory = new Comode\syntax\QuestionFactory($nodeFactory);
+        $argumentFactory = new Comode\syntax\ArgumentFactory($nodeFactory, $questionFactory, $complimentFactory);
+        $predicateFactory = new Comode\syntax\PredicateFactory($nodeFactory, $argumentFactory);
         $argumentFactory->setPredicateFactory($predicateFactory);
-        $clauseFactory = new Comode\syntax\ClauseFactory($graphFactory, $nodeFactory, $predicateFactory, $argumentFactory, $questionFactory);
+        $clauseFactory = new Comode\syntax\ClauseFactory($nodeFactory, $predicateFactory, $argumentFactory, $questionFactory);
         $predicateFactory->setClauseFactory($clauseFactory);
         $argumentFactory->setClauseFactory($clauseFactory);
         

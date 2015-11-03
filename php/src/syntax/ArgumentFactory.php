@@ -1,12 +1,8 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
-
 class ArgumentFactory implements IArgumentFactory
 {
-    private $graphFactory;
     private $nodeFactory;
     private $clauseFactory;
     private $predicateFactory;
@@ -14,13 +10,11 @@ class ArgumentFactory implements IArgumentFactory
     private $complimentFactory;
 
     public function __construct(
-        IGraphFactory $graphFactory, 
         node\IFactory $nodeFactory,
         IQuestionFactory $questionFactory, 
         IComplimentFactory $complimentFactory
     )
     {
-        $this->graphFactory = $graphFactory;
         $this->nodeFactory = $nodeFactory;
         $this->clauseFactory = $clauseFactory;
         $this->questionFactory = $questionFactory;
@@ -39,7 +33,7 @@ class ArgumentFactory implements IArgumentFactory
     
     public function provideArgument(IPredicate $predicate, IQuestion $question)
     {
-        $argumentProvider = new operation\ArgumentNodeProvider($this->graphFactory, $this->nodeFactory, $predicate, $question);
+        $argumentProvider = new operation\ArgumentNodeProvider($this->nodeFactory, $predicate, $question);
 
         $argumentNode = $argumentProvider->provideArgumentNode();
         

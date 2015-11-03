@@ -1,26 +1,20 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
-
 class ClauseFactory implements IClauseFactory
 {
-    private $graphFactory;
     private $nodeFactory;
     private $predicateFactory;
     private $argumentFactory;
     private $questionFactory;
     
    public function __construct(
-        IGraphFactory $graphFactory,
         node\IFactory $nodeFactory,
         IPredicateFactory $predicateFactory, 
         IArgumentFactory $argumentFactory, 
         IQuestionFactory $questionFactory
     )
     {
-        $this->graphFactory = $graphFactory;
         $this->nodeFactory = $nodeFactory;
         $this->predicateFactory = $predicateFactory;
         $this->argumentFactory = $argumentFactory;
