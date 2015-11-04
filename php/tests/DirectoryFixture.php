@@ -16,7 +16,9 @@ class DirectoryFixture
     public function removeDirectories()
     {
         foreach ($this->paths as $path) {
-            $this->removeRecursively($path);
+            if (is_dir($path) && !is_link($path)) {
+                $this->removeRecursively($path);
+            }
         }
     }
     

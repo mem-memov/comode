@@ -38,7 +38,7 @@ class ClauseFactory implements IClauseFactory
         $clauses = [];
         
         foreach ($clauseNodes as $clauseNode) {
-            $clauses[] = $this->makeArgument($clauseNode);
+            $clauses[] = $this->makeClause($clauseNode);
         }
         
         return $clauses;

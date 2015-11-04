@@ -24,12 +24,16 @@ Comode\graph\Node
 Comode\graph\Value
  [x] It provides its node
 
+ClauseFactory
+ [x] It creates clause
+ [x] It fetches clauses by compliment
+
 Comode\syntax\Factory
- [ ] It provides predicates
- [ ] It provides questions
- [ ] It provides arguments
- [ ] It provides string answer
+ [x] It provides predicates
+ [x] It provides questions
+ [x] It provides arguments
+ [x] It provides string answer
  [ ] It provides file answer
- [ ] It provides compliment
- [ ] It creates clauses
+ [x] It provides compliment
+ [x] It creates clauses
 
