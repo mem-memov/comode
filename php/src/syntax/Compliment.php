@@ -9,22 +9,51 @@ class Compliment implements ICompliment
     private $node;
     
     public function __construct(
+        IClauseFactory $clauseFactory,
         IArgumentFactory $argumentFactory,
         IAnswerFactory $answerFactory,
         node\ICompliment $node
     ) {
+        $this->clauseFactory = $clauseFactory;
         $this->argumentFactory = $argumentFactory;
         $this->answerFactory = $answerFactory;
         $this->node = $node;
     }
-    
-    public function setClauseFactory(IClauseFactory $clauseFactory)
-    {
-        $this->clauseFactory = $clauseFactory;
-    }
 
+    public function addClause(node\IClause $clauseNode)
+    {
+        $clauseNode->addNode($this->node);
+        $this->node->addNode($clauseNode);
+    }
+    
     public function fetchClauses()
     {
         return $this->clauseFactory->fetchClausesByCompliment($this->node);
+    }
+    
+    public function provideArgument()
+    {
+        $arguments = $this->argumentFactory->provideArgumentsByCompliment($this->node);
+        
+        $count = count($arguments);
+        
+        if ($count != 1) {
+            throw new exception\ArgumentAndAnswerHaveOneCommonCompliment('Compliment ' . $this->node->getId() . ' has ' . $count . ' arguments.');
+        }
+        
+        return $arguments[0];
+    }
+    
+    public function provideAnswer()
+    {
+        $answers = $this->answerFactory->provideAnswersByCompliment($this->node);
+        
+        $count = count($answers);
+        
+        if ($count != 1) {
+            throw new exception\ArgumentAndAnswerHaveOneCommonCompliment('Compliment ' . $this->node->getId() . ' has ' . $count . ' answers.');
+        }
+        
+        return $answers[0];
     }
 }

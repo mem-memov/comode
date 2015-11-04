@@ -29,6 +29,6 @@ class SyntaxFactoryFixture
     public function tearDown()
     {
         $this->graphFixture->tearDown();
-        $this->directoryFixture->removeDirectory();
+        $this->directoryFixture->removeDirectories();
     }
 }

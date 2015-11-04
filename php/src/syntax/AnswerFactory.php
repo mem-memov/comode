@@ -21,7 +21,7 @@ class AnswerFactory implements IAnswerFactory
     {
         $node = $this->nodeFactory->createStringAnswerNode($string);
 
-        return new StringAnswer($answerNode);
+        return new StringAnswer($this->complimentFactory, $node);
     }
     
     public function provideFileAnswer($path)

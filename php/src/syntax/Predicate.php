@@ -1,18 +1,15 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
-
 class Predicate implements IPredicate
 {
-    private $clauseFactory;
     private $argumentFactory;
     private $node;
 
-    public function __construct(IClauseFactory $clauseFactory, IArgumentFactory $argumentFactory,INode $node)
-    {
-        $this->clauseFactory = $clauseFactory;
+    public function __construct(
+        IArgumentFactory $argumentFactory,
+        node\IPredicate $node
+    ) {
         $this->argumentFactory = $argumentFactory;
         $this->node = $node;
     }
@@ -27,29 +24,33 @@ class Predicate implements IPredicate
         return $this->node->getValue()->getContent();
     }
     
-    public function addClause(node\IClause $clauseNode)
+    public function addArgument(node\IArgument $argumentNode)
     {
-        if ($this->node->hasNode($clauseNode)) {
-            throw new exception\ClauseMustHaveOnePredicate('Predicate '. $this->node->getId . ' is already linked to clause ' . $clauseNode->getId());
-        }
-        
-        $clauseNode->addNode($this->node);
-        $this->node->addNode($clauseNode);
+        $argumentNode->addNode($this->node);
+        $this->node->addNode($argumentNode);
     }
     
-    public function getClauses()
+    public function fetchClauses()
     {
         return $this->clauseFactory->getClausesByPredicate($this->node);
     }
     
-    public function getArguments()
+    public function provideArguments()
     {
-        return $this->argumentFactory->getArgumentsByPredicate($this->node);
+        return $this->argumentFactory->provideArgumentsByPredicate($this->node);
     }
     
-    public function provideArgument(operation\IArgumentNodeProvider $argumentNodeProvider)
+    public function provideArgumentByQuestion(IQuestion $question)
     {
-        $argumentNodeProvider->setPredicateNode($this->node);
-    }
+        $arguments = $this->provideArguments();
 
+        foreach ($arguments as $argument) {
+            $argumentQuestion = $argument->provideQuestion();
+            if ($argumentQuestion->getId() == $question->getId()) {
+                return $argument;
+            }
+        }
+        
+        throw new exception\PredicateAndQuestionHaveOneCommonArgument();
+    }
 }

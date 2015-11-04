@@ -25,3 +25,11 @@ Comode\graph\Value
  [x] It provides its node
 
 Comode\syntax\Factory
+ [ ] It provides predicates
+ [ ] It provides questions
+ [ ] It provides arguments
+ [ ] It provides string answer
+ [ ] It provides file answer
+ [ ] It provides compliment
+ [ ] It creates clauses
+

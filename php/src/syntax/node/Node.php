@@ -22,6 +22,11 @@ abstract class Node
         return $this->node->addNode($node);
     }
     
+    public function removeNode(INode $node)
+    {
+        return $this->node->removeNode($node);
+    }
+    
     public function getNodes()
     {
         return $this->node->getNodes();

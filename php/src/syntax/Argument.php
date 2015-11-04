@@ -26,10 +26,16 @@ class Argument implements IArgument
     {
         return $this->node->getId();
     }
+    
+    public function addCompliment(node\ICompliment $complimentNode)
+    {
+        $complimentNode->addNode($this->node);
+        $this->node->addNode($complimentNode);
+    }
 
     public function provideCompliments()
     {
-        return $this->complimentFactory->provideComplimentByArgument($this->node);
+        return $this->complimentFactory->provideComplimentsByArgument($this->node);
     }
     
     public function provideQuestion()
@@ -56,5 +62,19 @@ class Argument implements IArgument
         }
         
         return $predicates[0];
+    }
+    
+    public function provideComplimentByAnswer(IAnswer $answer)
+    {
+        $compliments = $this->provideCompliments();
+
+        foreach ($compliments as $compliment) {
+            $complimentAnswer = $compliment->provideAnswer();
+            if ($complimentAnswer->getId() == $answer->getId()) {
+                return $compliment;
+            }
+        }
+        
+        throw new exception\ArgumentAndAnswerHaveOneCommonCompliment();
     }
 }

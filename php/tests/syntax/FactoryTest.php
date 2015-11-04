@@ -10,9 +10,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         require_once __DIR__ . '/../DirectoryFixture.php';
         $this->directoryFixture = new \DirectoryFixture();
-        
-        $this->fileDirectoryFixture = new \DirectoryFixture();
-        $this->fileDirectory = $this->fileDirectoryFixture->createDirectory();
+
+        $this->fileDirectory = $this->directoryFixture->createDirectory();
 
         $this->spaceDirectory = $this->directoryFixture->createDirectory();
         
@@ -25,8 +24,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->graphFixture->tearDown();
-        $this->directoryFixture->removeDirectory();
-        $this->fileDirectoryFixture->removeDirectory();
+        $this->directoryFixture->removeDirectories();
     }
     
     public function testItProvidesPredicates()

@@ -12,8 +12,7 @@ class ArgumentFactory implements IArgumentFactory
         node\IFactory $nodeFactory,
         IPredicateFactory $predicateFactory,
         IQuestionFactory $questionFactory
-    )
-    {
+    ) {
         $this->nodeFactory = $nodeFactory;
         $this->predicateFactory = $predicateFactory;
         $this->questionFactory = $questionFactory;
@@ -26,11 +25,19 @@ class ArgumentFactory implements IArgumentFactory
     
     public function provideArgument(IPredicate $predicate, IQuestion $question)
     {
-        $argumentProvider = new operation\ArgumentNodeProvider($this->nodeFactory, $predicate, $question);
+        try {
+            
+            $argument = $predicate->provideArgumentByQuestion($question);
+            
+        } catch (exception\PredicateAndQuestionHaveOneCommonArgument $e) {
+            
+            $argumentNode = $this->nodeFactory->createArgumentNode();
+            $predicate->addArgument($argumentNode);
+            $question->addArgument($argumentNode);
+            $argument = $this->makeArgument($argumentNode);
+        }
 
-        $argumentNode = $argumentProvider->provideArgumentNode();
-        
-        return $this->makeArgument($argumentNode);
+        return $argument;
     }
     
     public function provideArgumentsByQuestion(node\IQuestion $questionNode)

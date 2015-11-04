@@ -24,7 +24,7 @@ class GraphFixture
     
     public function tearDown()
     {
-        $this->directoryFixture->removeDirectory();
+        $this->directoryFixture->removeDirectories();
     }
     
     public function createFile($fileName = 'myTestFile.txt', $content = 'some file content')

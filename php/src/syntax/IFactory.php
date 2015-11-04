@@ -5,7 +5,7 @@ interface IFactory
 {
     public function providePredicate($verb);
     public function provideQuestion($question);
-    public function provideArgument(IPredicate $predicate, IQiestion $question);
+    public function provideArgument(IPredicate $predicate, IQuestion $question);
     public function provideStringAnswer($phrase);
     public function provideFileAnswer($path);
     public function provideCompliment(IArgument $argument, IAnswer $answer);

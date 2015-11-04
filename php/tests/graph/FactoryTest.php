@@ -21,7 +21,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     
     protected function tearDown()
     {
-        $this->directoryFixture->removeDirectory();
+        $this->directoryFixture->removeDirectories();
     }
 
     public function testItCreatesANewNodeWithNoValue()

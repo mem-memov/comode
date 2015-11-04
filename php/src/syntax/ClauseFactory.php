@@ -4,35 +4,33 @@ namespace Comode\syntax;
 class ClauseFactory implements IClauseFactory
 {
     private $nodeFactory;
-    private $predicateFactory;
-    private $argumentFactory;
-    private $questionFactory;
-    
+    private $complimentFactory;
+
    public function __construct(
         node\IFactory $nodeFactory,
-        IPredicateFactory $predicateFactory, 
-        IArgumentFactory $argumentFactory, 
-        IQuestionFactory $questionFactory
+        IComplimentFactory $complimentFactory
     )
     {
         $this->nodeFactory = $nodeFactory;
-        $this->predicateFactory = $predicateFactory;
-        $this->argumentFactory = $argumentFactory;
-        $this->questionFactory = $questionFactory;
+        $this->complimentFactory = $complimentFactory;
     }
     
     public function createClause(array $compliments)
     {
-        $node = $this->nodeFactory->createClauseNode();
+        $clauseNode = $this->nodeFactory->createClauseNode();
         
-        return $this->makeClause($node);
+        foreach ($compliments as $compliment) {
+            $compliment->addClause($clauseNode);
+        }
+        
+        return $this->makeClause($clauseNode);
     }
     
     public function fetchClausesByCompliment(node\ICompliment $complimentNode)
     {
         $clauseNodes = $this->nodeFactory->getClauseNodes($complimentNode);
         
-        return $this->makeClauses(array $clauseNodes);
+        return $this->makeClauses($clauseNodes);
     }
 
     private function makeClauses(array $clauseNodes)
@@ -49,9 +47,7 @@ class ClauseFactory implements IClauseFactory
     private function makeClause(node\IClause $clauseNode)
     {
         return new Clause(
-            $this->predicateFactory,
-            $this->argumentFactory,
-            $this->questionFactory,
+            $this->complimentFactory,
             $clauseNode
         );
     }

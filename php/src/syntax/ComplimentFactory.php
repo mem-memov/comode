@@ -26,9 +26,19 @@ class ComplimentFactory implements IComplimentFactory
     
     public function provideCompliment(IArgument $argument, IAnswer $answer)
     {
-        $node = $this->nodeFactory->createComplimentNode();
-        
-        return $this->makeCompliment($node);
+        try {
+            
+            $compliment = $argument->provideComplimentByAnswer($answer);
+            
+        } catch (exception\ArgumentAndAnswerHaveOneCommonCompliment $e) {
+            
+            $complimentNode = $this->nodeFactory->createComplimentNode();
+            $argument->addCompliment($complimentNode);
+            $answer->addCompliment($complimentNode);
+            $compliment = $this->makeCompliment($complimentNode);
+        }
+
+        return $compliment;
     }
     
     public function provideComplimentsByClause(node\IClause $clauseNode)
@@ -65,6 +75,6 @@ class ComplimentFactory implements IComplimentFactory
     
     public function makeCompliment(node\ICompliment $node)
     {
-        return new Compliment($this->argumentFactory, $this->answerFactory, $node);
+        return new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $node);
     }
 }

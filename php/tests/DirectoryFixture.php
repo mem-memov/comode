@@ -2,19 +2,21 @@
 
 class DirectoryFixture
 {
-    private $path;
+    private $paths = [];
     
     public function createDirectory()
     {
-        $this->path = __DIR__ . '/../../data/tmp/test_' . time() . '_' . rand(1,1000000);
+        $path = __DIR__ . '/../../data/tmp/test_' . time() . '_' . rand(1,1000000);
+        //mkdir($path);
+        $this->paths[] = $path;
 
-        return $this->path;
+        return $path;
     }
     
-    public function removeDirectory()
+    public function removeDirectories()
     {
-        if (!is_null($this->path)) {
-            $this->removeRecursively($this->path);
+        foreach ($this->paths as $path) {
+            $this->removeRecursively($path);
         }
     }
     

@@ -19,6 +19,12 @@ abstract class Answer implements IAnswer
         return $this->node->getId();
     }
     
+    public function addCompliment(node\ICompliment $complimentNode)
+    {
+        $complimentNode->addNode($this->node);
+        $this->node->addNode($complimentNode);
+    }
+    
     public function provideCompliments()
     {
         return $this->complimentFactory->provideComplimentsByAnswer($this->node);
