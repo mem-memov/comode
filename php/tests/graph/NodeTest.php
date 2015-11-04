@@ -53,12 +53,33 @@ class NodeTest extends \PHPUnit_Framework_TestCase
     {
         $this->emptyNode->addNode($this->stringNode);
         $this->emptyNode->addNode($this->fileNode);
-        
+
         $this->stringNode->addNode($this->emptyNode);
         $this->stringNode->addNode($this->fileNode);
         
         $this->fileNode->addNode($this->emptyNode);
         $this->fileNode->addNode($this->stringNode);
+    }
+    
+    public function testItCanBeSeparatedFromItsNode()
+    {
+        $this->emptyNode->addNode($this->stringNode);
+        $this->emptyNode->addNode($this->fileNode);
+        
+        $this->emptyNode->removeNode($this->stringNode);
+        $this->emptyNode->removeNode($this->stringNode);
+
+        $this->stringNode->addNode($this->emptyNode);
+        $this->stringNode->addNode($this->fileNode);
+        
+        $this->stringNode->removeNode($this->emptyNode);
+        $this->stringNode->removeNode($this->fileNode);
+        
+        $this->fileNode->addNode($this->emptyNode);
+        $this->fileNode->addNode($this->stringNode);
+        
+        $this->fileNode->removeNode($this->emptyNode);
+        $this->fileNode->removeNode($this->stringNode);
     }
     
     /**

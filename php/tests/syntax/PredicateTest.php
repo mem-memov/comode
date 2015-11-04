@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 class PredicateTest extends \PHPUnit_Framework_TestCase
-{
+{/*
     protected function setUp()
     {
         require_once __DIR__ . '/../SyntaxFactoryFixture.php';
@@ -35,4 +35,4 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
         $predicate->addClause($clauseNode);
 
     }
-}
+*/}

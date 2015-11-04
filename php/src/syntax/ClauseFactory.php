@@ -21,21 +21,26 @@ class ClauseFactory implements IClauseFactory
         $this->questionFactory = $questionFactory;
     }
     
-    public function createClause()
+    public function createClause(array $compliments)
     {
         $node = $this->nodeFactory->createClauseNode();
         
         return $this->makeClause($node);
     }
     
-    public function getClausesByPredicate(node\IPredicate $predicateNode)
+    public function fetchClausesByCompliment(node\ICompliment $complimentNode)
     {
-        $clauseNodes = $this->nodeFactory->getClauseNodes($predicateNode);
+        $clauseNodes = $this->nodeFactory->getClauseNodes($complimentNode);
         
+        return $this->makeClauses(array $clauseNodes);
+    }
+
+    private function makeClauses(array $clauseNodes)
+    {
         $clauses = [];
         
         foreach ($clauseNodes as $clauseNode) {
-            $clauses[] = $this->makeClause($clauseNode);
+            $clauses[] = $this->makeArgument($clauseNode);
         }
         
         return $clauses;

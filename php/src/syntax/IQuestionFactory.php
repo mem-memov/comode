@@ -1,10 +1,9 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
 interface IQuestionFactory
 {
+    public function setArgumentFactory(IArgumentFactory $argumentFactory);
     public function provideQuestion($string);
-    public function provideQuestionsByPredicate(node\IPredicate $predicateNode);
+    public function provideQuestionsByArgument(node\IArgument $argumentNode);
 }

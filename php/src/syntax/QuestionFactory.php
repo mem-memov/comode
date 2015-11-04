@@ -4,11 +4,17 @@ namespace Comode\syntax;
 class QuestionFactory implements IQuestionFactory
 {
     private $nodeFactory;
+    private $argumentFactory;
     
     public function __construct(
         node\IFactory $nodeFactory
     ) {
         $this->nodeFactory = $nodeFactory;
+    }
+    
+    public function setArgumentFactory(IArgumentFactory $argumentFactory)
+    {
+        $this->argumentFactory = $argumentFactory;
     }
     
     public function provideQuestion($string)
@@ -20,9 +26,9 @@ class QuestionFactory implements IQuestionFactory
         return $question;
     }
     
-    public function provideQuestionsByPredicate(node\IPredicate $predicateNode)
+    public function provideQuestionsByArgument(node\IArgument $argumentNode)
     {
-        $questionNodes = $this->nodeFactory->getQuestionNodes($predicateNode);
+        $questionNodes = $this->nodeFactory->getQuestionNodes($argumentNode);
         
         $questions = [];
         
@@ -35,6 +41,6 @@ class QuestionFactory implements IQuestionFactory
     
     private function makeQuestion(node\IQuestion $questionNode)
     {
-        return new Question($questionNode);
+        return new Question($this->argumentFactory, $questionNode);
     }
 }

@@ -1,10 +1,9 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
 interface IPredicateFactory
 {
-    public function providePredicate($predicateString);
-    public function providePredicatesByClause(node\IClause $clauseNode);
+    public function setArgumentFactory(IArgumentFactory $argumentFactory);
+    public function providePredicate($verb);
+    public function providePredicatesByArgument(node\IArgument $argumentNode);
 }

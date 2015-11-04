@@ -1,25 +1,17 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
 class Clause implements IClause
 {
-    private $predicateFactory;
-    private $argumentFactory;
-    private $questionFactory;
+    private $complimentFactory;
     private $node;
 
     public function __construct(
-        IPredicateFactory $predicateFactory, 
-        IArgumentFactory $argumentFactory, 
-        IQuestionFactory $questionFactory,
-        INode $node
+        IComplimentFactory $complimentFactory,
+        node\IClause $node
     )
     {
-        $this->predicateFactory = $predicateFactory;
-        $this->argumentFactory = $argumentFactory;
-        $this->questionFactory = $questionFactory;
+        $this->complimentFactory = $complimentFactory;
         $this->node = $node;
     }
     
@@ -28,20 +20,33 @@ class Clause implements IClause
         return $this->node->getId();
     }
 
-    public function setPredicate($predicateString)
+    public function setPredicate($verb)
     {
         $predicates = $this->predicateFactory->providePredicatesByClause($this->node);
         
         $predicateCount = count($predicates);
-        if ($predicateCount > 0) {
-            throw new exception\ClausePredicateMustBeKeptUnchanged();
+        
+        if ($predicateCount == 0) {
+            
+            $predicate = $this->predicateFactory->providePredicate($verb);
+            $predicate->addToClause($this->node);
+            
+        } elseif ($predicateCount == 1) {
+            
+            $oldPredicate = $predicates[0];
+            $oldPredicate->removeFromClause($this->node);
+            
+            $predicate = $this->predicateFactory->providePredicate($verb);
+            $predicate->addToClause($this->node);
+            
+            $compliments = $this->complimentFactory->provideComplimentsByClause($this->node);
+            foreach ($compliments as $compliment) {
+                
+            }
+            
+        } else {
+            throw new exception\ClauseMustHaveOnePredicate();
         }
-        
-        $predicate = $this->predicateFactory->providePredicate($predicateString);
-        
-        $predicate->addClause($this->node);
-
-        return $predicate;
     }
     
     public function getPredicate()
@@ -57,24 +62,43 @@ class Clause implements IClause
         
         return $predicate;
     }
-
-    public function addArgument($questionString)
-    {
-        $predicate = $this->getPredicate();
-        $question = $this->questionFactory->provideQuestion($questionString);
-        
-        $argument = $this->argumentFactory->provideArgument($predicate, $question);
-        
-        $argument->addClause($this->node);
-
-        return $argument;
-    }
     
-    public function getArguments()
+    public function addStringCompliment($question, $string)
     {
-        $arguments = $this->argumentFactory->provideArgumentsByClause($this->node);
+        $argument = $this->provideArgument($question);
+
+        $compliment = $this->complimentFactory->provideStringCompliment($argument, $string);
+        
+        $compliment->addClause($this->node);
+        
+        return $compliment;
+    }
+
+    public function addFileCompliment($question, $path)
+    {
+        $argument = $this->provideArgument($question);
+
+        $compliment = $this->complimentFactory->provideFileCompliment($argument, $path);
+        
+        $compliment->addClause($this->node);
+        
+        return $compliment;
+    }
+
+    public function getCompliments()
+    {
+        $arguments = $this->complimentFactory->provideComplimentsByClause($this->node);
         
         return $arguments;
+    }
+    
+    private function provideArgument($questionString)
+    {
+        $predicate = $this->getPredicate();
+
+        $argument = $this->argumentFactory->provideArgument($predicate, $questionString);
+        
+        return $argument;
     }
 
 }

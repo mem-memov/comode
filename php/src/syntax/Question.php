@@ -5,10 +5,14 @@ use Comode\graph\INode;
 
 class Question implements IQuestion
 {
+    private $argumentFactory;
     private $node;
 
-    public function __construct(INode $node)
-    {
+    public function __construct(
+        IArgumentFactory $argumentFactory,
+        INode $node
+    ) {
+        $this->argumentFactory = $argumentFactory;
         $this->node = $node;
     }
     
@@ -25,6 +29,11 @@ class Question implements IQuestion
     public function getValue()
     {
         return $this->node->getValue()->getContent();
+    }
+    
+    public function provideArguments()
+    {
+        return $this->argumentFactory->provideArgumentsByQuestion($this->node);
     }
 
 }

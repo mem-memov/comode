@@ -1,8 +1,6 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
 interface IPredicate
 {
    public function getId();

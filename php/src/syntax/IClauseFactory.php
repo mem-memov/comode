@@ -3,6 +3,6 @@ namespace Comode\syntax;
 
 interface IClauseFactory
 {
-    public function createClause();
-    public function getClausesByPredicate(node\IPredicate $predicateNode);
+    public function createClause(array $compliments);
+    public function fetchClausesByCompliment(node\ICompliment $complimentNode);
 }

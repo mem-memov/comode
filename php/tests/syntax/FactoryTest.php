@@ -10,6 +10,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
         require_once __DIR__ . '/../DirectoryFixture.php';
         $this->directoryFixture = new \DirectoryFixture();
+        
+        $this->fileDirectoryFixture = new \DirectoryFixture();
+        $this->fileDirectory = $this->fileDirectoryFixture->createDirectory();
 
         $this->spaceDirectory = $this->directoryFixture->createDirectory();
         
@@ -23,11 +26,80 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->graphFixture->tearDown();
         $this->directoryFixture->removeDirectory();
+        $this->fileDirectoryFixture->removeDirectory();
+    }
+    
+    public function testItProvidesPredicates()
+    {
+        $predicate = $this->factory->providePredicate('make');
+        
+        $this->assertInstanceOf('Comode\syntax\IPredicate', $predicate);
+    }
+
+    public function testItProvidesQuestions()
+    {
+        $question = $this->factory->provideQuestion('when');
+        
+        $this->assertInstanceOf('Comode\syntax\IQuestion', $question);
+    }
+
+    public function testItProvidesArguments()
+    {
+        $predicate = $this->factory->providePredicate('make');
+        
+        $question = $this->factory->provideQuestion('when');
+        
+        $argument = $this->factory->provideArgument($predicate, $question);
+        
+        $this->assertInstanceOf('Comode\syntax\IArgument', $argument);
+    }
+    
+    public function testItProvidesStringAnswer()
+    {
+        $answer = $this->factory->provideStringAnswer('today');
+        
+        $this->assertInstanceOf('Comode\syntax\IAnswer', $answer);
+    }
+
+    public function testItProvidesFileAnswer()
+    {
+        $path = $this->fileDirectory . '/test.txt';
+        
+        file_put_contents($path, 'some content');
+        
+        $answer = $this->factory->provideFileAnswer($path);
+        
+        $this->assertInstanceOf('Comode\syntax\IAnswer', $answer);
+    }
+    
+    public function testItProvidesCompliment()
+    {
+        $predicate = $this->factory->providePredicate('make');
+        
+        $question = $this->factory->provideQuestion('when');
+        
+        $argument = $this->factory->provideArgument($predicate, $question);
+        
+        $answer = $this->factory->provideStringAnswer('today');
+        
+        $compliment = $this->factory->provideCompliment($argument, $answer);
+        
+        $this->assertInstanceOf('Comode\syntax\ICompliment', $compliment);
     }
 
     public function testItCreatesClauses()
     {
-        $clause = $this->factory->createClause();
+        $predicate = $this->factory->providePredicate('make');
+        
+        $question = $this->factory->provideQuestion('when');
+        
+        $argument = $this->factory->provideArgument($predicate, $question);
+        
+        $answer = $this->factory->provideStringAnswer('today');
+        
+        $compliment = $this->factory->provideCompliment($argument, $answer);
+        
+        $clause = $this->factory->createClause([$compliment]);
         
         $this->assertInstanceOf('Comode\syntax\IClause', $clause);
     }

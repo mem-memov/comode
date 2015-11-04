@@ -1,9 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
-class FileCompliment implements ICompliment
+class FileAnswer implements IAnswer
 {
     public function isFile() {
         return true;

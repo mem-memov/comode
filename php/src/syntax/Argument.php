@@ -5,20 +5,17 @@ use Comode\graph\INode;
 
 class Argument implements IArgument
 {
-    private $clauseFactory;
     private $predicateFactory;
     private $questionFactory;
     private $complimentFactory;
     private $node;
 
     public function __construct(
-        IClauseFactory $clauseFactory,
         IPredicateFactory $predicateFactory,
         IQuestionFactory $questionFactory,
         IComplimentFactory $complimentFactory, 
         INode $node
     ) {
-        $this->clauseFactory = $clauseFactory; 
         $this->predicateFactory = $predicateFactory;
         $this->questionFactory = $questionFactory;
         $this->complimentFactory = $complimentFactory;
@@ -29,45 +26,35 @@ class Argument implements IArgument
     {
         return $this->node->getId();
     }
-    
-    public function addClause(node\IClause $clauseNode)
+
+    public function provideCompliments()
     {
-        if ($this->node->hasNode($clauseNode)) {
-            throw new exception\ClauseArgumentMayNotRepeat();
-        }
-        
-        $clauseNode->addNode($this->node);
-        $this->node->addNode($clauseNode);
+        return $this->complimentFactory->provideComplimentByArgument($this->node);
     }
     
-    public function provideStringCompliment($string)
+    public function provideQuestion()
     {
-        $compliment = $this->complimentFactory->provideStringCompliment($string);
+        $questions = $this->questionFactory->provideQuestionsByArgument($this->node);
         
-        if (!$compliment->hasArgument($this->node)) {
-            $compliment->addArgument($this->node);
-        }
-    }
-    
-    public function provideFileCompliment($path)
-    {
-        $compliment = $this->complimentFactory->provideFileCompliment($path);
+        $count = count($questions);
         
-        if (!$compliment->hasArgument($this->node)) {
-            $compliment->addArgument($this->node);
-        }
-    }
-    
-    public function getQuestion()
-    {
-        $questions = $this->questionFactory->provideQuestionsByPredicate($this->node);
-        
-        $questionCount = count($questions);
-        
-        if ($questionCount != 1) {
-            throw new exception\PredicateAndQuestionHaveOneCommonArgument('Argument ' . $this->node->getId() . ' has ' . $questionCount . ' questions.');
+        if ($count != 1) {
+            throw new exception\PredicateAndQuestionHaveOneCommonArgument('Argument ' . $this->node->getId() . ' has ' . $count . ' questions.');
         }
         
         return $questions[0];
+    }
+    
+    public function providePredicate()
+    {
+        $predicates = $this->predicateFactory->provideQuestionsByArgument($this->node);
+        
+        $count = count($predicates);
+        
+        if ($count != 1) {
+            throw new exception\PredicateAndQuestionHaveOneCommonArgument('Argument ' . $this->node->getId() . ' has ' . $count . ' predicates.');
+        }
+        
+        return $predicates[0];
     }
 }

@@ -6,6 +6,7 @@ interface IClause
     public function getId();
     public function setPredicate($predicateString);
     public function getPredicate();
-    public function addArgument($questionString);
-    public function getArguments();
+    public function addStringCompliment($questionString, $answerString);
+    public function addFileCompliment($questionString, $answerPath);
+    public function getCompliments();
 }

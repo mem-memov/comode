@@ -4,34 +4,29 @@ namespace Comode\syntax;
 class PredicateFactory implements IPredicateFactory
 {
     private $nodeFactory;
-    private $clauseFactory;
     private $argumentFactory;
 
     public function __construct(
-        node\IFactory $nodeFactory,
-        IArgumentFactory $argumentFactory
+        node\IFactory $nodeFactory
     ) {
         $this->nodeFactory = $nodeFactory;
+    }
+    
+    public function setArgumentFactory(IArgumentFactory $argumentFactory)
+    {
         $this->argumentFactory = $argumentFactory;
     }
-    
-    public function setClauseFactory(IClauseFactory $clauseFactory)
-    {
-        $this->clauseFactory = $clauseFactory;
-    }
-    
-    public function providePredicate($predicateString)
-    {
-        $predicateNode = $this->nodeFactory->createPredicateNode($predicateString);
 
-        $predicate = $this->makePredicate($predicateNode);
-        
-        return $predicate;
+    public function providePredicate($verb)
+    {
+        $node = $this->nodeFactory->createPredicateNode($verb);
+
+        return $this->makePredicate($node);
     }
     
-    public function providePredicatesByClause(node\IClause $clauseNode)
+    public function providePredicatesByArgument(node\IArgument $argumentNode)
     {
-        $predicateNodes = $this->nodeFactory->getPredicateNodes($clauseNode);
+        $predicateNodes = $this->nodeFactory->getPredicateNodes($argumentNode);
 
         $predicates = [];
         
@@ -42,8 +37,8 @@ class PredicateFactory implements IPredicateFactory
         return $predicates;
     }
     
-    private function makePredicate(node\IPredicate $predicateNode)
+    private function makePredicate(node\IPredicate $node)
     {
-        return new Predicate($this->clauseFactory, $this->argumentFactory, $predicateNode);
+        return new Predicate($this->argumentFactory, $node);
     }
 }

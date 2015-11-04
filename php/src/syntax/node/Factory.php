@@ -37,9 +37,9 @@ class Factory implements IFactory
         return $clauseNodes;
     }
     
-    public function createPredicateNode($predicateString)
+    public function createPredicateNode($verb)
     {
-        $node = $this->graphFactory->createStringNode($predicateString);
+        $node = $this->graphFactory->createStringNode($verb);
         
         $node->addNode($this->map['predicate']);
         
@@ -81,9 +81,9 @@ class Factory implements IFactory
         return $argumentNodes;
     }
     
-    public function createQuestionNode($questionString)
+    public function createQuestionNode($question)
     {
-        $node = $this->graphFactory->createStringNode($questionString);
+        $node = $this->graphFactory->createStringNode($question);
         
         $node->addNode($this->map['question']);
         
@@ -103,22 +103,13 @@ class Factory implements IFactory
         return $questionNodes;
     }
     
-    public function createStringComplimentNode($string)
+    public function createComplimentNode()
     {
-        $node = $this->graphFactory->createStringNode($string);
+        $node = $this->graphFactory->createNode();
         
         $node->addNode($this->map['compliment']);
         
-        return new StringCompliment($node);
-    }
-    
-    public function createFileComplimentNode($path)
-    {
-        $node = $this->graphFactory->createFileNode($path);
-        
-        $node->addNode($this->map['compliment']);
-        
-        return new FileCompliment($node);
+        return new Compliment($node);
     }
     
     public function getComplimentNodes(INode $node)
@@ -128,14 +119,45 @@ class Factory implements IFactory
         $complimentNodes = [];
         
         foreach ($linkedNodes as $linkedNode) {
-            if ($linkedNode->getValue()->isFile()) {
-                $complimentNodes[] = new FileCompliment($linkedNode);
-            } else {
-                $complimentNodes[] = new StringCompliment($linkedNode);
-            }
+            $complimentNodes[] = new Compliment($linkedNode);
         }
         
         return $complimentNodes;
+    }
+    
+    public function createStringAnswerNode($phrase)
+    {
+        $node = $this->graphFactory->createStringNode($phrase);
+        
+        $node->addNode($this->map['answer']);
+        
+        return new StringAnswer($node);
+    }
+    
+    public function createFileAnswerNode($path)
+    {
+        $node = $this->graphFactory->createFileNode($path);
+        
+        $node->addNode($this->map['answer']);
+        
+        return new FileAnswer($node);
+    }
+    
+    public function getAnswerNodes(INode $node)
+    {
+        $linkedNodes = $this->selectLinkedNodes($node, 'answer');
+        
+        $answerNodes = [];
+        
+        foreach ($linkedNodes as $linkedNode) {
+            if ($linkedNode->getValue()->isFile()) {
+                $answerNodes[] = new FileAnswer($linkedNode);
+            } else {
+                $answerNodes[] = new StringAnswer($linkedNode);
+            }
+        }
+        
+        return $answerNodes;
     }
     
     private function setMap($spaceDirectory)
@@ -152,7 +174,8 @@ class Factory implements IFactory
                 'predicate' => $this->graphFactory->createNode()->getId(),
                 'argument' => $this->graphFactory->createNode()->getId(),
                 'question' => $this->graphFactory->createNode()->getId(),
-                'compliment' => $this->graphFactory->createNode()->getId()
+                'compliment' => $this->graphFactory->createNode()->getId(),
+                'answer' => $this->graphFactory->createNode()->getId()
             ];
             $fileContent = '<?php return ' . var_export($map, true) . ';';
             file_put_contents($mappingPath, $fileContent);

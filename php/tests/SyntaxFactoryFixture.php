@@ -1,5 +1,5 @@
 <?php
-
+namespace Comode\syntax;
 class SyntaxFactoryFixture
 {
     public function setUp()
@@ -13,23 +13,17 @@ class SyntaxFactoryFixture
 
         $spaceDirectory = $this->directoryFixture->createDirectory();
         
-        $nodeFactory = new Comode\syntax\node\Factory($graphFactory, $spaceDirectory);
+        $nodeFactory = new node\Factory($graphFactory, $spaceDirectory);
         
-        $complimentFactory = new Comode\syntax\ComplimentFactory($nodeFactory);
-        $questionFactory = new Comode\syntax\QuestionFactory($nodeFactory);
-        $argumentFactory = new Comode\syntax\ArgumentFactory($nodeFactory, $questionFactory, $complimentFactory);
-        $predicateFactory = new Comode\syntax\PredicateFactory($nodeFactory, $argumentFactory);
-        $argumentFactory->setPredicateFactory($predicateFactory);
-        $clauseFactory = new Comode\syntax\ClauseFactory($nodeFactory, $predicateFactory, $argumentFactory, $questionFactory);
-        $predicateFactory->setClauseFactory($clauseFactory);
-        $argumentFactory->setClauseFactory($clauseFactory);
+        $this->answerFactory = new AnswerFactory($nodeFactory);
+        $this->complimentFactory = new ComplimentFactory($nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $this->questionFactory = new QuestionFactory($nodeFactory, $this->argumentFactory);
+        $this->argumentFactory = new ArgumentFactory($nodeFactory, $this->questionFactory, $this->complimentFactory);
+        $this->predicateFactory = new PredicateFactory($nodeFactory, $this->argumentFactory);
+        $this->clauseFactory = new ClauseFactory($nodeFactory, $this->predicateFactory, $this->complimentFactory);
         
-        $this->nodeFactory = $nodeFactory;
-        $this->complimentFactory = $complimentFactory;
-        $this->questionFactory = $questionFactory;
-        $this->argumentFactory = $argumentFactory;
-        $this->predicateFactory = $predicateFactory;
-        $this->clauseFactory = $clauseFactory;
+        $this->argumentFactory->setPredicateFactory($this->predicateFactory);
+        $this->complimentFactory->setClauseFactory($this->clauseFactory);
     }
     
     public function tearDown()

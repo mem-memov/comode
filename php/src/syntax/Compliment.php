@@ -1,41 +1,30 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
-abstract class Compliment implements ICompliment
+class Compliment implements ICompliment
 {
-    protected $node;
+    private $clauseFactory;
+    private $argumentFactory;
+    private $answerFactory;
+    private $node;
     
-    public function __construct(INode $node)
-    {
+    public function __construct(
+        IArgumentFactory $argumentFactory,
+        IAnswerFactory $answerFactory,
+        node\ICompliment $node
+    ) {
+        $this->argumentFactory = $argumentFactory;
+        $this->answerFactory = $answerFactory;
         $this->node = $node;
     }
     
-    public function getId()
+    public function setClauseFactory(IClauseFactory $clauseFactory)
     {
-        return $this->node->getId();
+        $this->clauseFactory = $clauseFactory;
     }
-    
-    public function hasArgument(node\IArgument $argumentNode)
+
+    public function fetchClauses()
     {
-        return $this->node->hasNode($argumentNode);
+        return $this->clauseFactory->fetchClausesByCompliment($this->node);
     }
-    
-    public function addArgument(node\IArgument $argumentNode)
-    {
-        if ($this->hasArgument($argumentNode)) {
-            throw new exception\ArgumentComplimentsMayNotRepeat();
-        }
-        
-        $this->node->addNode($argumentNode);
-        $argumentNode->addNode($this->node);
-    }
-    
-    public function getValue()
-    {
-        return $this->node->getValue()->getContent();
-    }
-    
-    abstract public function isFile();
 }
