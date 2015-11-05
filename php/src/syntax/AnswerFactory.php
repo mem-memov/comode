@@ -19,18 +19,44 @@ class AnswerFactory implements IAnswerFactory
     
     public function provideStringAnswer($string)
     {
-        $node = $this->nodeFactory->createStringAnswerNode($string);
+        $stringAnswerNode = $this->nodeFactory->createStringAnswerNode($string);
 
-        return new StringAnswer($this->complimentFactory, $node);
+        return $this->makeStringAnswer($stringAnswerNode);
     }
     
     public function provideFileAnswer($path)
     {
-        $node = $this->nodeFactory->createFileAnswerNode($path);
+        $fileAnswerNode = $this->nodeFactory->createFileAnswerNode($path);
 
-        return new FileAnswer($this->complimentFactory, $node);
+        return $this->makeFileAnswer($fileAnswerNode);
     }
     
-
+    public function provideAnswersByCompliment(node\ICompliment $complimentNode)
+    {
+        $answerNodes = $this->nodeFactory->getAnswerNodes($complimentNode);
+        
+        $answers = [];
+        
+        foreach ($answerNodes as $answerNode) {
+            if ($answerNode instanceof node\IStringAnswer) {
+                $answers[] = $this->makeStringAnswer($answerNode);
+            } elseif ($answerNode instanceof node\IFileAnswer) {
+                $answers[] = $this->makeFileAnswer($answerNode);
+            } else {
+                throw new exception\NodeType('Unexpected answer node type: ' . gettype($answerNode));
+            }
+        }
+        
+        return $answers;
+    }
     
+    private function makeStringAnswer(node\IStringAnswer $stringAnswerNode)
+    {
+        return new StringAnswer($this->complimentFactory, $stringAnswerNode);
+    }
+    
+    private function makeFileAnswer(node\IFileAnswer $fileAnswerNode)
+    {
+        return new FileAnswer($this->complimentFactory, $fileAnswerNode);
+    }
 }

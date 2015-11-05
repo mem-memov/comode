@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class FileAnswer implements IAnswer
+class FileAnswer extends Answer
 {
     public function isFile() {
         return true;

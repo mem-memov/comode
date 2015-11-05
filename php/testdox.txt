@@ -24,16 +24,32 @@ Comode\graph\Node
 Comode\graph\Value
  [x] It provides its node
 
+AnswerFactory
+ [x] It provides string answer
+ [x] It provides file answer
+
+ArgumentFactory
+ [x] It reads argument
+ [x] It creates argument
+ [x] It provides arguments by question
+ [x] It provides arguments by predicate
+
 ClauseFactory
  [x] It creates clause
  [x] It fetches clauses by compliment
 
-Comode\syntax\Factory
- [x] It provides predicates
- [x] It provides questions
- [x] It provides arguments
- [x] It provides string answer
- [ ] It provides file answer
- [x] It provides compliment
- [x] It creates clauses
+ComplimentFactory
+ [x] It reads compliment
+ [x] It creates compliment
+ [x] It provides compliments by clause
+ [x] It provides compliments by argument
+ [x] It provides compliments by answer
+
+PredicateFactory
+ [x] It provides predicate
+ [x] It provide predicates by argument
+
+QuestionFactory
+ [x] It provides question
+ [x] It provide questions by argument
 
