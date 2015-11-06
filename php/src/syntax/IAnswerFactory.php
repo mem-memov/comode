@@ -6,4 +6,5 @@ interface IAnswerFactory
     public function setComplimentFactory(IComplimentFactory $complimentFactory);
     public function provideStringAnswer($string);
     public function provideFileAnswer($path);
+    public function provideAnswersByCompliment(node\ICompliment $complimentNode);
 }

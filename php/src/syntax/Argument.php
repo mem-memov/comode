@@ -43,7 +43,7 @@ class Argument implements IArgument
         $questions = $this->questionFactory->provideQuestionsByArgument($this->node);
         
         $count = count($questions);
-        
+
         if ($count != 1) {
             throw new exception\PredicateAndQuestionHaveOneCommonArgument('Argument ' . $this->node->getId() . ' has ' . $count . ' questions.');
         }
@@ -53,7 +53,7 @@ class Argument implements IArgument
     
     public function providePredicate()
     {
-        $predicates = $this->predicateFactory->provideQuestionsByArgument($this->node);
+        $predicates = $this->predicateFactory->providePredicatesByArgument($this->node);
         
         $count = count($predicates);
         

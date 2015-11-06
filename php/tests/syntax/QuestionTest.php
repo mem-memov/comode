@@ -21,7 +21,8 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
         
         $id = 7773;
         
-        $this->node->method('getId')
+        $this->node->expects($this->once())
+                        ->method('getId')
                         ->willReturn($id);
                         
         $questionId = $question->getId();

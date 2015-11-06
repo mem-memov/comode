@@ -29,17 +29,12 @@ class Predicate implements IPredicate
         $argumentNode->addNode($this->node);
         $this->node->addNode($argumentNode);
     }
-    
-    public function fetchClauses()
-    {
-        return $this->clauseFactory->getClausesByPredicate($this->node);
-    }
-    
+
     public function provideArguments()
     {
         return $this->argumentFactory->provideArgumentsByPredicate($this->node);
     }
-    
+
     public function provideArgumentByQuestion(IQuestion $question)
     {
         $arguments = $this->provideArguments();

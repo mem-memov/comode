@@ -1,12 +1,12 @@
 <?php
-class StringAnswerTest extends \PHPUnit_Framework_TestCase
+class ClauseTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
     protected $complimentFactory;
     
     protected function setUp()
     {
-        $this->node = $this->getMockBuilder('Comode\syntax\node\IStringAnswer')
+        $this->node = $this->getMockBuilder('Comode\syntax\node\IClause')
                             ->disableOriginalConstructor()
                             ->getMock();
 
@@ -17,7 +17,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
         
         $id = 7773;
         
@@ -25,35 +25,14 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
                         ->method('getId')
                         ->willReturn($id);
                         
-        $answerId = $answer->getId();
+        $clauseId = $clause->getId();
         
-        $this->assertEquals($answerId, $id);
-    }
-    
-    public function testItProvidesValue()
-    {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
-        
-        $answerString = 'today';
-        
-        $value = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $value->method('getContent')
-                        ->willReturn($answerString);
-        
-        $this->node->method('getValue')
-                        ->willReturn($value);
-                        
-        $answerValue = $answer->getValue();
-        
-        $this->assertEquals($answerValue, $answerString);
+        $this->assertEquals($clauseId, $id);
     }
     
     public function testItGetsLinkedToCompliments()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                             ->disableOriginalConstructor()
@@ -67,29 +46,24 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
                     ->method('addNode')
                     ->with($this->node);
         
-        $answer->addCompliment($complimentNode);
+        $clause->addCompliment($complimentNode);
     }
     
     public function testItProvidesCompliments()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
         
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()
                             ->getMock();
         
-        $this->complimentFactory->method('provideComplimentsByAnswer')
+        $this->complimentFactory->expects($this->once())
+                        ->method('provideComplimentsByClause')
+                        ->with($this->node)
                         ->willReturn([$compliment]);
         
-        $compliments = $answer->provideCompliments();
+        $compliments = $clause->provideCompliments();
         
         $this->assertContainsOnlyInstancesOf('Comode\syntax\ICompliment', $compliments);
-    }
-    
-    public function testItDeniesBeingAFile()
-    {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
-        
-        $this->assertEquals(false, $answer->isFile());
     }
 }

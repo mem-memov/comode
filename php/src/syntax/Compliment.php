@@ -19,6 +19,11 @@ class Compliment implements ICompliment
         $this->answerFactory = $answerFactory;
         $this->node = $node;
     }
+    
+    public function getId()
+    {
+        return $this->node->getId();
+    }
 
     public function addClause(node\IClause $clauseNode)
     {
