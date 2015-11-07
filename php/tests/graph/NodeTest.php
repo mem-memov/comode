@@ -23,6 +23,62 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $this->id = 3;
     }
     
+    public function testItGetsCreatedByStoreWhenNoIdProvided()
+    {
+        $this->store->expects($this->once())
+                    ->method('createNode')
+                    ->willReturn($this->id);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory);
+        
+        $this->assertEquals($this->id, $node->getId());
+    }
+    
+    public function testItGetsCreatedWithFileValueWhenPathProvided()
+    {
+        $this->store->expects($this->once())
+                    ->method('createNode')
+                    ->willReturn($this->id);
+                    
+        $path = '/tmp/some.file';
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, null, true, $path);
+    }
+    
+    public function testItGetsCreatedWithStringValueWhenContentProvided()
+    {
+        $this->store->expects($this->once())
+                    ->method('createNode')
+                    ->willReturn($this->id);
+                    
+        $content = 'rabbit';
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, null, false, $content);
+    }
+    
+    public function testItKeepsItsIdIfInStore()
+    {
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        
+        $this->assertEquals($this->id, $node->getId());
+    }
+    
+    /**
+     * @expectedException Comode\graph\exception\NoIdWhenRetrievingNode
+     */
+    public function testItPanicsWhenProvidedIdNotInStore()
+    {
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(false);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+    }
+    
     public function testItProvidesItsOwnId()
     {
         $this->store->expects($this->once())

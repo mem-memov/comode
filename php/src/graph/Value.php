@@ -7,22 +7,19 @@ class Value implements IValue
 {
     private $store;
     private $nodeFactory;
-    private $isFile;
-    private $content;
+    private $storeValue;
     
     public function __construct(IStore $store, INodeFactory $nodeFactory, $isFile, $content)
     {
         $this->store = $store;
         $this->nodeFactory = $nodeFactory;
         
-        $storeValue = $this->store->getValue($isFile, $content);
-        $this->isFile = $storeValue->isFile();
-        $this->content = $storeValue->getContent();
+        $this->storeValue = $this->store->getValue($isFile, $content);
     }
     
     public function getNode()
     {
-        $id = $this->store->getValueNode(new store\Value($this->isFile, $this->content));
+        $id = $this->store->getValueNode($this->storeValue);
         
         if (is_null($id)) {
             return null;
@@ -34,11 +31,11 @@ class Value implements IValue
     
     public function isFile()
     {
-        return $this->isFile;
+        return $this->storeValue->isFile();;
     }
     
     public function getContent()
     {
-        return $this->content;
+        return $this->storeValue->getContent();
     }
 }

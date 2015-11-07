@@ -35,7 +35,7 @@ class Node implements INode
             }
         } else {
             if (!$this->store->nodeExists($id)) {
-                throw new NoIdWhenRetrievingNode();
+                throw new exception\NoIdWhenRetrievingNode('Id given: ' . $id);
             }
         }
         
