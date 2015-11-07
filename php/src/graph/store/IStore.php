@@ -7,6 +7,7 @@ interface IStore
     public function createNode(IValue $value = null);
     public function linkNodes($originId, $targetId);
     public function separateNodes($originId, $targetId);
+    public function isLinkedToNode($originId, $targetId);
     public function getLinkedNodes($parentId);
     public function getValueNode(IValue $value);
     public function getNodeValue($nodeId);

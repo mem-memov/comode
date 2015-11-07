@@ -1,188 +1,302 @@
 <?php
-namespace Comode\graph;
 class NodeTest extends \PHPUnit_Framework_TestCase
 {
+    protected $store;
+    protected $valueFactory;
+    protected $nodeFactory;
+    protected $id;
+
     protected function setUp()
     {
-        require_once __DIR__ . '/../DirectoryFixture.php';
-        $this->directoryFixture = new \DirectoryFixture();
+        $this->store = $this->getMockBuilder('Comode\graph\store\IStore')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $this->valueFactory = $this->getMockBuilder('Comode\graph\IValueFactory')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $this->nodeFactory = $this->getMockBuilder('Comode\graph\INodeFactory')
+                            ->disableOriginalConstructor()
+                            ->getMock();
         
-        $this->path = $this->directoryFixture->createDirectory();
-
-        $config = [
-            'store' => [
-                'type' => 'fileSystem',
-                'path' => $this->path
-            ]
-        ];
-        
-        $factory = new Factory($config);
-        
-        $this->emptyNode = $factory->createNode(); // id = 1
-        
-        $this->stringContent = 'some text';
-        $this->stringNode = $factory->createStringNode($this->stringContent); // id = 2
-        
-        $this->originFilePath = $this->path . '/myTestFile.txt';
-        $this->originFileContent = 'some file content';
-        file_put_contents($this->originFilePath, $this->originFileContent);
-        
-        $this->fileNode = $factory->createFileNode($this->originFilePath); // id = 3
+        $this->id = 3;
     }
     
-    protected function tearDown()
-    {
-        $this->directoryFixture->removeDirectories();
-    }
-
     public function testItProvidesItsOwnId()
     {
-        $this->assertEquals(1, $this->emptyNode->getId());
-        $this->assertEquals(2, $this->stringNode->getId());
-        $this->assertEquals(3, $this->fileNode->getId());
-    }
-    
-    public function testItsIdIsAnInteger()
-    {
-        $this->assertTrue(is_int($this->emptyNode->getId()));
-        $this->assertTrue(is_int($this->stringNode->getId()));
-        $this->assertTrue(is_int($this->fileNode->getId()));
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        
+        $nodeId = $node->getId();
+        
+        $this->assertEquals($this->id, $nodeId);
     }
     
     public function testItCanBeConnectedToOtherNodes()
     {
-        $this->emptyNode->addNode($this->stringNode);
-        $this->emptyNode->addNode($this->fileNode);
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
 
-        $this->stringNode->addNode($this->emptyNode);
-        $this->stringNode->addNode($this->fileNode);
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
         
-        $this->fileNode->addNode($this->emptyNode);
-        $this->fileNode->addNode($this->stringNode);
+        $nodeToAdd = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $nodeToAddId = $this->id + 2222;
+        
+        $nodeToAdd->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($nodeToAddId);
+                            
+        $this->store->expects($this->once())
+                    ->method('linkNodes')
+                    ->with($this->id, $nodeToAddId);
+        
+        $node->addNode($nodeToAdd);
     }
     
-    public function testItCanBeSeparatedFromItsNode()
+    public function testItNodesCanBeRemoved()
     {
-        $this->emptyNode->addNode($this->stringNode);
-        $this->emptyNode->addNode($this->fileNode);
-        
-        $this->emptyNode->removeNode($this->stringNode);
-        $this->emptyNode->removeNode($this->stringNode);
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
 
-        $this->stringNode->addNode($this->emptyNode);
-        $this->stringNode->addNode($this->fileNode);
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
         
-        $this->stringNode->removeNode($this->emptyNode);
-        $this->stringNode->removeNode($this->fileNode);
+        $nodeToRemove = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $nodeToRemoveId = $this->id + 2222;
         
-        $this->fileNode->addNode($this->emptyNode);
-        $this->fileNode->addNode($this->stringNode);
-        
-        $this->fileNode->removeNode($this->emptyNode);
-        $this->fileNode->removeNode($this->stringNode);
+        $nodeToRemove->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($nodeToRemoveId);
+                    
+        $this->store->expects($this->once())
+                    ->method('separateNodes')
+                    ->with($this->id, $nodeToRemoveId);
+                    
+        $node->removeNode($nodeToRemove);
     }
     
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testItProducesAnErrorWhenYouTryToConnectItToSomethingElse()
+    public function testItSuppliesItsNodes()
     {
-        $this->emptyNode->addNode(1);
-    }
-    
-    public function testItProvidesAllNodesItIsConnectedTo()
-    {
-        // empty
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+           
+        $linkedNodeId = $this->id + 2222;
         
-        $this->emptyNode->addNode($this->stringNode);
-        $this->emptyNode->addNode($this->fileNode);
+        $this->store->expects($this->once())
+                    ->method('getLinkedNodes')
+                    ->with($this->id)
+                    ->willReturn([$linkedNodeId]);
+                    
+        $linkedNode = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $this->nodeFactory->expects($this->once())
+                    ->method('readNode')
+                    ->with($linkedNodeId)
+                    ->willReturn($linkedNode);
         
-        $nodes = $this->emptyNode->getNodes();
-        $this->assertCount(2, $nodes);
-        $ids = [];
-        foreach ($nodes as $node) {
-            array_push($ids, $node->getId());
-        }
-        $this->assertContains(2, $ids);
-        $this->assertContains(3, $ids);
+        $nodes = $node->getNodes();
         
-        // string
-        
-        $this->stringNode->addNode($this->emptyNode);
-        $this->stringNode->addNode($this->fileNode);
-        
-        $nodes = $this->stringNode->getNodes();
-        $this->assertCount(2, $nodes);
-        $ids = [];
-        foreach ($nodes as $node) {
-            array_push($ids, $node->getId());
-        }
-        $this->assertContains(1, $ids);
-        $this->assertContains(3, $ids);
-        
-        // file
-        
-        $this->fileNode->addNode($this->emptyNode);
-        $this->fileNode->addNode($this->stringNode);
-        
-        $nodes = $this->fileNode->getNodes();
-        $this->assertCount(2, $nodes);
-        $ids = [];
-        foreach ($nodes as $node) {
-            array_push($ids, $node->getId());
-        }
-        $this->assertContains(1, $ids);
-        $this->assertContains(2, $ids);
-    }
-    
-    public function testProvidedNodesAreOfTheNodeType()
-    {
-        // empty
-        
-        $this->emptyNode->addNode($this->stringNode);
-        $this->emptyNode->addNode($this->fileNode);
-        
-        $nodes = $this->emptyNode->getNodes();
         $this->assertContainsOnlyInstancesOf('Comode\graph\INode', $nodes);
         
-        // string
-        
-        $this->stringNode->addNode($this->emptyNode);
-        $this->stringNode->addNode($this->fileNode);
-        
-        $nodes = $this->stringNode->getNodes();
-        $this->assertContainsOnlyInstancesOf('Comode\graph\INode', $nodes);
-        
-        // file
-        
-        $this->fileNode->addNode($this->emptyNode);
-        $this->fileNode->addNode($this->stringNode);
-        
-        $nodes = $this->fileNode->getNodes();
-        $this->assertContainsOnlyInstancesOf('Comode\graph\INode', $nodes);
+        $this->assertEquals($linkedNode, $nodes[0]);
     }
     
-    public function testItProvidesItsValue()
+    public function testItChecksItHasANode()
     {
-        $stringValue = $this->stringNode->getValue();
-        $this->assertEquals($stringValue->getContent(), $this->stringContent);
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
         
-        $fileValue = $this->fileNode->getValue();
-        $fileContent = file_get_contents($fileValue->getContent());
-        $this->assertEquals($fileContent, $this->originFileContent);
+        $nodeToCheck = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $nodeToCheckId = $this->id + 2222;
+        
+        $nodeToCheck->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($nodeToCheckId);
+        
+        $this->store->expects($this->once())
+                    ->method('isLinkedToNode')
+                    ->with($this->id, $nodeToCheckId)
+                    ->willReturn(true);
+        
+        $hasNode = $node->hasNode($nodeToCheck);
+
+        $this->assertEquals($hasNode, true);
     }
     
-    /**
-     * @expectedException Comode\graph\store\ValueNotFound
-     */
-    public function testItDoesNotProvideAValueWhenItIsEmpty()
+    public function testItChecksItHasNoNode()
     {
-        $this->emptyNode->getValue();
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        
+        $nodeToCheck = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $nodeToCheckId = $this->id + 2222;
+        
+        $nodeToCheck->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($nodeToCheckId);
+        
+        $this->store->expects($this->once())
+                    ->method('isLinkedToNode')
+                    ->with($this->id, $nodeToCheckId)
+                    ->willReturn(false);
+        
+        $hasNode = $node->hasNode($nodeToCheck);
+
+        $this->assertEquals($hasNode, false);
     }
     
-    public function testItCopiesItsValueFileToAnInternalLocation()
+    public function testItSuppliesItsStringValue()
     {
-        $targetPath = $this->fileNode->getValue()->getContent();
-        $this->assertFalse($targetPath == $this->originFilePath);
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $string = 'rabbit';
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id, false, $string);
+        
+        $storeValue = $this->getMockBuilder('Comode\graph\store\IValue')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $this->store->expects($this->once())
+                    ->method('getNodeValue')
+                    ->with($this->id)
+                    ->willReturn($storeValue);
+                    
+        $storeValue->expects($this->once())
+                    ->method('isFile')
+                    ->willReturn(false);
+                    
+        $storeValue->expects($this->once())
+                    ->method('getContent')
+                    ->willReturn($string);
+                    
+        $stringValue = $this->getMockBuilder('Comode\graph\IValue')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                    
+        $this->valueFactory->expects($this->once())
+                    ->method('makeStringValue')
+                    ->with($string)
+                    ->willReturn($stringValue);
+        
+        $nodeStringValue = $node->getValue();
+        
+        $this->assertInstanceOf('Comode\graph\IValue', $nodeStringValue);
+    }
+    
+    public function testItSuppliesItsFileValue()
+    {
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $path = '/tmp/some.file';
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id, true, $path);
+        
+        $storeValue = $this->getMockBuilder('Comode\graph\store\IValue')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $this->store->expects($this->once())
+                    ->method('getNodeValue')
+                    ->with($this->id)
+                    ->willReturn($storeValue);
+                    
+        $storeValue->expects($this->once())
+                    ->method('isFile')
+                    ->willReturn(true);
+                    
+        $storeValue->expects($this->once())
+                    ->method('getContent')
+                    ->willReturn($path);
+                    
+        $fileValue = $this->getMockBuilder('Comode\graph\IValue')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                    
+        $this->valueFactory->expects($this->once())
+                    ->method('makeFileValue')
+                    ->with($path)
+                    ->willReturn($fileValue);
+        
+        $nodeFileValue = $node->getValue();
+        
+        $this->assertInstanceOf('Comode\graph\IValue', $nodeFileValue);
+    }
+    
+    public function testItSuppliesCommonNodes()
+    {
+        $this->store->expects($this->once())
+                    ->method('nodeExists')
+                    ->willReturn(true);
+
+        $node = new Comode\graph\Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        
+        $adjacentNode = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $adjacentNodeId = $this->id + 2222;
+        
+        $adjacentNode->expects($this->once())
+                    ->method('getId')
+                    ->willReturn($adjacentNodeId);
+
+        $commonNode = $this->getMockBuilder('Comode\graph\INode')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $commonNodeId = $adjacentNodeId + 345;
+                           
+        $this->store->expects($this->exactly(2))
+                    ->method('getLinkedNodes')
+                    ->withConsecutive(
+                        [$this->equalTo($this->id)],
+                        [$this->equalTo($adjacentNodeId)]
+                    )
+                    ->will($this->onConsecutiveCalls(
+                        [$commonNodeId], 
+                        [$commonNodeId]
+                    ));
+                    
+        $this->nodeFactory->expects($this->once())
+                    ->method('readNode')
+                    ->with($commonNodeId)
+                    ->willReturn($commonNode);
+                    
+        $commonNodes = $node->getCommonNodes($adjacentNode);
+
+        $this->assertEquals($commonNodes[0], $commonNode);
     }
 }
