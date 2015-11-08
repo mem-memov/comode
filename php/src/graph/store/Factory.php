@@ -5,16 +5,12 @@ use Comode\graph\value\IFactory as IValueFactory;
 
 class Factory
 {
-    private $config;
-
-    public function __construct($config)
+    public function __construct()
     {
-        $this->config = $config;
-        $this->valueFactory = $valueFactory;
     }
     
-    public function makeFileSystem()
+    public function makeFileSystem(array $options)
     {
-        return new FileSystem($this->config['path']);
+        return new FileSystem($options['path']);
     }
 }
