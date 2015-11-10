@@ -20,32 +20,8 @@ class Configuration implements IConfiguration
         
         $this->options = $options;
     }
-    
-    public function makeNodeFactory()
-    {
-        $this->bindNodeAndValueFactories();
-        
-        return $this->nodeFactory;
-    }
 
-    public function makeValueFactory()
-    {
-        $this->bindNodeAndValueFactories();
-        
-        return $this->valueFactory;
-    }
-    
-    private function bindNodeAndValueFactories()
-    {
-        if (is_null($this->nodeFactory) && is_null($this->valueFactory)) {
-            $this->nodeFactory = new NodeFactory($this->makeStore());
-            $this->valueFactory = new ValueFactory($this->makeStore());
-            $this->nodeFactory->setValueFactory($this->valueFactory);
-            $this->valueFactory->setNodeFactory($this->nodeFactory);
-        }
-    }
-    
-    private function makeStore()
+    public function makeStore()
     {
         if (is_null($this->store)) {
             $storeFactory = $this->makeStoreFactory();

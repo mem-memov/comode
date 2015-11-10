@@ -6,10 +6,10 @@ class Factory implements IFactory
     private $nodeFactory;
     private $valueFactory;
 
-    public function __construct(IConfiguration $configuration)
+    public function __construct(INodeFactory $nodeFactory, IValueFactory $valueFactory)
     {
-        $this->nodeFactory = $configuration->makeNodeFactory();
-        $this->valueFactory = $configuration->makeValueFactory();
+        $this->nodeFactory = $nodeFactory;
+        $this->valueFactory = $valueFactory;
     }
 
     public function createNode()
