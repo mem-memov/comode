@@ -1,6 +1,15 @@
 <?php
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
+    protected $storeFactory;
+    
+    protected function setUp()
+    {
+        $this->storeFactory = $this->getMockBuilder('Comode\graph\store\IFactory')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+    }
+    
     public function testItMakesFileSystemStore()
     {
         $options = [
@@ -9,11 +18,19 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         
-        $configuration = new Comode\graph\Configuration($options);
+        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
+        
+        $fileSystemStore = $this->getMockBuilder('Comode\graph\store\fileSystem\Store')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+        
+        $this->storeFactory->expects($this->any())
+                            ->method('makeFileSystem')
+                            ->willReturn($fileSystemStore);
         
         $store = $configuration->makeStore();
         
-        $this->assertInstanceOf('Comode\graph\store\FileSystem', $store);
+        $this->assertEquals($fileSystemStore, $store);
     }
     
     /**
@@ -25,7 +42,9 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'store' => []
         ];
         
-        $configuration = new Comode\graph\Configuration($options);
+        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
+        
+        $store = $configuration->makeStore();
     }
 
     /**
@@ -39,7 +58,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         
-        $configuration = new Comode\graph\Configuration($options);
+        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
         
         $store = $configuration->makeStore();
     }

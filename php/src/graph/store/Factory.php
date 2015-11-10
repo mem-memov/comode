@@ -3,7 +3,7 @@ namespace Comode\graph\store;
 
 use Comode\graph\value\IFactory as IValueFactory;
 
-class Factory
+class Factory implements IFactory
 {
     public function __construct()
     {
@@ -11,6 +11,7 @@ class Factory
     
     public function makeFileSystem(array $options)
     {
-        return new FileSystem($options['path']);
+        $wrapper = new fileSystem\Wrapper();
+        return new fileSystem\Store($options['path'], $wrapper);
     }
 }

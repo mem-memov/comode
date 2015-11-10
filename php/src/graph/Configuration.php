@@ -6,29 +6,24 @@ class Configuration implements IConfiguration
     private $options;
     private $storeFactory;
     private $store;
-    private $nodeFactory;
-    private $valueFactory;
-    
-    public function __construct(array $options)
-    {
-        if (
-            !isset($options['store']) 
-            || !isset($options['store']['type'])
-        ) {
-            throw new exception\OptionMissing('Store type missing.');
-        }
-        
+
+    public function __construct(
+        store\IFactory $storeFactory, 
+        array $options
+    ) {
+        $this->storeFactory = $storeFactory;
         $this->options = $options;
     }
 
     public function makeStore()
     {
         if (is_null($this->store)) {
-            $storeFactory = $this->makeStoreFactory();
             
+            $this->checkOptions();
+
             switch ($this->options['store']['type']) {
                 case 'fileSystem':
-                    $this->store = $storeFactory->makeFileSystem($this->options['store']);
+                    $this->store = $this->storeFactory->makeFileSystem($this->options['store']);
                     break;
                 default:
                     throw new exception\OptionUnknown('Unknown store type: ' . $this->options['store']['type']);
@@ -39,12 +34,13 @@ class Configuration implements IConfiguration
         return $this->store;
     }
     
-    private function makeStoreFactory()
+    private function checkOptions()
     {
-        if (is_null($this->storeFactory)) {
-            $this->storeFactory = new store\Factory();
+        if (
+            !isset($this->options['store']) 
+            || !isset($this->options['store']['type'])
+        ) {
+            throw new exception\OptionMissing('Store type missing.');
         }
-        
-        return $this->storeFactory;
     }
 }

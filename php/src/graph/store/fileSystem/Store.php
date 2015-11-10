@@ -1,35 +1,64 @@
 <?php
-namespace Comode\graph\store;
+namespace Comode\graph\store\fileSystem;
 
-use Comode\graph\value\IFactory as IValueFactory;
+use Comode\graph\store\IStore;
+use Comode\graph\store\Value;
+use Comode\graph\store\IValue;
+use Comode\graph\store\exception\ValueNotFound;
+use Comode\graph\store\exception\ValueMustBeLinkedToOneNode;
 
-class FileSystem implements IStore {
+class Store implements IStore {
 
     private $path;
-    private $initialized;
+    private $fileSystem;
+    
     private $graphPath;
     private $valuePath;
     private $valueToNodeIndexPath;
     private $nodeToValueIndexPath;
     private $idFile = 'lastId';
 
-    public function __construct($path)
+    public function __construct($path, IWrapper $fileSystem)
     {
         $this->path = $path;
-        $this->initialized = false;
+        $this->fileSystem = $fileSystem;
+
+        if (!$this->fileSystem->fileExists($this->path)) {
+            $this->fileSystem->makeDirectory($this->path);
+        }
+        
+        $this->graphPath = $this->path . '/node';
+        
+        if (!$this->fileSystem->fileExists($this->graphPath)) {
+            $this->fileSystem->makeDirectory($this->graphPath);
+        }
+        
+        $this->valuePath = $this->path . '/value';
+        
+        if (!$this->fileSystem->fileExists($this->valuePath)) {
+            $this->fileSystem->makeDirectory($this->valuePath);
+        }
+        
+        $this->valueToNodeIndexPath = $this->path . '/value_to_node';
+        
+        if (!$this->fileSystem->fileExists($this->valueToNodeIndexPath)) {
+            $this->fileSystem->makeDirectory($this->valueToNodeIndexPath);
+        }
+        
+        $this->nodeToValueIndexPath = $this->path . '/node_to_value';
+        
+        if (!$this->fileSystem->fileExists($this->nodeToValueIndexPath)) {
+            $this->fileSystem->makeDirectory($this->nodeToValueIndexPath);
+        }
     }
 
     public function nodeExists($nodeId)
     {
-        $this->initialize();
-        
-        return file_exists($this->buildNodePath($nodeId));
+        return $this->fileSystem->fileExists($this->buildNodePath($nodeId));
     }
     
     public function createNode(IValue $value = null)
     {
-        $this->initialize();
-        
         if (!is_null($value)) {
             $nodeId = $this->getValueNode($value);
             if (!is_null($nodeId)) {
@@ -41,7 +70,7 @@ class FileSystem implements IStore {
        
         $nodePath = $this->buildNodePath($nodeId);
         
-        mkdir($nodePath, 0777, true);
+        $this->fileSystem->makeDirectory($nodePath);
             
         if (!is_null($value)) {
             list($valueHash, $valuePath) = $this->createValue($value);
@@ -53,46 +82,38 @@ class FileSystem implements IStore {
 
     public function linkNodes($originId, $targetId)
     {
-        $this->initialize();
-        
         $originPath = $this->graphPath . '/' . $originId . '/' . $targetId;
 
-        if (file_exists($originPath)) {
+        if ($this->fileSystem->fileExists($originPath)) {
             return;
         }
 
         $targetPath = $this->graphPath . '/' . $targetId;
-        symlink($targetPath, $originPath);
+        $this->fileSystem->makeLink($targetPath, $originPath);
     }
     
     public function separateNodes($originId, $targetId)
     {
-        $this->initialize();
-        
         $originPath = $this->graphPath . '/' . $originId . '/' . $targetId;
         
-        if (!file_exists($originPath)) {
+        if (!$this->fileSystem->fileExists($originPath)) {
             return;
         }
         
-        unlink($originPath);
+        $this->fileSystem->deleteLink($originPath);
     }
         
     public function isLinkedToNode($originId, $targetId)
     {
-        $this->initialize();
-        
         $originPath = $this->buildNodePath($originId);
         
         $linkPath = $originPath . '/' . $targetId;
         
-        return file_exists($linkPath);
+        return $this->fileSystem->fileExists($linkPath);
     }
     
     public function getLinkedNodes($nodeId)
     {
-        $this->initialize();
-        
         $path = $this->buildNodePath($nodeId);
         $offset = strlen($path) + 1;
             
@@ -109,8 +130,6 @@ class FileSystem implements IStore {
 
     public function getValueNode(IValue $value)
     {
-        $this->initialize();
-        
         if ($value->isFile()) {
             $originPath = $value->getContent();
             $valueHash = $this->hashFile($originPath);
@@ -131,7 +150,7 @@ class FileSystem implements IStore {
         } elseif ($nodeCount == 1) {
             $nodeId = (int)substr($nodePaths[0], $offset);
         } else {
-            throw new \Exception();
+            throw new ValueMustBeLinkedToOneNode('Value with content ' . $value->getContent() . ' has too many nodes: ' . $nodeCount);
         }
         
         return $nodeId;
@@ -139,8 +158,6 @@ class FileSystem implements IStore {
         
     public function getNodeValue($nodeId)
     {
-        $this->initialize();
-        
         $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
         $paths = glob($indexPath . '/*');
@@ -162,7 +179,7 @@ class FileSystem implements IStore {
         $fileName = basename($valuePath);
 
         if ($fileName == $this->nameStringValueFile($valueHash)) {
-            $content = file_get_contents($valuePath);
+            $content = $this->fileSystem->readFile($valuePath);
             $value = new Value(false, $content);
         } else {
             $value = new Value(true, $valuePath);
@@ -173,8 +190,6 @@ class FileSystem implements IStore {
     
     public function getValue($isFile, $content)
     {
-        $this->initialize();
-        
         if (!$isFile) {
             $value = new Value(false, $content);
         } else {
@@ -190,55 +205,20 @@ class FileSystem implements IStore {
     }
 
     // private methods
-    
-    private function initialize()
-    {
-        if ($this->initialized) {
-            return;
-        }
-        
-        if (!file_exists($this->path)) {
-            mkdir($this->path, 0777, true);
-        }
-        
-        $this->graphPath = $this->path . '/node';
-        
-        if (!file_exists($this->graphPath)) {
-            mkdir($this->graphPath, 0777, true);
-        }
-        
-        $this->valuePath = $this->path . '/value';
-        
-        if (!file_exists($this->valuePath)) {
-            mkdir($this->valuePath, 0777, true);
-        }
-        
-        $this->valueToNodeIndexPath = $this->path . '/value_to_node';
-        
-        if (!file_exists($this->valueToNodeIndexPath)) {
-            mkdir($this->valueToNodeIndexPath, 0777, true);
-        }
-        
-        $this->nodeToValueIndexPath = $this->path . '/node_to_value';
-        
-        if (!file_exists($this->nodeToValueIndexPath)) {
-            mkdir($this->nodeToValueIndexPath, 0777, true);
-        }
-    }
 
     private function nextId()
     {
         $lastIdPath = $this->path . '/' . $this->idFile;
 
-        if (!file_exists($lastIdPath)) {
-            file_put_contents($lastIdPath, 0);
+        if (!$this->fileSystem->fileExists($lastIdPath)) {
+            $this->fileSystem->writeFile($lastIdPath, 0);
         }
 
-        $lastId = file_get_contents($lastIdPath);
+        $lastId = $this->fileSystem->readFile($lastIdPath);
 
         $nextId = $lastId + 1;
 
-        file_put_contents($lastIdPath, $nextId);
+        $this->fileSystem->writeFile($lastIdPath, $nextId);
 
         return (int)$nextId;
     }
@@ -265,7 +245,7 @@ class FileSystem implements IStore {
             $valuePath = $this->createValueDirectory($valueHash);
             
             $targetPath = $valuePath . '/' . $this->nameStringValueFile($valueHash);
-            file_put_contents($targetPath, $string);
+            $this->fileSystem->writeFile($targetPath, $string);
 
         }
 
@@ -277,27 +257,27 @@ class FileSystem implements IStore {
         // value to node
         $valueToNodeIndexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
         
-        if (!file_exists($valueToNodeIndexPath)) {
-            mkdir($valueToNodeIndexPath, 0777, true);
+        if (!$this->fileSystem->fileExists($valueToNodeIndexPath)) {
+            $this->fileSystem->makeDirectory($valueToNodeIndexPath);
         }
 
-        symlink($nodePath, $valueToNodeIndexPath . '/' . $nodeId);
+        $this->fileSystem->makeLink($nodePath, $valueToNodeIndexPath . '/' . $nodeId);
          
         // node to value           
         $nodeToValueIndexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
-        if (!file_exists($nodeToValueIndexPath)) {
-            mkdir($nodeToValueIndexPath, 0777, true);
+        if (!$this->fileSystem->fileExists($nodeToValueIndexPath)) {
+            $this->fileSystem->makeDirectory($nodeToValueIndexPath);
         }
         
-        symlink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
+        $this->fileSystem->makeLink($valuePath, $nodeToValueIndexPath . '/' . $valueHash);
     }
     
     private function createValueDirectory($hash)
     {
         $valuePath = $this->valuePath . '/' . $hash;
-        if (!file_exists($valuePath)) {
-            mkdir($valuePath, 0777, true);
+        if (!$this->fileSystem->fileExists($valuePath)) {
+            $this->fileSystem->makeDirectory($valuePath);
         }
         return $valuePath;
     }

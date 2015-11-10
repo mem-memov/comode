@@ -5,7 +5,8 @@ class Facade extends Factory
 {
     public function __construct(array $config)
     {
-        $configuration = new Configuration($config);
+        $storeFactory = new store\Factory();
+        $configuration = new Configuration($storeFactory, $config);
         
         $store = $configuration->getStore();
         
