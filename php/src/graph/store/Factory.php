@@ -11,7 +11,9 @@ class Factory implements IFactory
     
     public function makeFileSystem(array $options)
     {
+        $path = $options['path'];
         $wrapper = new fileSystem\Wrapper();
-        return new fileSystem\Store($options['path'], $wrapper);
+        $id = new Id($path, $wrapper);
+        return new fileSystem\Store($path, $wrapper);
     }
 }

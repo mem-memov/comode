@@ -5,7 +5,12 @@ class Wrapper implements IWrapper
 {
     public function makeDirectory($path)
     {
-        mkdir($this->path, 0777, true);
+        mkdir($path, 0777, true);
+    }
+    
+    public function readDirectory($path)
+    {
+        return array_diff(scandir($path,  SCANDIR_SORT_NONE), ['.', '..']);
     }
     
     public function fileExists($path)

@@ -117,7 +117,7 @@ class Store implements IStore {
         $path = $this->buildNodePath($nodeId);
         $offset = strlen($path) + 1;
             
-        $linkedPaths = glob($path . '/*');
+        $linkedPaths = $this->fileSystem->readDirectory($path);
 
         $linkedIds = [];
         foreach ($linkedPaths as $linkedPath) {
@@ -141,7 +141,7 @@ class Store implements IStore {
         $indexPath = $this->valueToNodeIndexPath . '/' . $valueHash;
         $offset = strlen($indexPath) + 1;
             
-        $nodePaths = glob($indexPath . '/*');
+        $nodePaths = $this->fileSystem->readDirectory($indexPath);
 
         $nodeCount = count($nodePaths);
 
@@ -160,7 +160,7 @@ class Store implements IStore {
     {
         $indexPath = $this->nodeToValueIndexPath . '/' . $nodeId;
         
-        $paths = glob($indexPath . '/*');
+        $paths = $this->fileSystem->readDirectory($indexPath);
 
         if (empty($paths)) {
             throw new ValueNotFound();
@@ -172,7 +172,7 @@ class Store implements IStore {
 
         $valueHash = basename($valueDirectory);
 
-        $valuePaths = glob($valueDirectory . '/*');
+        $valuePaths = $this->fileSystem->readDirectory($valueDirectory);
 
         $valuePath = $valuePaths[0];
 
@@ -195,7 +195,7 @@ class Store implements IStore {
         } else {
             $valueHash = $this->hashFile($content);
             $valueDirectory = $this->createValueDirectory($valueHash);
-            $valuePaths = glob($valueDirectory . '/*');
+            $valuePaths = $this->fileSystem->readDirectory($valueDirectory);
             
             $valuePath = $valuePaths[0];
             $value = new Value(true, $valuePath);

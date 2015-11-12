@@ -4,6 +4,7 @@ namespace Comode\graph\store\fileSystem;
 interface IWrapper
 {
     public function makeDirectory($path);
+    public function readDirectory($path);
     public function fileExists($path);
     public function writeFile($path, $content);
     public function readFile($path);
