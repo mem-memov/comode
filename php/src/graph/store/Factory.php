@@ -21,12 +21,12 @@ class Factory implements IFactory
         $valueToNodeDirectory = $root->get('value_to_node')->create();
 
         $wrapper = new fileSystem\Wrapper();
-        $id = new Id($path.'/lastId', $wrapper);
-        $hash = new Hash();
-        $file = new File($wrapper);
+        $id = new fileSystem\Id($path . '/lastId', $wrapper);
+        $hash = new fileSystem\Hash();
+        $file = new fileSystem\File($wrapper);
         
-        $node = new Node($nodeDirectory, $nodeToValueDirectory, $id);
-        $value = new Value($valueDirectory, $valueToNodeDirectory, $hash, $file);
+        $node = new fileSystem\Node($nodeDirectory, $nodeToValueDirectory, $id);
+        $value = new fileSystem\Value($valueDirectory, $valueToNodeDirectory, $hash, $file);
         
         return new fileSystem\Store($node, $value);
     }
