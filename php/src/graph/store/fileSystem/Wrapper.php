@@ -37,12 +37,7 @@ class Wrapper implements IWrapper
     {
         copy($originPath, $targetPath);
     }
-    
-    public function isLink($linkPath)
-    {
-        return is_link($linkPath);
-    }
-    
+
     public function makeLink($targetPath, $linkPath)
     {
         symlink($targetPath, $linkPath);
