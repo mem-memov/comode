@@ -2,7 +2,6 @@
 namespace Comode\graph\store\fileSystem\directory;
 
 use Comode\graph\store\fileSystem\IWrapper as IFileSystem;
-use Comode\graph\store\fileSystem\IFactory;
 
 class Link implements ILink
 {

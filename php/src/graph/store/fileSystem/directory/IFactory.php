@@ -1,9 +1,9 @@
 <?php
-namespace Comode\graph\store\fileSystem;
+namespace Comode\graph\store\fileSystem\directory;
 
-interface IDirectory
+interface IFactory
 {
-    public function initialize();
-    public function valueToNodeIndex($valueHash);
-    public function nodeToValueIndex($nodeId);
+    public function directory($path);
+    public function link($path);
+    public function file($path);
 }
