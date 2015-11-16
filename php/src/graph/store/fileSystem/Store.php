@@ -9,39 +9,39 @@ use Comode\graph\store\exception\ValueMustBeLinkedToOneNode;
 
 class Store implements IStore {
 
-    private $node;
-    private $value;
+    private $nodeStore;
+    private $valueStore;
 
     public function __construct(
-        INode $node, 
-        IValue $value
+        INodeStore $nodeStore, 
+        IValueStore $valueStore
     ) {
-        $this->node = $node;
-        $this->value = $value;
+        $this->nodeStore = $nodeStore;
+        $this->valueStore = $valueStore;
     }
 
     public function nodeExists($nodeId)
     {
-        return $this->node->directory($nodeId)->exists();
+        return $this->nodeStore->directory($nodeId)->exists();
     }
     
     public function createNode(IValue $value = null)
     {
         // read node by value
         if (!is_null($value)) {
-            $nodeId = $this->value->getNode($value);
+            $nodeId = $this->valueStore->getNode($value);
             if (!is_null($nodeId)) {
                 return $nodeId;
             }
         }
 
         // create new node
-        $nodeId = $this->node->create();
+        $nodeId = $this->nodeStore->create();
 
         if (!is_null($value)) {
-            $valueHash = $this->value->create($value);
-            $this->node->bindValue($nodeId, $this->value->directory($valueHash));
-            $this->value->bindNode($valueHash, $this->node->directory($nodeId));
+            $valueHash = $this->valueStore->create($value);
+            $this->nodeStore->bindValue($nodeId, $this->valueStore->directory($valueHash));
+            $this->valueStore->bindNode($valueHash, $this->nodeStore->directory($nodeId));
         }
 
         return $nodeId;
@@ -49,12 +49,12 @@ class Store implements IStore {
 
     public function linkNodes($fromId, $toId)
     {
-        $fromDirectory = $this->nodeDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
         $link = $fromDirectory->link($toId);
 
         if (!$link->exists()) {
             
-            $toDirectory = $this->nodeDirectory->directory($toId);
+            $toDirectory = $this->nodeStoreDirectory->directory($toId);
             $link->create($toDirectory->path());
             
         }
@@ -62,7 +62,7 @@ class Store implements IStore {
     
     public function separateNodes($fromId, $toId)
     {
-        $fromDirectory = $this->nodeDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
         $link = $fromDirectory->link($toId);
 
         if ($link->exists()) {
@@ -74,7 +74,7 @@ class Store implements IStore {
         
     public function isLinkedToNode($fromId, $toId)
     {
-        $fromDirectory = $this->nodeDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
         $link = $fromDirectory->directory($toId);
 
         return $link->exists();
@@ -82,7 +82,7 @@ class Store implements IStore {
     
     public function getLinkedNodes($nodeId)
     {
-        $nodeDirectory = $this->nodeDirectory->directory($nodeId);
+        $nodeDirectory = $this->nodeStoreDirectory->directory($nodeId);
 
         $nodeIds = $nodeDirectory->names();
 
@@ -91,16 +91,16 @@ class Store implements IStore {
 
     public function getValueNode(IValue $value)
     {
-        return $this->value->getNode($value);
+        return $this->valueStore->getNode($value);
     }
         
     public function getNodeValue($nodeId)
     {
-        return $this->node->getValue($nodeId);
+        return $this->nodeStore->getValue($nodeId);
     }
     
     public function getValue($isFile, $content)
     {
-        return $this->value->makeStoreValue($isFile, $content);
+        return $this->valueStore->makeStoreValue($isFile, $content);
     }
 }

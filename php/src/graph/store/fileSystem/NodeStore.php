@@ -1,9 +1,9 @@
 <?php
-namespace Comode\graph\store\fileSystem\directory;
+namespace Comode\graph\store\fileSystem;
 
 use Comode\graph\store\Value as StoreValue;
 
-class Value implements IValue
+class NodeStore implements INodeStore
 {
     private $nodes;
     private $values;

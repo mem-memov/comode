@@ -1,7 +1,7 @@
 <?php
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
-    protected $path;
+/*    protected $path;
     protected $fileSystem;
     
     protected function setUp()
@@ -11,6 +11,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->fileSystem = $this->getMockBuilder('Comode\graph\store\fileSystem\IWrapper')
                             ->disableOriginalConstructor()
                             ->getMock();
+                            
+                            
+                            
+
     }
     
     public function testItCreatesMissingDirectories()
@@ -79,5 +83,5 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function testItCreatesNode()
     {
         
-    }
+    }*/
 }

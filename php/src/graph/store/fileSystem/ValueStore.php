@@ -4,7 +4,7 @@ namespace Comode\graph\store\fileSystem;
 use Comode\graph\store\IValue as IStoreValue;
 use Comode\graph\store\Value as StoreValue;
 
-class Value implements IValue
+class ValueStore implements IValueStore
 {
     private $values;
     private $nodes;

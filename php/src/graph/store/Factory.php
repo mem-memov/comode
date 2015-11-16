@@ -25,9 +25,9 @@ class Factory implements IFactory
         $hash = new fileSystem\Hash();
         $file = new fileSystem\File($wrapper);
         
-        $node = new fileSystem\Node($nodeDirectory, $nodeToValueDirectory, $id);
-        $value = new fileSystem\Value($valueDirectory, $valueToNodeDirectory, $hash, $file);
+        $nodeStore = new fileSystem\NodeStore($nodeDirectory, $nodeToValueDirectory, $id);
+        $valueStore = new fileSystem\ValueStore($valueDirectory, $valueToNodeDirectory, $hash, $file);
         
-        return new fileSystem\Store($node, $value);
+        return new fileSystem\Store($nodeStore, $valueStore);
     }
 }
