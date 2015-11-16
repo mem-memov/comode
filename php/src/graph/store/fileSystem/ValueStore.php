@@ -6,19 +6,19 @@ use Comode\graph\store\Value as StoreValue;
 
 class ValueStore implements IValueStore
 {
-    private $values;
-    private $nodes;
+    private $valueRoot;
+    private $nodeIndex;
     private $valueHash;
     private $file;
  
     public function __construct(
-        IDirectory $values,
-        IDirectory $nodes,
+        IDirectory $valueRoot,
+        IDirectory $nodeIndex,
         IHash $valueHash,
         IFile $file
     ) {
-        $this->values = $values;
-        $this->nodes = $nodes;
+        $this->valueRoot = $valueRoot;
+        $this->nodeIndex = $nodeIndex;
         $this->hash = $valueHash;
         $this->file = $file;
     }
@@ -31,7 +31,7 @@ class ValueStore implements IValueStore
             
             $valueHash = $this->hash->file($originPath);
             
-            $valueDirectory = $this->values->directory($valueHash);
+            $valueDirectory = $this->valueRoot->directory($valueHash);
             
             $valueDirectory->create();
 
@@ -44,7 +44,7 @@ class ValueStore implements IValueStore
             
             $valueHash = $this->hash->string($string);
             
-            $valueDirectory = $this->values->directory($valueHash);
+            $valueDirectory = $this->valueRoot->directory($valueHash);
             
             $valueDirectory->create();
             
@@ -57,7 +57,7 @@ class ValueStore implements IValueStore
     
     public function bindNode($valueHash, IDirectory $nodeDirectory)
     {
-        $this->nodes
+        $this->nodeIndex
             ->directory($valueHash)
             ->link($nodeDirectory->name())
             ->create($nodeDirectory->path());
@@ -73,7 +73,7 @@ class ValueStore implements IValueStore
             $valueHash = $this->hash->string($string);
         }
 
-        $nodeIds = $this->nodes->directory($valueHash)->names();
+        $nodeIds = $this->nodeIndex->directory($valueHash)->names();
 
         $nodeCount = count($nodeIds);
 

@@ -60,7 +60,7 @@ class Directory implements IDirectory
         $links = [];
         
         foreach ($paths as $path) {
-            $link = $this->link($path);
+            $link = $this->factory->link($path);
             array_push($links, $link);
         }
         
@@ -74,7 +74,7 @@ class Directory implements IDirectory
         $files = [];
         
         foreach ($paths as $path) {
-            $file = $this->file($path);
+            $file = $this->factory->file($path);
             array_push($files, $file);
         }
         

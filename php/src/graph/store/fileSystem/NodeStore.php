@@ -5,17 +5,17 @@ use Comode\graph\store\Value as StoreValue;
 
 class NodeStore implements INodeStore
 {
-    private $nodes;
-    private $values;
+    private $nodeRoot;
+    private $valueIndex;
     private $id;
  
     public function __construct(
-        IDirectory $nodes,
-        IDirectory $values,
+        IDirectory $nodeRoot,
+        IDirectory $valueIndex,
         IId $id
     ) {
-        $this->nodes = $nodes;
-        $this->values = $values;
+        $this->nodeRoot = $nodeRoot;
+        $this->valueIndex = $valueIndex;
         $this->id = $id;
     }
     
@@ -23,19 +23,19 @@ class NodeStore implements INodeStore
     {
         $nodeId = $this->id->next();
 
-        $this->nodes->directory($nodeId)->create();
+        $this->nodeRoot->directory($nodeId)->create();
 
         return $nodeId;
     }
     
     public function directory($nodeId)
     {
-        return $this->nodes->directory($nodeId);
+        return $this->nodeRoot->directory($nodeId);
     }
     
     public function bindValue($nodeId, IDirectory $valueDirectory)
     {
-        $this->values
+        $this->valueIndex
             ->directory($nodeId)
             ->link($valueDirectory->name())
             ->create($valueDirectory->path());
@@ -43,7 +43,7 @@ class NodeStore implements INodeStore
     
     public function getValue($nodeId)
     {
-        $nodeIndexDirectory = $this->nodes->directory($nodeId);
+        $nodeIndexDirectory = $this->nodeRoot->directory($nodeId);
 
         $links = $nodeIndexDirectory->links();
 
