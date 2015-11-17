@@ -10,8 +10,8 @@ class NodeStore implements INodeStore
     private $id;
  
     public function __construct(
-        IDirectory $nodeRoot,
-        IDirectory $valueIndex,
+        directory\IDirectory $nodeRoot,
+        directory\IDirectory $valueIndex,
         IId $id
     ) {
         $this->nodeRoot = $nodeRoot;
