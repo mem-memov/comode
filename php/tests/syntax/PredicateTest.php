@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class PredicateTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -17,7 +19,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $id = 7773;
         
@@ -32,7 +34,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesValue()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $predicateString = 'make';
         
@@ -53,7 +55,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToArguments()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')
                             ->disableOriginalConstructor()
@@ -72,7 +74,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArguments()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $argument = $this->getMockBuilder('Comode\syntax\IArgument')
                             ->disableOriginalConstructor()
@@ -88,7 +90,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArgumentByQuestion()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $question = $this->getMockBuilder('Comode\syntax\IQuestion')
                             ->disableOriginalConstructor()
@@ -121,7 +123,7 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoArgumentForQuestion()
     {
-        $predicate = new Comode\syntax\Predicate($this->argumentFactory, $this->node);
+        $predicate = new Predicate($this->argumentFactory, $this->node);
         
         $question = $this->getMockBuilder('Comode\syntax\IQuestion')
                             ->disableOriginalConstructor()

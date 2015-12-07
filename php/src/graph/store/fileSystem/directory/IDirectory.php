@@ -4,6 +4,7 @@ namespace Comode\graph\store\fileSystem\directory;
 interface IDirectory
 {
     public function path();
+    public function name();
     public function exists();
     public function create();
     public function paths();

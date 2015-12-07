@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-abstract class Answer implements IAnswer
+class Answer implements IAnswer
 {
     protected $complimentFactory;
     protected $node;
@@ -32,8 +32,6 @@ abstract class Answer implements IAnswer
 
     public function getValue()
     {
-        return $this->node->getValue()->getContent();
+        return $this->node->getValue();
     }
-    
-    abstract public function isFile();
 }

@@ -1,4 +1,6 @@
 <?php
+namespace Comode\graph;
+
 class ValueFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $store;
@@ -17,58 +19,32 @@ class ValueFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsNodeFactory()
     {
-        $valueFactory = new Comode\graph\ValueFactory($this->store);
+        $valueFactory = new ValueFactory($this->store);
         $valueFactory->setNodeFactory($this->nodeFactory);
     }
     
-    public function testItRetrievesAStringValue()
+    public function testItRetrievesAValue()
     {
-        $valueFactory = new Comode\graph\ValueFactory($this->store);
+        $valueFactory = new ValueFactory($this->store);
         $valueFactory->setNodeFactory($this->nodeFactory);
         
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
-        $factoryValue = $valueFactory->makeStringValue($string);
+        $factoryValue = $valueFactory->makeValue($structure);
         
         $this->assertInstanceOf('Comode\graph\IValue', $factoryValue);
     }
     
-    public function testItCreatesNewInstancesOfTheSameStringValue()
+    public function testItCreatesNewInstancesOfTheSameValue()
     {
-        $valueFactory = new Comode\graph\ValueFactory($this->store);
+        $valueFactory = new ValueFactory($this->store);
         $valueFactory->setNodeFactory($this->nodeFactory);
         
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
-        $factoryValue_1 = $valueFactory->makeStringValue($string);
-        $factoryValue_2 = $valueFactory->makeStringValue($string);
+        $factoryValue_1 = $valueFactory->makeValue($structure);
+        $factoryValue_2 = $valueFactory->makeValue($structure);
         
         $this->assertFalse($factoryValue_1 === $factoryValue_2);
     }
-    
-    public function testItRetrievesAFileValue()
-    {
-        $valueFactory = new Comode\graph\ValueFactory($this->store);
-        $valueFactory->setNodeFactory($this->nodeFactory);
-        
-        $path = '/tmp/some.file';
-        
-        $factoryValue = $valueFactory->makeFileValue($path);
-        
-        $this->assertInstanceOf('Comode\graph\IValue', $factoryValue);
-    }
-    
-    public function testItCreatesNewInstancesOfTheSameFileValue()
-    {
-        $valueFactory = new Comode\graph\ValueFactory($this->store);
-        $valueFactory->setNodeFactory($this->nodeFactory);
-        
-        $path = '/tmp/some.file';
-        
-        $factoryValue_1 = $valueFactory->makeStringValue($path);
-        $factoryValue_2 = $valueFactory->makeStringValue($path);
-        
-        $this->assertFalse($factoryValue_1 === $factoryValue_2);
-    }
-
 }

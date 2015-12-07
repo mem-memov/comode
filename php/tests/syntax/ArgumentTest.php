@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ArgumentTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -27,7 +29,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $id = 7773;
         
@@ -42,7 +44,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToCompliments()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                             ->disableOriginalConstructor()
@@ -61,7 +63,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesCompliments()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()
@@ -79,7 +81,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesQuestion()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $question = $this->getMockBuilder('Comode\syntax\IQuestion')
                             ->disableOriginalConstructor()
@@ -102,7 +104,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoQuestion()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
 
         $this->questionFactory->expects($this->once())
                                 ->method('provideQuestionsByArgument')
@@ -117,7 +119,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenTooManyQuestions()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
 
         $question_1 = $this->getMockBuilder('Comode\syntax\IQuestion')
                             ->disableOriginalConstructor()
@@ -137,7 +139,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesPredicate()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $predicate = $this->getMockBuilder('Comode\syntax\IPredicate')
                             ->disableOriginalConstructor()
@@ -160,7 +162,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoPredicate()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
 
         $this->predicateFactory->expects($this->once())
                                 ->method('providePredicatesByArgument')
@@ -175,7 +177,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenTooManyPredicates()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
 
         $predicate_1 = $this->getMockBuilder('Comode\syntax\IPredicate')
                             ->disableOriginalConstructor()
@@ -195,7 +197,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesComplimentByAnswer()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $answer = $this->getMockBuilder('Comode\syntax\IAnswer')
                             ->disableOriginalConstructor()
@@ -228,7 +230,7 @@ class ArgumentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoComplimentForAnswer()
     {
-        $argument = new Comode\syntax\Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
+        $argument = new Argument($this->predicateFactory, $this->questionFactory, $this->complimentFactory, $this->node);
         
         $answer = $this->getMockBuilder('Comode\syntax\IAnswer')
                             ->disableOriginalConstructor()

@@ -12,19 +12,9 @@ class Factory implements IFactory
         $this->valueFactory = $valueFactory;
     }
 
-    public function createNode()
+    public function createNode(array $structure = [])
     {
-        return $this->nodeFactory->createNode();
-    }
-
-    public function createStringNode($content)
-    {
-         return $this->nodeFactory->createStringNode($content);
-    }
-
-    public function createFileNode($path)
-    {
-        return $this->nodeFactory->createFileNode($path);
+        return $this->nodeFactory->createNode($structure);
     }
 
     public function readNode($nodeId)
@@ -32,14 +22,8 @@ class Factory implements IFactory
          return $this->nodeFactory->readNode($nodeId);
     }
 
-    public function makeStringValue($content)
+    public function makeValue(array $structure)
     {
-        return $this->valueFactory->makeStringValue($content);
+        return $this->valueFactory->makeValue($structure);
     }
-    
-    public function makeFileValue($path)
-    {
-        return $this->valueFactory->makeFileValue($path);
-    }
-
 }

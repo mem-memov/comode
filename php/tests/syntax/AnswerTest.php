@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class StringAnswerTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -6,7 +8,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->node = $this->getMockBuilder('Comode\syntax\node\IStringAnswer')
+        $this->node = $this->getMockBuilder('Comode\syntax\node\IAnswer')
                             ->disableOriginalConstructor()
                             ->getMock();
 
@@ -17,7 +19,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $answer = new Answer($this->complimentFactory, $this->node);
         
         $id = 7773;
         
@@ -32,7 +34,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesValue()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $answer = new Answer($this->complimentFactory, $this->node);
         
         $answerString = 'today';
         
@@ -53,7 +55,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToCompliments()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $answer = new Answer($this->complimentFactory, $this->node);
         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                             ->disableOriginalConstructor()
@@ -72,7 +74,7 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesCompliments()
     {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
+        $answer = new Answer($this->complimentFactory, $this->node);
         
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()
@@ -84,12 +86,5 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
         $compliments = $answer->provideCompliments();
         
         $this->assertContainsOnlyInstancesOf('Comode\syntax\ICompliment', $compliments);
-    }
-    
-    public function testItDeniesBeingAFile()
-    {
-        $answer = new Comode\syntax\StringAnswer($this->complimentFactory, $this->node);
-        
-        $this->assertEquals(false, $answer->isFile());
     }
 }

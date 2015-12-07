@@ -1,4 +1,6 @@
 <?php
+namespace Comode\graph;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -18,7 +20,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItCreatesANewNodeWithNoValue()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
         $node = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -33,49 +35,29 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($factoryNode, $node);
     }
     
-    public function testItCreatesANewNodeWithAStringValue()
+    public function testItCreatesANewNodeWithAValue()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
         $node = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
                             ->getMock();
                             
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
         $this->nodeFactory->expects($this->once())
-                            ->method('createStringNode')
-                            ->with($string)
+                            ->method('createNode')
+                            ->with($structure)
                             ->willReturn($node);
         
-        $factoryNode = $factory->createStringNode($string);
+        $factoryNode = $factory->createNode($structure);
         
         $this->assertEquals($factoryNode, $node);
     }
-    
-    public function testItCreatesANewNodeWithAFileValue()
-    {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
-        
-        $node = $this->getMockBuilder('Comode\graph\INode')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $path = '/tmp/some.file';
-        
-        $this->nodeFactory->expects($this->once())
-                            ->method('createStringNode')
-                            ->with($path)
-                            ->willReturn($node);
-        
-        $factoryNode = $factory->createStringNode($path);
-        
-        $this->assertEquals($factoryNode, $node);
-    }
-    
+
     public function testItRetrievesANodeByItsId()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
         $node = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -95,7 +77,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesNewInstancesOfTheSameNode()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
         $node_1 = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -116,31 +98,31 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         
     }
     
-    public function testItRetrievesAStringValue()
+    public function testItRetrievesAValue()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
         $stringValue = $this->getMockBuilder('Comode\graph\IValue')
                             ->disableOriginalConstructor()
                             ->getMock();
         
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
         $this->valueFactory->expects($this->once())
-                            ->method('makeStringValue')
-                            ->with($string)
+                            ->method('makeValue')
+                            ->with($structure)
                             ->willReturn($stringValue);
         
-        $factoryStringValue = $factory->makeStringValue($string);
+        $factoryStringValue = $factory->makeValue($structure);
         
         $this->assertEquals($factoryStringValue, $stringValue);
     }
     
-    public function testItCreatesNewInstancesOfTheSameStringValue()
+    public function testItCreatesNewInstancesOfTheSameValue()
     {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
+        $factory = new Factory($this->nodeFactory, $this->valueFactory);
         
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
         $value_1 = $this->getMockBuilder('Comode\graph\IValue')
                             ->disableOriginalConstructor()
@@ -151,55 +133,11 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
         
         $this->valueFactory->expects($this->exactly(2))
-                            ->method('makeStringValue')
+                            ->method('makeValue')
                             ->will($this->onConsecutiveCalls($value_1, $value_2));
         
-        $factoryStringValue_1 = $factory->makeStringValue($string);
-        $factoryStringValue_2 = $factory->makeStringValue($string);
-        
-        $this->assertFalse($factoryStringValue_1 === $factoryStringValue_2);
-    }
-    
-    public function testItRetrievesAFileValue()
-    {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
-        
-        $fileValue = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-        
-        $path = '/tmp/some.file';
-        
-        $this->valueFactory->expects($this->once())
-                            ->method('makeFileValue')
-                            ->with($path)
-                            ->willReturn($fileValue);
-        
-        $factoryFileValue = $factory->makeFileValue($path);
-        
-        $this->assertEquals($factoryStringValue, $stringValue);
-    }
-    
-    public function testItCreatesNewInstancesOfTheSameFileValue()
-    {
-        $factory = new Comode\graph\Factory($this->nodeFactory, $this->valueFactory);
-        
-        $path = '/tmp/some.file';
-        
-        $value_1 = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-        
-        $value_2 = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-        
-        $this->valueFactory->expects($this->exactly(2))
-                            ->method('makeStringValue')
-                            ->will($this->onConsecutiveCalls($value_1, $value_2));
-        
-        $factoryStringValue_1 = $factory->makeStringValue($path);
-        $factoryStringValue_2 = $factory->makeStringValue($path);
+        $factoryStringValue_1 = $factory->makeValue($structure);
+        $factoryStringValue_2 = $factory->makeValue($structure);
         
         $this->assertFalse($factoryStringValue_1 === $factoryStringValue_2);
     }

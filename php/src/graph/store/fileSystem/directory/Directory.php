@@ -24,6 +24,11 @@ class Directory implements IDirectory
         return $this->path;
     }
     
+    public function name()
+    {
+        return $this->fileSystem->name($this->path);
+    }
+    
     public function exists()
     {
         return $this->fileSystem->exists($this->path);

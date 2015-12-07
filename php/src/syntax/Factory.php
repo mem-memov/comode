@@ -27,14 +27,14 @@ class Factory implements IFactory
         $this->complimentFactory->setClauseFactory($this->clauseFactory);
     }
     
-    public function providePredicate($verb)
+    public function providePredicate(array $structure)
     {
-        return $this->predicateFactory->providePredicate($verb);
+        return $this->predicateFactory->providePredicate($structure);
     }
     
-    public function provideQuestion($question)
+    public function provideQuestion(array $structure)
     {
-        return $this->questionFactory->provideQuestion($question);
+        return $this->questionFactory->provideQuestion($structure);
     }
     
     public function provideArgument(IPredicate $predicate, IQuestion $question)
@@ -42,16 +42,11 @@ class Factory implements IFactory
         return $this->argumentFactory->provideArgument($predicate, $question);
     }
     
-    public function provideStringAnswer($phrase)
+    public function provideAnswer(array $structure)
     {
-        return $this->answerFactory->provideStringAnswer($phrase);
+        return $this->answerFactory->provideAnswer($structure);
     }
-    
-    public function provideFileAnswer($path)
-    {
-        return $this->answerFactory->provideFileAnswer($path);
-    }
-    
+
     public function provideCompliment(IArgument $argument, IAnswer $answer)
     {
         return $this->complimentFactory->provideCompliment($argument, $answer);

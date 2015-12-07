@@ -4,8 +4,6 @@ namespace Comode\graph\store\fileSystem;
 use Comode\graph\store\IStore;
 use Comode\graph\store\Value;
 use Comode\graph\store\IValue;
-use Comode\graph\store\exception\ValueNotFound;
-use Comode\graph\store\exception\ValueMustBeLinkedToOneNode;
 
 class Store implements IStore {
 
@@ -25,11 +23,11 @@ class Store implements IStore {
         return $this->nodeStore->directory($nodeId)->exists();
     }
     
-    public function createNode(IValue $value = null)
+    public function createNode(array $structure = [])
     {
         // read node by value
-        if (!is_null($value)) {
-            $nodeId = $this->valueStore->getNode($value);
+        if (!empty($structure)) {
+            $nodeId = $this->valueStore->getNode($structure);
             if (!is_null($nodeId)) {
                 return $nodeId;
             }
@@ -38,8 +36,9 @@ class Store implements IStore {
         // create new node
         $nodeId = $this->nodeStore->create();
 
-        if (!is_null($value)) {
-            $valueHash = $this->valueStore->create($value);
+        if (!empty($structure)) {
+            // bind value to new node
+            $valueHash = $this->valueStore->create($structure);
             $this->nodeStore->bindValue($nodeId, $this->valueStore->directory($valueHash));
             $this->valueStore->bindNode($valueHash, $this->nodeStore->directory($nodeId));
         }
@@ -89,18 +88,20 @@ class Store implements IStore {
         return $nodeIds;
     }
 
-    public function getValueNode(IValue $value)
+    public function getValueNode(array $structure)
     {
-        return $this->valueStore->getNode($value);
+        return $this->valueStore->getNode($structure);
     }
         
     public function getNodeValue($nodeId)
     {
-        return $this->nodeStore->getValue($nodeId);
+        list($isFile, $content) = $this->nodeStore->getValue($nodeId);
+        
+        return new Value($isFile, $content);
     }
     
-    public function getValue($isFile, $content)
+    public function getValue(array $structure)
     {
-        return $this->valueStore->makeStoreValue($isFile, $content);
+        return $this->valueStore->makeValue($structure);
     }
 }

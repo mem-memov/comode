@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ClauseTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -17,7 +19,7 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->node);
         
         $id = 7773;
         
@@ -32,7 +34,7 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToCompliments()
     {
-        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->node);
         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                             ->disableOriginalConstructor()
@@ -51,7 +53,7 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesCompliments()
     {
-        $clause = new Comode\syntax\Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->node);
         
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()

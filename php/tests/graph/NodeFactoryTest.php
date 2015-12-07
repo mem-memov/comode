@@ -1,4 +1,6 @@
 <?php
+namespace Comode\graph;
+
 class NodeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $store;
@@ -17,13 +19,13 @@ class NodeFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsValueFactory()
     {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
+        $nodeFactory = new NodeFactory($this->store);
         $nodeFactory->setValueFactory($this->valueFactory);
     }
     
     public function testItCreatesANewNodeWithNoValue()
     {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
+        $nodeFactory = new NodeFactory($this->store);
         $nodeFactory->setValueFactory($this->valueFactory);
         
         $factoryNode = $nodeFactory->createNode();
@@ -31,33 +33,21 @@ class NodeFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Comode\graph\INode', $factoryNode);
     }
     
-    public function testItCreatesANewNodeWithAStringValue()
+    public function testItCreatesANewNodeWithAValue()
     {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
+        $nodeFactory = new NodeFactory($this->store);
         $nodeFactory->setValueFactory($this->valueFactory);
         
-        $string = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
         
-        $factoryNode = $nodeFactory->createStringNode($string);
+        $factoryNode = $nodeFactory->createNode($structure);
         
         $this->assertInstanceOf('Comode\graph\INode', $factoryNode);
     }
-    
-    public function testItCreatesANewNodeWithAFileValue()
-    {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
-        $nodeFactory->setValueFactory($this->valueFactory);
-        
-        $path = '/tmp/some.file';
-        
-        $factoryNode = $nodeFactory->createFileNode($path);
-        
-        $this->assertInstanceOf('Comode\graph\INode', $factoryNode);
-    }
-    
+
     public function testItRetrievesANodeByItsId()
     {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
+        $nodeFactory = new NodeFactory($this->store);
         $nodeFactory->setValueFactory($this->valueFactory);
         
         $nodeId = 1000;
@@ -73,7 +63,7 @@ class NodeFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesNewInstancesOfTheSameNode()
     {
-        $nodeFactory = new Comode\graph\NodeFactory($this->store);
+        $nodeFactory = new NodeFactory($this->store);
         $nodeFactory->setValueFactory($this->valueFactory);
         
         $nodeId = 1000;

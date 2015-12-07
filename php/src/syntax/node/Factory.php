@@ -37,9 +37,9 @@ class Factory implements IFactory
         return $clauseNodes;
     }
     
-    public function createPredicateNode($verb)
+    public function createPredicateNode($structure)
     {
-        $node = $this->graphFactory->createStringNode($verb);
+        $node = $this->graphFactory->createNode($structure);
         
         $node->addNode($this->map['predicate']);
         
@@ -81,9 +81,9 @@ class Factory implements IFactory
         return $argumentNodes;
     }
     
-    public function createQuestionNode($question)
+    public function createQuestionNode(array $structure)
     {
-        $node = $this->graphFactory->createStringNode($question);
+        $node = $this->graphFactory->createNode($structure);
         
         $node->addNode($this->map['question']);
         
@@ -125,24 +125,15 @@ class Factory implements IFactory
         return $complimentNodes;
     }
     
-    public function createStringAnswerNode($phrase)
+    public function createAnswerNode(array $structure)
     {
-        $node = $this->graphFactory->createStringNode($phrase);
+        $node = $this->graphFactory->createNode($structure);
         
         $node->addNode($this->map['answer']);
         
-        return new StringAnswer($node);
+        return new Answer($node);
     }
-    
-    public function createFileAnswerNode($path)
-    {
-        $node = $this->graphFactory->createFileNode($path);
-        
-        $node->addNode($this->map['answer']);
-        
-        return new FileAnswer($node);
-    }
-    
+
     public function getAnswerNodes(INode $node)
     {
         $linkedNodes = $this->selectLinkedNodes($node, 'answer');
@@ -150,11 +141,7 @@ class Factory implements IFactory
         $answerNodes = [];
         
         foreach ($linkedNodes as $linkedNode) {
-            if ($linkedNode->getValue()->isFile()) {
-                $answerNodes[] = new FileAnswer($linkedNode);
-            } else {
-                $answerNodes[] = new StringAnswer($linkedNode);
-            }
+            $answerNodes[] = new Answer($linkedNode);
         }
         
         return $answerNodes;

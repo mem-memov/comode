@@ -1,4 +1,6 @@
 <?php
+namespace Comode\graph;
+
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     protected $storeFactory;
@@ -18,7 +20,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         
-        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
+        $configuration = new Configuration($this->storeFactory, $options);
         
         $fileSystemStore = $this->getMockBuilder('Comode\graph\store\fileSystem\Store')
                             ->disableOriginalConstructor()
@@ -42,7 +44,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             'store' => []
         ];
         
-        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
+        $configuration = new Configuration($this->storeFactory, $options);
         
         $store = $configuration->makeStore();
     }
@@ -58,7 +60,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
             ]
         ];
         
-        $configuration = new Comode\graph\Configuration($this->storeFactory, $options);
+        $configuration = new Configuration($this->storeFactory, $options);
         
         $store = $configuration->makeStore();
     }

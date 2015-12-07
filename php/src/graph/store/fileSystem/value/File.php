@@ -1,15 +1,14 @@
 <?php
-namespace Comode\graph\store\fileSystem\directory;
+namespace Comode\graph\store\fileSystem\value;
 
 use Comode\graph\store\fileSystem\IWrapper as IFileSystem;
-use Comode\graph\store\fileSystem\IFactory;
 
-class Value implements IValue
+class File implements IFile
 {
     private $fileSystem;
 
     public function __construct(
-        IWrapper $fileSystem
+        IFileSystem $fileSystem
     ) {
         $this->fileSystem = $fileSystem;
     }

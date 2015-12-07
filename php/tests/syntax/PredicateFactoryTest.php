@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class PredicateFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -17,7 +19,7 @@ class PredicateFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesPredicate()
     {
-        $predicateFactory = new Comode\syntax\PredicateFactory($this->nodeFactory);
+        $predicateFactory = new PredicateFactory($this->nodeFactory);
         $predicateFactory->setArgumentFactory($this->argumentFactory);
         
         $predicateNode = $this->getMockBuilder('Comode\syntax\node\IPredicate')
@@ -26,15 +28,17 @@ class PredicateFactoryTest extends \PHPUnit_Framework_TestCase
         
         $this->nodeFactory->method('createPredicateNode')
                         ->willReturn($predicateNode);
+                        
+        $structure = ['type'=>'string', 'content'=>'make'];
         
-        $predicate = $predicateFactory->providePredicate('make');
+        $predicate = $predicateFactory->providePredicate($structure);
         
         $this->assertInstanceOf('Comode\syntax\IPredicate', $predicate);
     }
     
     public function testItProvidePredicatesByArgument()
     {
-        $predicateFactory = new Comode\syntax\PredicateFactory($this->nodeFactory);
+        $predicateFactory = new PredicateFactory($this->nodeFactory);
         $predicateFactory->setArgumentFactory($this->argumentFactory);
         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')

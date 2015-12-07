@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -28,7 +30,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItReadsCompliment()
     {
-        $complimentFactory = new Comode\syntax\ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $complimentFactory = new ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
         $complimentFactory->setClauseFactory($this->clauseFactory);
         
         $argument = $this->getMockBuilder('Comode\syntax\IArgument')
@@ -53,7 +55,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesCompliment()
     {
-        $complimentFactory = new Comode\syntax\ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $complimentFactory = new ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
         $complimentFactory->setClauseFactory($this->clauseFactory);
         
         $argument = $this->getMockBuilder('Comode\syntax\IArgument')
@@ -65,7 +67,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
                             
         $argument->method('provideComplimentByAnswer')
-                        ->will($this->throwException(new Comode\syntax\exception\ArgumentAndAnswerHaveOneCommonCompliment()));
+                        ->will($this->throwException(new exception\ArgumentAndAnswerHaveOneCommonCompliment()));
                         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                     ->disableOriginalConstructor()
@@ -89,7 +91,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesComplimentsByClause()
     {
-        $complimentFactory = new Comode\syntax\ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $complimentFactory = new ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
         $complimentFactory->setClauseFactory($this->clauseFactory);
         
         $clauseNode = $this->getMockBuilder('Comode\syntax\node\IClause')
@@ -110,7 +112,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesComplimentsByArgument()
     {
-        $complimentFactory = new Comode\syntax\ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $complimentFactory = new ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
         $complimentFactory->setClauseFactory($this->clauseFactory);
         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')
@@ -131,7 +133,7 @@ class ComplimentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesComplimentsByAnswer()
     {
-        $complimentFactory = new Comode\syntax\ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
+        $complimentFactory = new ComplimentFactory($this->nodeFactory, $this->argumentFactory, $this->answerFactory);
         $complimentFactory->setClauseFactory($this->clauseFactory);
         
         $answerNode = $this->getMockBuilder('Comode\syntax\node\IAnswer')

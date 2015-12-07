@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -28,7 +30,7 @@ class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItReadsArgument()
     {
-        $argumentFactory = new Comode\syntax\ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
+        $argumentFactory = new ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
         $argumentFactory->setComplimentFactory($this->complimentFactory);
         
         $predicate = $this->getMockBuilder('Comode\syntax\IPredicate')
@@ -53,7 +55,7 @@ class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesArgument()
     {
-        $argumentFactory = new Comode\syntax\ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
+        $argumentFactory = new ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
         $argumentFactory->setComplimentFactory($this->complimentFactory);
         
         $predicate = $this->getMockBuilder('Comode\syntax\IPredicate')
@@ -65,7 +67,7 @@ class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
                             
         $predicate->method('provideArgumentByQuestion')
-                        ->will($this->throwException(new Comode\syntax\exception\PredicateAndQuestionHaveOneCommonArgument()));
+                        ->will($this->throwException(new exception\PredicateAndQuestionHaveOneCommonArgument()));
                         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')
                     ->disableOriginalConstructor()
@@ -89,7 +91,7 @@ class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArgumentsByQuestion()
     {
-        $argumentFactory = new Comode\syntax\ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
+        $argumentFactory = new ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
         $argumentFactory->setComplimentFactory($this->complimentFactory);
         
         $questionNode = $this->getMockBuilder('Comode\syntax\node\IQuestion')
@@ -110,7 +112,7 @@ class ArgumentFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArgumentsByPredicate()
     {
-        $argumentFactory = new Comode\syntax\ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
+        $argumentFactory = new ArgumentFactory($this->nodeFactory, $this->predicateFactory, $this->questionFactory);
         $argumentFactory->setComplimentFactory($this->complimentFactory);
         
         $predicateNode = $this->getMockBuilder('Comode\syntax\node\IPredicate')

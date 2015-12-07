@@ -17,20 +17,13 @@ class AnswerFactory implements IAnswerFactory
         $this->complimentFactory = $complimentFactory;
     }
     
-    public function provideStringAnswer($string)
+    public function provideAnswer(array $structure)
     {
-        $stringAnswerNode = $this->nodeFactory->createStringAnswerNode($string);
+        $answerNode = $this->nodeFactory->createAnswerNode($structure);
 
-        return $this->makeStringAnswer($stringAnswerNode);
+        return $this->makeAnswer($answerNode);
     }
-    
-    public function provideFileAnswer($path)
-    {
-        $fileAnswerNode = $this->nodeFactory->createFileAnswerNode($path);
 
-        return $this->makeFileAnswer($fileAnswerNode);
-    }
-    
     public function provideAnswersByCompliment(node\ICompliment $complimentNode)
     {
         $answerNodes = $this->nodeFactory->getAnswerNodes($complimentNode);
@@ -38,25 +31,14 @@ class AnswerFactory implements IAnswerFactory
         $answers = [];
         
         foreach ($answerNodes as $answerNode) {
-            if ($answerNode instanceof node\IStringAnswer) {
-                $answers[] = $this->makeStringAnswer($answerNode);
-            } elseif ($answerNode instanceof node\IFileAnswer) {
-                $answers[] = $this->makeFileAnswer($answerNode);
-            } else {
-                throw new exception\NodeType('Unexpected answer node type: ' . gettype($answerNode));
-            }
+            $answers[] = $this->makeAnswer($answerNode);
         }
         
         return $answers;
     }
     
-    private function makeStringAnswer(node\IStringAnswer $stringAnswerNode)
+    private function makeAnswer(node\IAnswer $answerNode)
     {
-        return new StringAnswer($this->complimentFactory, $stringAnswerNode);
-    }
-    
-    private function makeFileAnswer(node\IFileAnswer $fileAnswerNode)
-    {
-        return new FileAnswer($this->complimentFactory, $fileAnswerNode);
+        return new Answer($this->complimentFactory, $answerNode);
     }
 }

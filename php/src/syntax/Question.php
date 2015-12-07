@@ -29,7 +29,7 @@ class Question implements IQuestion
     
     public function getValue()
     {
-        return $this->node->getValue()->getContent();
+        return $this->node->getValue();
     }
     
     public function provideArguments()

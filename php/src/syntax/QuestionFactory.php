@@ -17,9 +17,9 @@ class QuestionFactory implements IQuestionFactory
         $this->argumentFactory = $argumentFactory;
     }
     
-    public function provideQuestion($string)
+    public function provideQuestion(array $structure)
     {
-        $questionNode = $this->nodeFactory->createQuestionNode($string);
+        $questionNode = $this->nodeFactory->createQuestionNode($structure);
 
         $question = $this->makeQuestion($questionNode);
         

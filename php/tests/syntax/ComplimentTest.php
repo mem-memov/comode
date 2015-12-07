@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ComplimentTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -27,7 +29,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
         $id = 7773;
         
@@ -42,7 +44,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToClauses()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
         $clauseNode = $this->getMockBuilder('Comode\syntax\node\IClause')
                             ->disableOriginalConstructor()
@@ -61,7 +63,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     
     public function testItFetchesClauses()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
         $clause = $this->getMockBuilder('Comode\syntax\IClause')
                             ->disableOriginalConstructor()
@@ -79,7 +81,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArgument()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
         $argument = $this->getMockBuilder('Comode\syntax\IArgument')
                             ->disableOriginalConstructor()
@@ -102,7 +104,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoArgument()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
 
         $this->argumentFactory->expects($this->once())
                                 ->method('provideArgumentsByCompliment')
@@ -117,7 +119,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenTooManyArguments()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
 
         $argument_1 = $this->getMockBuilder('Comode\syntax\IArgument')
                             ->disableOriginalConstructor()
@@ -137,7 +139,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesAnswer()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
         $answer = $this->getMockBuilder('Comode\syntax\IAnswer')
                             ->disableOriginalConstructor()
@@ -160,7 +162,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenNoAnswer()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
 
         $this->answerFactory->expects($this->once())
                                 ->method('provideAnswersByCompliment')
@@ -175,7 +177,7 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
      */
     public function testItPanicsWhenTooManyAnswers()
     {
-        $compliment = new Comode\syntax\Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
+        $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
 
         $answer_1 = $this->getMockBuilder('Comode\syntax\IAnswer')
                             ->disableOriginalConstructor()

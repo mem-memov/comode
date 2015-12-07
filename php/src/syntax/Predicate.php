@@ -21,7 +21,7 @@ class Predicate implements IPredicate
     
     public function getValue()
     {
-        return $this->node->getValue()->getContent();
+        return $this->node->getValue();
     }
     
     public function addArgument(node\IArgument $argumentNode)

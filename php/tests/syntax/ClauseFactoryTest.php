@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class ClauseFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -17,7 +19,7 @@ class ClauseFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testItCreatesClause()
     {
-        $clauseFactory = new Comode\syntax\ClauseFactory($this->nodeFactory, $this->complimentFactory);
+        $clauseFactory = new ClauseFactory($this->nodeFactory, $this->complimentFactory);
 
         $clauseNode = $this->getMockBuilder('Comode\syntax\node\IClause')
                             ->disableOriginalConstructor()
@@ -37,7 +39,7 @@ class ClauseFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItFetchesClausesByCompliment()
     {
-        $clauseFactory = new Comode\syntax\ClauseFactory($this->nodeFactory, $this->complimentFactory);
+        $clauseFactory = new ClauseFactory($this->nodeFactory, $this->complimentFactory);
 
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                     ->disableOriginalConstructor()

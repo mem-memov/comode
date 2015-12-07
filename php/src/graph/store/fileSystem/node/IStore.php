@@ -1,7 +1,9 @@
 <?php
-namespace Comode\graph\store\fileSystem;
+namespace Comode\graph\store\fileSystem\node;
 
-interface INodeStore
+use Comode\graph\store\fileSystem\directory\IDirectory;
+
+interface IStore
 {
     public function create();
     public function directory($nodeId);

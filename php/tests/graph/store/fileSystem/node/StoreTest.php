@@ -1,11 +1,12 @@
 <?php
-namespace Comode\graph\store\fileSystem;
+namespace Comode\graph\store\fileSystem\node;
 
-class NodeStoreTest extends \PHPUnit_Framework_TestCase
+class StoreTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeRoot;
     protected $valueIndex;
     protected $id;
+    protected $valueFactory;
     
     protected function setUp()
     {
@@ -17,14 +18,18 @@ class NodeStoreTest extends \PHPUnit_Framework_TestCase
                             ->disableOriginalConstructor()
                             ->getMock();
                             
-        $this->id = $this->getMockBuilder('Comode\graph\store\fileSystem\IId')
+        $this->id = $this->getMockBuilder('Comode\graph\store\fileSystem\node\IId')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                            
+        $this->valueFactory = $this->getMockBuilder('Comode\graph\store\value\IFactory')
                             ->disableOriginalConstructor()
                             ->getMock();
     }
     
     public function testItCreatesNodeDirectoryInFileSystem()
     {
-        $nodeStore = new NodeStore($this->nodeRoot, $this->valueIndex, $this->id);
+        $nodeStore = new Store($this->nodeRoot, $this->valueIndex, $this->id, $this->valueFactory);
         
         $nodeId = 53;
         
@@ -49,7 +54,7 @@ class NodeStoreTest extends \PHPUnit_Framework_TestCase
     
     public function testItCreatesNodeDirectory()
     {
-        $nodeStore = new NodeStore($this->nodeRoot, $this->valueIndex, $this->id);
+        $nodeStore = new Store($this->nodeRoot, $this->valueIndex, $this->id, $this->valueFactory);
         
         $nodeId = 53;
         
@@ -63,19 +68,51 @@ class NodeStoreTest extends \PHPUnit_Framework_TestCase
                     ->willReturn($directory);
         
         $nodeStoreDirectory = $nodeStore->directory($nodeId);
-        
+
         $this->assertSame($nodeStoreDirectory, $directory);
     }
     
-    public function testItbindsValue()
+    public function testItBindsValue()
     {
-        $nodeStore = new NodeStore($this->nodeRoot, $this->valueIndex, $this->id);
+        $nodeStore = new Store($this->nodeRoot, $this->valueIndex, $this->id, $this->valueFactory);
         
         $nodeId = 53;
+        $valueHash = 'adefa0cfec6eaae92016e923aaba685';
+        $valuePath = 'values/adefa0cfec6eaae92016e923aaba685';
         
         $valueDirectory = $this->getMockBuilder('Comode\graph\store\fileSystem\directory\IDirectory')
                             ->disableOriginalConstructor()
                             ->getMock(); 
+                            
+        $nodeDirectory = $this->getMockBuilder('Comode\graph\store\fileSystem\directory\IDirectory')
+                            ->disableOriginalConstructor()
+                            ->getMock(); 
+             
+        $this->valueIndex->expects($this->once())
+                        ->method('directory')
+                        ->with($nodeId)
+                        ->willReturn($nodeDirectory);
+                        
+        $valueDirectory->expects($this->once())
+                        ->method('name')
+                        ->willReturn($valueHash);
+                        
+        $valueLink = $this->getMockBuilder('Comode\graph\store\fileSystem\directory\ILink')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        
+        $nodeDirectory->expects($this->once())
+                        ->method('link')
+                        ->with($valueHash)
+                        ->willReturn($valueLink);
+                        
+        $valueDirectory->expects($this->once())
+                        ->method('path')
+                        ->willReturn($valuePath);
+                        
+        $valueLink->expects($this->once())
+                        ->method('create')
+                        ->with($valuePath);
         
         $nodeStore->bindValue($nodeId, $valueDirectory);
     }

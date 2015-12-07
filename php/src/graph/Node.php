@@ -10,35 +10,32 @@ class Node implements INode
     private $valueFactory;
     private $nodeFactory;
     private $id;
-    private $value;
-    
+
     /**
      * It creates node instances.
      * 
      * Some nodes have values bound to them, but most nodes have no value.
-     *  - In order to create a new node with no value all parameters should be set to null.
-     *  - For a new node that has a value attached pass null for $id, 
-     * specify whether the value is a file or not and pass the path or text as the value content.
+     *  - In order to create a new node with no value, id and structure should be set to null.
+     *  - For a new node that has a value attached pass null for $id and a structure for value.
      *  - To retrieve an existing node by its id just pass the id
      */
-    public function __construct(IStore $store, IValueFactory $valueFactory, INodeFactory $nodeFactory, $id = null, $isFile = null, $content = null)
+    public function __construct(IStore $store, IValueFactory $valueFactory, INodeFactory $nodeFactory, $id = null, array $structure = [])
     {
+        if (!is_null($id) && !empty($structure)) {
+            throw new exception\NodeValueIsConstant('Trying to reassign value of node ' . $id);
+        }
+        
+        if (!is_null($id) && !$store->nodeExists($id)) {
+            throw new exception\NodeHasAnId('Node ID ' . $id . ' is not known.');
+        }
+
+        if (is_null($id)) {
+            $id = $store->createNode($structure);
+        }
+        
         $this->store = $store;
         $this->valueFactory = $valueFactory;
         $this->nodeFactory = $nodeFactory;
-        
-        if (is_null($id)) {
-            if (is_bool($isFile) && !is_null($content)) {
-                $id = $this->store->createNode(new store\Value($isFile, $content));
-            } else {
-                $id = $this->store->createNode();
-            }
-        } else {
-            if (!$this->store->nodeExists($id)) {
-                throw new exception\NoIdWhenRetrievingNode('Id given: ' . $id);
-            }
-        }
-        
         $this->id = $id;
     }
     
@@ -78,12 +75,14 @@ class Node implements INode
         
     public function getValue()
     {
-        $storeValue = $this->store->getNodeValue($this->id);
+        try {
+        
+            $storeValue = $this->store->getNodeValue($this->id);
+            
+            return $this->valueFactory->makeValue($storeValue);
 
-        if ($storeValue->isFile()) {
-            return $this->valueFactory->makeFileValue($storeValue->getContent());
-        } else {
-            return $this->valueFactory->makeStringValue($storeValue->getContent());
+        } catch(store\exception\ValueNotFound $e) {
+            throw new exception\SomeNodesHasNoValue('Node ' . $this->id . ' can\'t supply a value.');
         }
     }
     

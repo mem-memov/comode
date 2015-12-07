@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class QuestionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -17,7 +19,7 @@ class QuestionFactoryTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesQuestion()
     {
-        $questionFactory = new Comode\syntax\QuestionFactory($this->nodeFactory);
+        $questionFactory = new QuestionFactory($this->nodeFactory);
         $questionFactory->setArgumentFactory($this->argumentFactory);
         
         $questionNode = $this->getMockBuilder('Comode\syntax\node\IQuestion')
@@ -26,15 +28,17 @@ class QuestionFactoryTest extends \PHPUnit_Framework_TestCase
         
         $this->nodeFactory->method('createQuestionNode')
                         ->willReturn($questionNode);
+                        
+        $structure = ['type'=>'string', 'content'=>'when'];
         
-        $question = $questionFactory->provideQuestion('when');
+        $question = $questionFactory->provideQuestion($structure);
         
         $this->assertInstanceOf('Comode\syntax\IQuestion', $question);
     }
     
     public function testItProvideQuestionsByArgument()
     {
-        $questionFactory = new Comode\syntax\QuestionFactory($this->nodeFactory);
+        $questionFactory = new QuestionFactory($this->nodeFactory);
         $questionFactory->setArgumentFactory($this->argumentFactory);
         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')

@@ -1,4 +1,6 @@
 <?php
+namespace Comode\graph;
+
 class ValueTest extends \PHPUnit_Framework_TestCase
 {
     protected $store;
@@ -22,14 +24,13 @@ class ValueTest extends \PHPUnit_Framework_TestCase
 
     public function testItProvidesItsNode()
     {
-        $isFile = false;
-        $content = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
 
         $this->store->expects($this->once())
                     ->method('getValue')
                     ->willReturn($this->storeValue);
 
-        $stringValue = new Comode\graph\Value($this->store, $this->nodeFactory, $isFile, $content);
+        $stringValue = new Value($this->store, $this->nodeFactory, $structure);
         
         $nodeId = 1234;
         
@@ -51,63 +52,18 @@ class ValueTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($valueNode, $node);
     }
     
-    public function testItSuppliesItsContent()
+    public function testItSuppliesItsStructure()
     {
-        $isFile = false;
-        $content = 'rabbit';
+        $structure = ['type'=>'string', 'content'=>'rabbit'];
 
         $this->store->expects($this->once())
                     ->method('getValue')
                     ->willReturn($this->storeValue);
 
-        $stringValue = new Comode\graph\Value($this->store, $this->nodeFactory, $isFile, $content);
-        
-        $this->storeValue->expects($this->once())
-                    ->method('getContent')
-                    ->willReturn($content);
-        
-        $valueContent = $stringValue->getContent();
-        
-        $this->assertEquals($valueContent, $content);
-    }
-    
-    public function testItConfirmsToBeAFile()
-    {
-        $isFile = true;
-        $content = '/tmp/some.file';
+        $value = new Value($this->store, $this->nodeFactory, $structure);
 
-        $this->store->expects($this->once())
-                    ->method('getValue')
-                    ->willReturn($this->storeValue);
-
-        $stringValue = new Comode\graph\Value($this->store, $this->nodeFactory, $isFile, $content);
+        $valueStructure = $value->getStructure();
         
-        $this->storeValue->expects($this->once())
-                    ->method('isFile')
-                    ->willReturn($isFile);
-        
-        $valueIsFile = $stringValue->isFile();
-        
-        $this->assertEquals($valueIsFile, $isFile);
-    }
-    
-    public function testItDeniesToBeAFile()
-    {
-        $isFile = false;
-        $content = 'rabbit';
-
-        $this->store->expects($this->once())
-                    ->method('getValue')
-                    ->willReturn($this->storeValue);
-
-        $stringValue = new Comode\graph\Value($this->store, $this->nodeFactory, $isFile, $content);
-        
-        $this->storeValue->expects($this->once())
-                    ->method('isFile')
-                    ->willReturn($isFile);
-        
-        $valueIsFile = $stringValue->isFile();
-        
-        $this->assertEquals($valueIsFile, $isFile);
+        $this->assertEquals($valueStructure, $structure);
     }
 }

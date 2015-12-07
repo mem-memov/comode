@@ -1,22 +1,28 @@
 <?php
-namespace Comode\graph\store\fileSystem;
+namespace Comode\graph\store\fileSystem\node;
 
+use Comode\graph\store\fileSystem\directory\IDirectory;
 use Comode\graph\store\Value as StoreValue;
+use Comode\graph\store\exception\ValueNotFound;
+use Comode\graph\store\value\IFactory as IValueFactory;
 
-class NodeStore implements INodeStore
+class Store implements IStore
 {
     private $nodeRoot;
     private $valueIndex;
     private $id;
+    private $valueFactory;
  
     public function __construct(
-        directory\IDirectory $nodeRoot,
-        directory\IDirectory $valueIndex,
-        IId $id
+        IDirectory $nodeRoot,
+        IDirectory $valueIndex,
+        IId $id,
+        IValueFactory $valueFactory
     ) {
         $this->nodeRoot = $nodeRoot;
         $this->valueIndex = $valueIndex;
         $this->id = $id;
+        $this->valueFactory = $valueFactory;
     }
     
     public function create()
@@ -58,9 +64,9 @@ class NodeStore implements INodeStore
         $valueFile = $valueFiles[0];
 
         if ($valueFile->name() == $valueDirectory->name()) {
-            return new StoreValue(false, $valueFile->read());
+            return $this->valueFactory->makeString($valueFile->read());
         } else {
-            return new StoreValue(true, $valueFile->path());
+            return $this->valueFactory->makeFile($valueFile->path());
         }
     }
 }

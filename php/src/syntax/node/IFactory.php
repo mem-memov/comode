@@ -9,19 +9,18 @@ interface IFactory
     public function createClauseNode();
     public function getClauseNodes(INode $node);
     
-    public function createPredicateNode($verb);
+    public function createPredicateNode(array $structure);
     public function getPredicateNodes(INode $node);
     
     public function createArgumentNode();
     public function getArgumentNodes(INode $node);
     
-    public function createQuestionNode($question);
+    public function createQuestionNode(array $structure);
     public function getQuestionNodes(INode $node);
     
     public function createComplimentNode();
     public function getComplimentNodes(INode $node);
     
-    public function createStringAnswerNode($phrase);
-    public function createFileAnswerNode($path);
+    public function createAnswerNode(array $structure);
     public function getAnswerNodes(INode $node);
 }

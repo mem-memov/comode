@@ -1,5 +1,5 @@
 <?php
-namespace Comode\graph\store\fileSystem;
+namespace Comode\graph\store\fileSystem\value;
 
 class Hash implements IHash
 {

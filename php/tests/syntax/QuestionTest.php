@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class QuestionTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
@@ -17,7 +19,7 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
     
     public function testItSuppliesId()
     {
-        $question = new Comode\syntax\Question($this->argumentFactory, $this->node);
+        $question = new Question($this->argumentFactory, $this->node);
         
         $id = 7773;
         
@@ -32,7 +34,7 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesValue()
     {
-        $question = new Comode\syntax\Question($this->argumentFactory, $this->node);
+        $question = new Question($this->argumentFactory, $this->node);
         
         $questionString = 'when';
         
@@ -53,7 +55,7 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToArguments()
     {
-        $question = new Comode\syntax\Question($this->argumentFactory, $this->node);
+        $question = new Question($this->argumentFactory, $this->node);
         
         $argumentNode = $this->getMockBuilder('Comode\syntax\node\IArgument')
                             ->disableOriginalConstructor()
@@ -72,7 +74,7 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
     
     public function testItProvidesArguments()
     {
-        $question = new Comode\syntax\Question($this->argumentFactory, $this->node);
+        $question = new Question($this->argumentFactory, $this->node);
         
         $argument = $this->getMockBuilder('Comode\syntax\IArgument')
                             ->disableOriginalConstructor()

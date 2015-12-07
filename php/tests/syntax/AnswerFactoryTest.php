@@ -1,4 +1,6 @@
 <?php
+namespace Comode\syntax;
+
 class AnswerFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $nodeFactory;
@@ -15,43 +17,28 @@ class AnswerFactoryTest extends \PHPUnit_Framework_TestCase
                             ->getMock();
     }
     
-    public function testItProvidesStringAnswer()
+    public function testItProvidesAnswer()
     {
-        $answerFactory = new Comode\syntax\AnswerFactory($this->nodeFactory);
+        $answerFactory = new AnswerFactory($this->nodeFactory);
         $answerFactory->setComplimentFactory($this->complimentFactory);
         
-        $answerNode = $this->getMockBuilder('Comode\syntax\node\IStringAnswer')
+        $answerNode = $this->getMockBuilder('Comode\syntax\node\IAnswer')
                             ->disableOriginalConstructor()
                             ->getMock();
         
-        $this->nodeFactory->method('createStringAnswerNode')
+        $this->nodeFactory->method('createAnswerNode')
                         ->willReturn($answerNode);
         
-        $answer = $answerFactory->provideStringAnswer('today');
+        $structure = ['type'=>'string', 'content'=>'today'];
         
-        $this->assertInstanceOf('Comode\syntax\StringAnswer', $answer);
-    }
-    
-    public function testItProvidesFileAnswer()
-    {
-        $answerFactory = new Comode\syntax\AnswerFactory($this->nodeFactory);
-        $answerFactory->setComplimentFactory($this->complimentFactory);
-        
-        $answerNode = $this->getMockBuilder('Comode\syntax\node\IFileAnswer')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-        
-        $this->nodeFactory->method('createFileAnswerNode')
-                        ->willReturn($answerNode);
-        
-        $answer = $answerFactory->provideFileAnswer(__FILE__);
+        $answer = $answerFactory->provideAnswer($structure);
         
         $this->assertInstanceOf('Comode\syntax\IAnswer', $answer);
     }
-    
+
     public function itProvideAnswersByCompliment()
     {
-        $answerFactory = new Comode\syntax\AnswerFactory($this->nodeFactory);
+        $answerFactory = new AnswerFactory($this->nodeFactory);
         $answerFactory->setComplimentFactory($this->complimentFactory);
         
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')

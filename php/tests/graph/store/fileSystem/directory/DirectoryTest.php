@@ -29,6 +29,22 @@ class DirectoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($path, $this->path);
     }
     
+    public function testItSuppliesItsName()
+    {
+        $directory = new Directory($this->path, $this->fileSystem, $this->factory);
+        
+        $name = 'my_directory';
+        
+        $this->fileSystem->expects($this->once())
+                        ->method('name')
+                        ->with($this->path)
+                        ->willReturn($name);
+        
+        $directoryName = $directory->name();
+        
+        $this->assertEquals($directoryName, $name);
+    }
+    
     public function testItChecksPathExists()
     {
         $directory = new Directory($this->path, $this->fileSystem, $this->factory);
