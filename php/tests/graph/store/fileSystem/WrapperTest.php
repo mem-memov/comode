@@ -139,28 +139,7 @@ class WrapperTest extends \PHPUnit_Framework_TestCase
         
         $this->assertEquals($content, $fileContent);
     }
-    
-    public function testItCopiesFile()
-    {
-        $path = vfsStream::url($this->path);
-        $wrapper = new Comode\graph\store\fileSystem\Wrapper($path);
-        
-        $structure = [
-            'dir_1' => [
-                'file_1' => 'bla bla bla'
-            ]
-        ];
-        
-        vfsStream::create($structure);
-        
-        $originPath = vfsStream::url($this->path. '/dir_1/file_1'); 
-        $targetPath = vfsStream::url($this->path. '/file_1'); 
-        
-        $wrapper->copyFile($originPath, $targetPath);
-        
-        $this->assertTrue($this->root->hasChild('file_1'));
-    }
-    
+
     public function testItMakesLink()
     {
         $this->markTestSkipped('Links are currently not supported by vfsStream.');

@@ -3,27 +3,15 @@ namespace Comode\graph;
 
 class Factory implements IFactory
 {
-    private $nodeFactory;
-    private $valueFactory;
+    private $store;
 
-    public function __construct(INodeFactory $nodeFactory, IValueFactory $valueFactory)
+    public function __construct(store\IStore $store)
     {
-        $this->nodeFactory = $nodeFactory;
-        $this->valueFactory = $valueFactory;
+        $this->store = $store;
     }
 
-    public function createNode(array $structure = [])
+    public function makeNode($id = null, $value = '')
     {
-        return $this->nodeFactory->createNode($structure);
-    }
-
-    public function readNode($nodeId)
-    {
-         return $this->nodeFactory->readNode($nodeId);
-    }
-
-    public function makeValue(array $structure)
-    {
-        return $this->valueFactory->makeValue($structure);
+        return new Node($this->store, $this, $id, $value);
     }
 }

@@ -23,11 +23,11 @@ class Store implements IStore {
         return $this->nodeStore->directory($nodeId)->exists();
     }
     
-    public function createNode(array $structure = [])
+    public function createNode($value = '')
     {
         // read node by value
-        if (!empty($structure)) {
-            $nodeId = $this->valueStore->getNode($structure);
+        if (strlen($value) > 0) {
+            $nodeId = $this->valueStore->getNode($value);
             if (!is_null($nodeId)) {
                 return $nodeId;
             }
@@ -36,9 +36,9 @@ class Store implements IStore {
         // create new node
         $nodeId = $this->nodeStore->create();
 
-        if (!empty($structure)) {
+        if (strlen($value) > 0) {
             // bind value to new node
-            $valueHash = $this->valueStore->create($structure);
+            $valueHash = $this->valueStore->create($value);
             $this->nodeStore->bindValue($nodeId, $this->valueStore->directory($valueHash));
             $this->valueStore->bindNode($valueHash, $this->nodeStore->directory($nodeId));
         }
@@ -88,9 +88,9 @@ class Store implements IStore {
         return $nodeIds;
     }
 
-    public function getValueNode(array $structure)
+    public function getValueNode($value)
     {
-        return $this->valueStore->getNode($structure);
+        return $this->valueStore->getNode($value);
     }
         
     public function getNodeValue($nodeId)
@@ -98,10 +98,5 @@ class Store implements IStore {
         list($isFile, $content) = $this->nodeStore->getValue($nodeId);
         
         return new Value($isFile, $content);
-    }
-    
-    public function getValue(array $structure)
-    {
-        return $this->valueStore->makeValue($structure);
     }
 }

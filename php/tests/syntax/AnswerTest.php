@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class StringAnswerTest extends \PHPUnit_Framework_TestCase
+class AnswerTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
     protected $complimentFactory;
@@ -36,21 +36,14 @@ class StringAnswerTest extends \PHPUnit_Framework_TestCase
     {
         $answer = new Answer($this->complimentFactory, $this->node);
         
-        $answerString = 'today';
-        
-        $value = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $value->method('getContent')
-                        ->willReturn($answerString);
-        
+        $value = '{"type":"string","value":"today"}';
+
         $this->node->method('getValue')
                         ->willReturn($value);
                         
         $answerValue = $answer->getValue();
         
-        $this->assertEquals($answerValue, $answerString);
+        $this->assertEquals($answerValue, $value);
     }
     
     public function testItGetsLinkedToCompliments()

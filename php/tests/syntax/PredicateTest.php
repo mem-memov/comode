@@ -36,21 +36,14 @@ class PredicateTest extends \PHPUnit_Framework_TestCase
     {
         $predicate = new Predicate($this->argumentFactory, $this->node);
         
-        $predicateString = 'make';
-        
-        $value = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $value->method('getContent')
-                        ->willReturn($predicateString);
+        $value = '{"type":"string","value":"make"}';
         
         $this->node->method('getValue')
                         ->willReturn($value);
                         
         $predicateValue = $predicate->getValue();
         
-        $this->assertEquals($predicateValue, $predicateString);
+        $this->assertEquals($predicateValue, $value);
     }
     
     public function testItGetsLinkedToArguments()

@@ -1,26 +1,29 @@
 <?php
 namespace Comode\graph\store\fileSystem\value;
 
-use Comode\graph\store\value\IFactory as IValueFactory;
 use Comode\graph\store\fileSystem\directory\IDirectory;
 
 class Store implements IStore
 {
-    private $valueFactory;
-    private $strategyFactory;
+    private $valueRoot;
+    private $nodeIndex;
 
     public function __construct(
-        IValueFactory $valueFactory,
-        stretegy\IFactory $strategyFactory
+        IDirectory $valueRoot,
+        IDirectory $nodeIndex
     ) {
-        $this->valueFactory = $valueFactory;
-        $this->strategyFactory = $strategyFactory;
+        $this->valueRoot = $valueRoot;
+        $this->nodeIndex = $nodeIndex;
     }
     
-    private function create(array $structure)
+    private function create($value)
     {
-        $strategy = $this->valueFactory->make($structure, $this->strategyFactory);
-        return $strategy->create();
+        $valueHash = md5($value);
+        $valueDirectory = $this->valueRoot->directory($valueHash);
+        $valueDirectory->create();
+        $valueDirectory->file($valueHash)->write($string);
+        
+        return $valueHash;
     }
     
     public function bindNode($valueHash, IDirectory $nodeDirectory)
@@ -31,29 +34,22 @@ class Store implements IStore
             ->create($nodeDirectory->path());
     }
     
-    public function getNode(array $structure)
+    public function getNode($value)
     {
-        $strategy = $this->valueFactory->make($structure, $this->strategyFactory);
-        return $strategy->getNode();
-    }
-    
-    public function makeValue(array $structure)
-    {
-        $storeValue = $this->valueFactory->make($structure);
+        $valueHash = md5($value);
         
-        //return new strategy\
+        $nodeIds = $this->nodeIndex->directory($valueHash)->names();
         
-        /*if (!$isFile) {
-            $value = new StoreValue(false, $content);
+        $nodeCount = count($nodeIds);
+
+        if ($nodeCount == 0) {
+            $nodeId = null;
+        } elseif ($nodeCount == 1) {
+            $nodeId = (int)$nodeIds[0];
         } else {
-            $valueHash = $this->hash->hashFile($content);
-            $valueDirectory = $this->valueDirectory->directory($valueHash);
-            $valuePaths = $valueDirectory->paths();
-            
-            $valuePath = $valuePaths[0];
-            $value = new StoreValue(true, $valuePath);
+            throw new ValueMustBeLinkedToOneNode('Value with content ' . $json . ' has too many nodes: ' . $nodeCount);
         }
         
-        return $value;*/
+        return $nodeId;
     }
 }

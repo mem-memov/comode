@@ -36,21 +36,14 @@ class QuestionTest extends \PHPUnit_Framework_TestCase
     {
         $question = new Question($this->argumentFactory, $this->node);
         
-        $questionString = 'when';
-        
-        $value = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $value->method('getContent')
-                        ->willReturn($questionString);
-        
+        $value = '{"type":"string","value":"when"}';
+
         $this->node->method('getValue')
                         ->willReturn($value);
                         
         $questionValue = $question->getValue();
         
-        $this->assertEquals($questionValue, $questionString);
+        $this->assertEquals($questionValue, $value);
     }
     
     public function testItGetsLinkedToArguments()

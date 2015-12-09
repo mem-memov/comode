@@ -4,8 +4,7 @@ namespace Comode\graph;
 class NodeTest extends \PHPUnit_Framework_TestCase
 {
     protected $store;
-    protected $valueFactory;
-    protected $nodeFactory;
+    protected $factory;
     protected $id;
 
     protected function setUp()
@@ -13,12 +12,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
         $this->store = $this->getMockBuilder('Comode\graph\store\IStore')
                             ->disableOriginalConstructor()
                             ->getMock();
-                            
-        $this->valueFactory = $this->getMockBuilder('Comode\graph\IValueFactory')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                            
-        $this->nodeFactory = $this->getMockBuilder('Comode\graph\INodeFactory')
+
+        $this->factory = $this->getMockBuilder('Comode\graph\IFactory')
                             ->disableOriginalConstructor()
                             ->getMock();
         
@@ -31,21 +26,21 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('createNode')
                     ->willReturn($this->id);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory);
+        $node = new Node($this->store, $this->factory);
         
         $this->assertEquals($this->id, $node->getId());
     }
     
-    public function testItGetsCreatedWithAValueWhenStructureProvided()
+    public function testItGetsCreatedWithAValueWhenProvided()
     {
-        $structure = ['type'=>'string', 'content'=>'rabbit'];
+        $value = '{"someKey":"someValue"}';
         
         $this->store->expects($this->once())
                     ->method('createNode')
-                    ->with($structure)
+                    ->with($value)
                     ->willReturn($this->id);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, null, $structure);
+        $node = new Node($this->store, $this->factory, null, $value);
     }
 
     public function testItKeepsItsIdIfInStore()
@@ -54,7 +49,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $this->assertEquals($this->id, $node->getId());
     }
@@ -68,7 +63,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(false);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
     }
     
     public function testItProvidesItsOwnId()
@@ -77,7 +72,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $nodeId = $node->getId();
         
@@ -90,7 +85,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $nodeToAdd = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -115,7 +110,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $nodeToRemove = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -140,7 +135,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
            
         $linkedNodeId = $this->id + 2222;
         
@@ -153,8 +148,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                             ->disableOriginalConstructor()
                             ->getMock();
                             
-        $this->nodeFactory->expects($this->once())
-                    ->method('readNode')
+        $this->factory->expects($this->once())
+                    ->method('makeNode')
                     ->with($linkedNodeId)
                     ->willReturn($linkedNode);
         
@@ -171,7 +166,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $nodeToCheck = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -199,7 +194,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $nodeToCheck = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -227,31 +222,18 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('createNode')
                     ->willReturn($this->id);
 
-        $structure = ['type'=>'string', 'content'=>'rabbit'];
+        $value = '{"someKey":"someValue"}';
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, null, $structure);
-        
-        $storeValue = $this->getMockBuilder('Comode\graph\store\value\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-        
+        $node = new Node($this->store, $this->factory, null, $value);
+
         $this->store->expects($this->once())
                     ->method('getNodeValue')
                     ->with($this->id)
-                    ->willReturn($storeValue);
-
-        $value = $this->getMockBuilder('Comode\graph\IValue')
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                    
-        $this->valueFactory->expects($this->once())
-                    ->method('makeValue')
-                    ->with($storeValue)
                     ->willReturn($value);
-        
+
         $nodeValue = $node->getValue();
         
-        $this->assertInstanceOf('Comode\graph\IValue', $nodeValue);
+        $this->assertEquals($nodeValue, $value);
     }
 
     public function testItSuppliesCommonNodes()
@@ -260,7 +242,7 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                     ->method('nodeExists')
                     ->willReturn(true);
 
-        $node = new Node($this->store, $this->valueFactory, $this->nodeFactory, $this->id);
+        $node = new Node($this->store, $this->factory, $this->id);
         
         $adjacentNode = $this->getMockBuilder('Comode\graph\INode')
                             ->disableOriginalConstructor()
@@ -289,8 +271,8 @@ class NodeTest extends \PHPUnit_Framework_TestCase
                         [$commonNodeId]
                     ));
                     
-        $this->nodeFactory->expects($this->once())
-                    ->method('readNode')
+        $this->factory->expects($this->once())
+                    ->method('makeNode')
                     ->with($commonNodeId)
                     ->willReturn($commonNode);
                     

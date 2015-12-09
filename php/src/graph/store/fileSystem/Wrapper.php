@@ -32,11 +32,6 @@ class Wrapper implements IWrapper
     {
         return file_get_contents($path);
     }
-    
-    public function copyFile($originPath, $targetPath)
-    {
-        copy($originPath, $targetPath);
-    }
 
     public function makeLink($targetPath, $linkPath)
     {

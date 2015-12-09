@@ -11,7 +11,6 @@ interface IWrapper
 
     public function writeFile($path, $content);
     public function readFile($path);
-    public function copyFile($originPath, $targetPath);
 
     public function makeLink($targetPath, $linkPath);
     public function readLink($linkPath);

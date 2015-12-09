@@ -7,21 +7,22 @@ use Comode\graph\store\ValueNotFound;
 class Node implements INode
 {
     private $store;
-    private $valueFactory;
-    private $nodeFactory;
+    private $factory;
     private $id;
 
     /**
      * It creates node instances.
      * 
      * Some nodes have values bound to them, but most nodes have no value.
-     *  - In order to create a new node with no value, id and structure should be set to null.
-     *  - For a new node that has a value attached pass null for $id and a structure for value.
+     *  - In order to create a new node with no value, id should be set to null and value should be set to an empty string.
+     *  - For a new node that has a value attached pass null for id and a string value.
      *  - To retrieve an existing node by its id just pass the id
+     * It's not possible to assign a value to an existing node.
+     * A value can be assigned only when a node is created.
      */
-    public function __construct(IStore $store, IValueFactory $valueFactory, INodeFactory $nodeFactory, $id = null, array $structure = [])
+    public function __construct(IStore $store, IFactory $factory, $id = null, $value = '')
     {
-        if (!is_null($id) && !empty($structure)) {
+        if (!is_null($id) && strlen($value) > 0) {
             throw new exception\NodeValueIsConstant('Trying to reassign value of node ' . $id);
         }
         
@@ -30,12 +31,11 @@ class Node implements INode
         }
 
         if (is_null($id)) {
-            $id = $store->createNode($structure);
+            $id = $store->createNode($value);
         }
         
         $this->store = $store;
-        $this->valueFactory = $valueFactory;
-        $this->nodeFactory = $nodeFactory;
+        $this->factory = $factory;
         $this->id = $id;
     }
     
@@ -61,7 +61,7 @@ class Node implements INode
         $childNodes = [];
         
         foreach ($childIds as $childId) {
-            $childNode = $this->nodeFactory->readNode($childId);
+            $childNode = $this->factory->makeNode($childId);
             array_push($childNodes, $childNode);
         }
 
@@ -77,9 +77,7 @@ class Node implements INode
     {
         try {
         
-            $storeValue = $this->store->getNodeValue($this->id);
-            
-            return $this->valueFactory->makeValue($storeValue);
+            return $this->store->getNodeValue($this->id);
 
         } catch(store\exception\ValueNotFound $e) {
             throw new exception\SomeNodesHasNoValue('Node ' . $this->id . ' can\'t supply a value.');
@@ -95,8 +93,8 @@ class Node implements INode
         
         $commonNodes = [];
         
-        foreach ($commonIds as $commomId) {
-            $commonNode = $this->nodeFactory->readNode($commomId);
+        foreach ($commonIds as $commonId) {
+            $commonNode = $this->factory->makeNode($commonId);
             array_push($commonNodes, $commonNode);
         }
         
