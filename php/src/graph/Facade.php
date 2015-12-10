@@ -8,13 +8,8 @@ class Facade extends Factory
         $storeFactory = new store\Factory();
         $configuration = new Configuration($storeFactory, $config);
         
-        $store = $configuration->getStore();
-        
-        $nodeFactory = new NodeFactory($store);
-        $valueFactory = new ValueFactory($store);
-        $nodeFactory->setValueFactory($valueFactory);
-        $valueFactory->setNodeFactory($nodeFactory);
-        
-        parent::__construct($nodeFactory, $valueFactory);
+        $store = $configuration->makeStore();
+
+        parent::__construct($store);
     }
 }

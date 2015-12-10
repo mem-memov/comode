@@ -17,9 +17,9 @@ class AnswerFactory implements IAnswerFactory
         $this->complimentFactory = $complimentFactory;
     }
     
-    public function provideAnswer(array $structure)
+    public function provideAnswer($value)
     {
-        $answerNode = $this->nodeFactory->createAnswerNode($structure);
+        $answerNode = $this->nodeFactory->createAnswerNode($value);
 
         return $this->makeAnswer($answerNode);
     }

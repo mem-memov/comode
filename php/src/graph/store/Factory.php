@@ -11,16 +11,29 @@ class Factory implements IFactory
     
     public function makeFileSystem(array $options)
     {
-        $path = $options['path'];
-        $directoryFactory = new fileSystem\directory\Factory();
-        $root = $directoryFactory->make($path);
-        
-        $nodeDirectory = $root->get('node')->create();
-        $nodeToValueDirectory = $root->get('node_to_value')->create();
-        $valueDirectory = $root->get('value')->create();
-        $valueToNodeDirectory = $root->get('value_to_node')->create();
-
         $wrapper = new fileSystem\Wrapper();
+        
+        $path = $options['path'];
+        $directoryFactory = new fileSystem\directory\Factory($wrapper);
+        $root = $directoryFactory->directory($path);
+        
+        $nodeDirectory = $root->directory('node');
+        if (!$nodeDirectory->exists()) {
+            $nodeDirectory->create();
+        }
+        $nodeToValueDirectory = $root->directory('node_to_value');
+        if (!$nodeToValueDirectory->exists()) {
+            $nodeToValueDirectory->create();
+        }
+        $valueDirectory = $root->directory('value');
+        if (!$valueDirectory->exists()) {
+            $valueDirectory->create();
+        }
+        $valueToNodeDirectory = $root->directory('value_to_node');
+        if (!$valueToNodeDirectory->exists()) {
+            $valueToNodeDirectory->create();
+        }
+
         $id = new fileSystem\node\Id($path . '/lastId', $wrapper);
 
         $nodeStore = new fileSystem\node\Store($nodeDirectory, $nodeToValueDirectory, $id);

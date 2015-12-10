@@ -1,7 +1,9 @@
 <?php
 namespace Comode\graph\store\fileSystem\node;
 
-class Store implements IId
+use Comode\graph\store\fileSystem\IWrapper;
+
+class Id implements IId
 {
     private $fileSystem;
     
@@ -13,7 +15,7 @@ class Store implements IId
     
     public function next()
     {
-        if (!$this->fileSystem->fileExists($this->path)) {
+        if (!$this->fileSystem->exists($this->path)) {
             $this->fileSystem->writeFile($this->path, 0);
         }
 

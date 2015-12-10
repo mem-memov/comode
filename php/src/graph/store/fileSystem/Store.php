@@ -2,8 +2,6 @@
 namespace Comode\graph\store\fileSystem;
 
 use Comode\graph\store\IStore;
-use Comode\graph\store\Value;
-use Comode\graph\store\IValue;
 
 class Store implements IStore {
 
@@ -11,8 +9,8 @@ class Store implements IStore {
     private $valueStore;
 
     public function __construct(
-        INodeStore $nodeStore, 
-        IValueStore $valueStore
+        node\IStore $nodeStore, 
+        value\IStore $valueStore
     ) {
         $this->nodeStore = $nodeStore;
         $this->valueStore = $valueStore;

@@ -17,7 +17,7 @@ class Factory implements IFactory
     
     public function createClauseNode()
     {
-        $node = $this->graphFactory->createNode();
+        $node = $this->graphFactory->makeNode();
         
         $node->addNode($this->map['clause']);
         
@@ -37,9 +37,9 @@ class Factory implements IFactory
         return $clauseNodes;
     }
     
-    public function createPredicateNode($structure)
+    public function createPredicateNode($value)
     {
-        $node = $this->graphFactory->createNode($structure);
+        $node = $this->graphFactory->makeNode(null, $value);
         
         $node->addNode($this->map['predicate']);
         
@@ -61,7 +61,7 @@ class Factory implements IFactory
     
     public function createArgumentNode()
     {
-        $node = $this->graphFactory->createNode();
+        $node = $this->graphFactory->makeNode();
         
         $node->addNode($this->map['argument']);
         
@@ -81,9 +81,9 @@ class Factory implements IFactory
         return $argumentNodes;
     }
     
-    public function createQuestionNode(array $structure)
+    public function createQuestionNode($value)
     {
-        $node = $this->graphFactory->createNode($structure);
+        $node = $this->graphFactory->makeNode(null, $value);
         
         $node->addNode($this->map['question']);
         
@@ -105,7 +105,7 @@ class Factory implements IFactory
     
     public function createComplimentNode()
     {
-        $node = $this->graphFactory->createNode();
+        $node = $this->graphFactory->makeNode();
         
         $node->addNode($this->map['compliment']);
         
@@ -125,9 +125,9 @@ class Factory implements IFactory
         return $complimentNodes;
     }
     
-    public function createAnswerNode(array $structure)
+    public function createAnswerNode($value)
     {
-        $node = $this->graphFactory->createNode($structure);
+        $node = $this->graphFactory->makeNode(null, $value);
         
         $node->addNode($this->map['answer']);
         
@@ -157,12 +157,12 @@ class Factory implements IFactory
         
         if (!file_exists($mappingPath)) {
             $map = [
-                'clause' => $this->graphFactory->createNode()->getId(),
-                'predicate' => $this->graphFactory->createNode()->getId(),
-                'argument' => $this->graphFactory->createNode()->getId(),
-                'question' => $this->graphFactory->createNode()->getId(),
-                'compliment' => $this->graphFactory->createNode()->getId(),
-                'answer' => $this->graphFactory->createNode()->getId()
+                'clause' => $this->graphFactory->makeNode()->getId(),
+                'predicate' => $this->graphFactory->makeNode()->getId(),
+                'argument' => $this->graphFactory->makeNode()->getId(),
+                'question' => $this->graphFactory->makeNode()->getId(),
+                'compliment' => $this->graphFactory->makeNode()->getId(),
+                'answer' => $this->graphFactory->makeNode()->getId()
             ];
             $fileContent = '<?php return ' . var_export($map, true) . ';';
             file_put_contents($mappingPath, $fileContent);
@@ -171,7 +171,7 @@ class Factory implements IFactory
         $map = require($mappingPath);
         
         foreach ($map as $space => $nodeId) {
-            $map[$space] = $this->graphFactory->readNode($nodeId);
+            $map[$space] = $this->graphFactory->makeNode($nodeId);
         }
         
         $this->map = $map;

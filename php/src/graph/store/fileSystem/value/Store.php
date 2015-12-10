@@ -16,7 +16,7 @@ class Store implements IStore
         $this->nodeIndex = $nodeIndex;
     }
     
-    private function create($value)
+    public function create($value)
     {
         $valueHash = md5($value);
         $valueDirectory = $this->valueRoot->directory($valueHash);

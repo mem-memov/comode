@@ -17,9 +17,9 @@ class PredicateFactory implements IPredicateFactory
         $this->argumentFactory = $argumentFactory;
     }
 
-    public function providePredicate(array $structure)
+    public function providePredicate($value)
     {
-        $node = $this->nodeFactory->createPredicateNode($structure);
+        $node = $this->nodeFactory->createPredicateNode($value);
 
         return $this->makePredicate($node);
     }
