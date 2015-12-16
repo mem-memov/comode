@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class Compliment implements ICompliment
+final class Compliment implements ICompliment
 {
     private $clauseFactory;
     private $argumentFactory;

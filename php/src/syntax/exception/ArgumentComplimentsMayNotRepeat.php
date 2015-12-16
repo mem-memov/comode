@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\exception;
 
-class ArgumentComplimentsMayNotRepeat extends Exception
+final class ArgumentComplimentsMayNotRepeat extends Exception
 {
     
 }

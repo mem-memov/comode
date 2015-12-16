@@ -3,13 +3,13 @@ namespace Comode\syntax;
 
 use Comode\graph\IFactory as IGraphFactory;
 
-class Factory implements IFactory
+final class Factory implements IFactory
 {
     private $clauseFactory;
     
     public function __construct(array $config, IGraphFactory $graphFactory)
     {
-        $nodeFactory = new node\Factory($graphFactory, $config['spaceDirectory']);
+        $nodeFactory = new node\Facade($graphFactory, $config['spaceDirectory']);
 
         $this->questionFactory = new QuestionFactory($nodeFactory);
         $this->predicateFactory = new PredicateFactory($nodeFactory);

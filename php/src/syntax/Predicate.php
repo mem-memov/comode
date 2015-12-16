@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class Predicate implements IPredicate
+final class Predicate implements IPredicate
 {
     private $argumentFactory;
     private $node;

@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class ComplimentFactory implements IComplimentFactory
+final class ComplimentFactory implements IComplimentFactory
 {
     private $nodeFactory;
     private $clauseFactory;
@@ -47,7 +47,7 @@ class ComplimentFactory implements IComplimentFactory
 
         return $this->makeCompliments($complimentNodes);
     }
-    
+
     public function provideComplimentsByArgument(node\IArgument $argumentNode)
     {
         $complimentNodes = $this->nodeFactory->getComplimentNodes($argumentNode);

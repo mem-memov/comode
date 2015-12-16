@@ -3,7 +3,7 @@ namespace Comode\syntax;
 
 use Comode\graph\Facade as GraphFactory;
 
-class Facade extends Factory
+final class Facade extends Factory
 {
     public function __construct(array $config)
     {

@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-class Predicate extends Node implements IPredicate
+final class Predicate extends Node implements IPredicate
 {
     
 }

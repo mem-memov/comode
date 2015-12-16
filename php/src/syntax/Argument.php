@@ -3,7 +3,7 @@ namespace Comode\syntax;
 
 use Comode\graph\INode;
 
-class Argument implements IArgument
+final class Argument implements IArgument
 {
     private $predicateFactory;
     private $questionFactory;

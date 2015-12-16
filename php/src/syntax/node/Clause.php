@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-class Clause extends Node implements IClause
+final class Clause extends Node implements IClause
 {
-    
+
 }

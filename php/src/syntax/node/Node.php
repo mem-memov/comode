@@ -6,7 +6,7 @@ use Comode\graph\INode;
 abstract class Node
 {
     private $node;
-    
+
     public function __construct(INode $node)
     {
         $this->node = $node;

@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\exception;
 
-class ClauseMustHaveOnePredicate extends Exception
+final class ClauseMustHaveOnePredicate extends Exception
 {
     
 }

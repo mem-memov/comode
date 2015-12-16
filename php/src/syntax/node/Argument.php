@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-class Argument extends Node implements IArgument
+final class Argument extends Node implements IArgument
 {
     
 }

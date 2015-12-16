@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class AnswerFactory implements IAnswerFactory
+final class AnswerFactory implements IAnswerFactory
 {
     private $nodeFactory;
     private $complimentFactory;

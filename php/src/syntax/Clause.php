@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax;
 
-class Clause implements IClause
+final class Clause implements IClause
 {
     private $complimentFactory;
     private $node;

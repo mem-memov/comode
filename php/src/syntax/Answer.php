@@ -1,10 +1,10 @@
 <?php
 namespace Comode\syntax;
 
-class Answer implements IAnswer
+final class Answer implements IAnswer
 {
-    protected $complimentFactory;
-    protected $node;
+    private  $complimentFactory;
+    private  $node;
 
     public function __construct(
         IComplimentFactory $complimentFactory, 

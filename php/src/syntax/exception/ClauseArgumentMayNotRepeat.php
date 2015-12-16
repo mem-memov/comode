@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\exception;
 
-class ClauseArgumentMayNotRepeat extends Exception
+final class ClauseArgumentMayNotRepeat extends Exception
 {
     
 }
