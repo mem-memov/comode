@@ -5,5 +5,5 @@ use Comode\graph\INode;
 
 interface IFilter
 {
-    public function byTypes(INode $node, array $types);
+    public function byType(INode $node, $type);
 }

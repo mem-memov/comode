@@ -14,13 +14,11 @@ final class Creator implements ICreator
         $this->typeChecker = $typeChecker;
     }
     
-    public function createNode(array $types, $value = null)
+    public function createNode($type, $value = null)
     {
         $node = $this->graphFactory->makeNode(null, $value);
-        
-        foreach ($types as $type) {
-            $this->typeChecker->addType($node, $type);
-        }
+
+        $this->typeChecker->addType($node, $type);
 
         return $node;
     }

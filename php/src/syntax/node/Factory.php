@@ -24,73 +24,78 @@ final class Factory implements IFactory
     
     public function createClauseNode()
     {
-        $node = $this->creator->createNode([self::$clause]);
+        $node = $this->creator->createNode(self::$clause);
 
         return new Clause($node);
     }
     
     public function getClauseNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$clause]);
+        return $this->filter->byType($node, self::$clause);
     }
     
     public function createPredicateNode($value)
     {
-        $node = $this->creator->createNode([self::$predicate], $value);
+        $node = $this->creator->createNode(self::$predicate, $value);
 
         return new Predicate($node);
     }
     
     public function getPredicateNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$predicate]);
+        return $this->filter->byType($node, self::$predicate);
     }
     
     public function createArgumentNode()
     {
-        $node = $this->creator->createNode([self::$argument]);
+        $node = $this->creator->createNode(self::$argument);
 
         return new Argument($node);
     }
     
     public function getArgumentNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$argument]);
+        return $this->filter->byType($node, self::$argument);
     }
     
     public function createQuestionNode($value)
     {
-        $node = $this->creator->createNode([self::$question], $value);
+        $node = $this->creator->createNode(self::$question, $value);
 
         return new Question($node);
     }
     
     public function getQuestionNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$question]);
+        return $this->filter->byType($node, self::$question);
     }
     
     public function createComplimentNode()
     {
-        $node = $this->creator->createNode([self::$compliment]);
+        $node = $this->creator->createNode(self::$compliment);
 
         return new Compliment($node);
     }
 
     public function getComplimentNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$compliment]);
+        return $this->filter->byType($node, self::$compliment);
+    }
+    
+    public function getComplimentSequence(INode $node)
+    {
+        return new Sequence($node, self::$compliment);
     }
 
     public function createAnswerNode($value)
     {
-        $node = $this->creator->createNode([self::$answer], $value);
+        $node = $this->creator->createNode(self::$answer, $value);
 
         return new Answer($node);
     }
 
     public function getAnswerNodes(INode $node)
     {
-        return $this->filter->byTypes($node, [self::$answer]);
+        return $this->filter->byType($node, self::$answer);
     }
 }

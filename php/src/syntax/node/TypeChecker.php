@@ -22,6 +22,16 @@ final class TypeChecker implements ITypeChecker
         $typeNode = $this->typeSpace->getTypeNode($type);
         $node->addNode($typeNode);
     }
+    
+    public function removeType(INode $node, $type)
+    {
+        if (!$this->ofType($node, $type)) {
+            return;
+        }
+        
+        $typeNode = $this->typeSpace->getTypeNode($type);
+        $node->removeNode($typeNode);
+    }
 
     public function ofType(INode $node, $type)
     {

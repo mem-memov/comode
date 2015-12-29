@@ -5,5 +5,5 @@ use Comode\graph\INode;
 
 interface ICreator
 {
-    public function createNode(array $types, $value = null);
+    public function createNode($type, $value = null);
 }

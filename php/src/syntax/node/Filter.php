@@ -12,27 +12,23 @@ final class Filter implements IFilter
         $this->typeChecker = $typeChecker;
     }
     
-    public function byTypes(INode $node, array $types)
+    public function byType(INode $node, $type)
     {
         $linkedNodes = $this->node->getNodes();
 
         $selectedNodes = [];
         
         foreach ($linkedNodes as $linkedNode) {
-            
-            $typesMached = true;
-            foreach ($types as $type) {
-                $typesMached = $typesMached && $this->typeChecker->ofType($linkedNode, $type);
-                if (!$typesMached) {
-                    break;
-                }
-            }
-            
-            if ($typesMached) {
+            if ($this->typeChecker->ofType($linkedNode, $type)) {
                 $selectedNodes[] = $linkedNode;
             }
         }
         
         return $selectedNodes;
+    }
+    
+    public function byNode()
+    {
+        
     }
 }
