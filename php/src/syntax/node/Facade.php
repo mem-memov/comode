@@ -7,10 +7,10 @@ final class Facade extends Factory
 {
     public function __construct(IGraphFactory $graphFactory, $spaceDirectory)
     {
-        $typeSpace = new TypeSpace($graphFactory, $spaceDirectory.'/syntaxSpace.php');
-        $typeChecker = new Typechecker($typeSpace);
-        $creator = new Creator($this->graphFactory, $this->typeChecker);
-        $filter = new Filter($this->typeChecker);
+        $typeSpace = new type\Space($graphFactory, $spaceDirectory.'/syntaxSpace.php');
+        $typeChecker = new type\Checker($typeSpace);
+        $creator = new type\Creator($graphFactory, $typeChecker);
+        $filter = new type\Filter($typeChecker);
         
         parent::__construct($creator, $filter);
     }

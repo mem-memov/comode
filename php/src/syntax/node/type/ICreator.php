@@ -1,7 +1,5 @@
 <?php
-namespace Comode\syntax\node;
-
-use Comode\graph\INode;
+namespace Comode\syntax\node\type;
 
 interface ICreator
 {

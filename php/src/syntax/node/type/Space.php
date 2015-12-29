@@ -1,9 +1,9 @@
 <?php
-namespace Comode\syntax\node;
+namespace Comode\syntax\node\type;
 
 use Comode\graph\IFactory as IGraphFactory;
 
-final class TypeSpace implements ITypeSpace
+final class Space implements ISpace
 {
     private $graphFactory;
     private $spaceFile;

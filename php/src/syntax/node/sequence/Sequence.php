@@ -1,9 +1,9 @@
 <?php
 namespace Comode\syntax\node\sequence;
 
-use Comode\syntax\node\IFilter;
-use Comode\syntax\node\ITypeChecker;
 use Comode\syntax\node\INode;
+use Comode\syntax\node\type\ICreator;
+use Comode\syntax\node\type\IFilter;
 
 final class Sequence implements ISequence
 {

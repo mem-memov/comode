@@ -1,13 +1,13 @@
 <?php
-namespace Comode\syntax\node;
+namespace Comode\syntax\node\type;
 
-use Comode\graph\INode;
+use Comode\syntax\node\INode;
 
 final class Filter implements IFilter
 {
     private $typeChecker;
     
-    public function __construct(ITypeChecker $typeChecker)
+    public function __construct(IChecker $typeChecker)
     {
         $this->typeChecker = $typeChecker;
     }

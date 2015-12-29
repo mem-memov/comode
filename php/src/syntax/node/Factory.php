@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-use Comode\graph\INode;
+use Comode\syntax\node\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
 final class Factory implements IFactory
@@ -16,7 +16,7 @@ final class Factory implements IFactory
     private $creator;
     private $filter;
     
-    public function __construct(ICreator $creator, IFilter $filter)
+    public function __construct(type\ICreator $creator, type\IFilter $filter)
     {
         $this->creator = $creator;
         $this->filter = $filter;

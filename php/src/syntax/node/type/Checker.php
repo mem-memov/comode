@@ -1,14 +1,13 @@
 <?php
-namespace Comode\syntax\node;
+namespace Comode\syntax\node\type;
 
-use Comode\graph\INode;
-use Comode\graph\IFactory as IGraphFactory;
+use Comode\syntax\node\INode;
 
-final class TypeChecker implements ITypeChecker
+final class Checker implements IChecker
 {
     private $typeSpace;
     
-    public function __construct(ITypeSpace $typeSpace)
+    public function __construct(ISpace $typeSpace)
     {
         $this->typeSpace = $typeSpace;
     }

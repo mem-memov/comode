@@ -1,7 +1,9 @@
 <?php
-namespace Comode\syntax\node;
+namespace Comode\syntax\node\type;
 
-interface ITypeChecker
+use Comode\syntax\node\INode;
+
+interface IChecker
 {
     public function addType(INode $node, $type);
     public function removeType(INode $node, $type);
