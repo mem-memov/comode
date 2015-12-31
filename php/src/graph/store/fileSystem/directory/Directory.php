@@ -61,7 +61,7 @@ class Directory implements IDirectory
     public function links()
     {
         $paths = $this->fileSystem->readDirectory($this->path);
-        
+
         $links = [];
         
         foreach ($paths as $path) {

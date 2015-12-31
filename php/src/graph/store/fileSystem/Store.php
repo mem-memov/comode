@@ -93,8 +93,6 @@ class Store implements IStore {
         
     public function getNodeValue($nodeId)
     {
-        list($isFile, $content) = $this->nodeStore->getValue($nodeId);
-        
-        return new Value($isFile, $content);
+        return $this->nodeStore->getValue($nodeId);
     }
 }

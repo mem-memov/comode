@@ -32,7 +32,13 @@ class Factory implements IFactory
     
     public function getClauseNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$clause);
+        $nodes = $this->filter->byType($node, self::$clause);
+        
+        $clauses = [];
+        foreach ($nodes as $node) {
+            $clauses[] = new Clause($node);
+        }
+        return $clauses;
     }
     
     public function createPredicateNode($value)
@@ -44,7 +50,13 @@ class Factory implements IFactory
     
     public function getPredicateNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$predicate);
+        $nodes = $this->filter->byType($node, self::$predicate);
+        
+        $predicates = [];
+        foreach ($nodes as $node) {
+            $predicates[] = new Predicate($node);
+        }
+        return $predicates;
     }
     
     public function createArgumentNode()
@@ -56,7 +68,13 @@ class Factory implements IFactory
     
     public function getArgumentNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$argument);
+        $nodes = $this->filter->byType($node, self::$argument);
+        
+        $arguments = [];
+        foreach ($nodes as $node) {
+            $arguments[] = new Argument($node);
+        }
+        return $arguments;
     }
     
     public function createQuestionNode($value)
@@ -68,7 +86,13 @@ class Factory implements IFactory
     
     public function getQuestionNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$question);
+        $nodes = $this->filter->byType($node, self::$question);
+        
+        $questions = [];
+        foreach ($nodes as $node) {
+            $questions[] = new Question($node);
+        }
+        return $questions;
     }
     
     public function createComplimentNode()
@@ -80,7 +104,13 @@ class Factory implements IFactory
 
     public function getComplimentNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$compliment);
+        $nodes = $this->filter->byType($node, self::$compliment);
+        
+        $compliments = [];
+        foreach ($nodes as $node) {
+            $compliments[] = new Compliment($node);
+        }
+        return $compliments;
     }
     
     public function getComplimentSequence(INode $node)
@@ -97,6 +127,12 @@ class Factory implements IFactory
 
     public function getAnswerNodes(INode $node)
     {
-        return $this->filter->byType($node, self::$answer);
+        $nodes = $this->filter->byType($node, self::$answer);
+        
+        $answers = [];
+        foreach ($nodes as $node) {
+            $answers[] = new Answer($node);
+        }
+        return $answers;
     }
 }

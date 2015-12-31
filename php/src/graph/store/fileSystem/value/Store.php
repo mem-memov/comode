@@ -21,7 +21,7 @@ class Store implements IStore
         $valueHash = md5($value);
         $valueDirectory = $this->valueRoot->directory($valueHash);
         $valueDirectory->create();
-        $valueDirectory->file($valueHash)->write($string);
+        $valueDirectory->file($valueHash)->write($value);
         
         return $valueHash;
     }

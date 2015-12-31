@@ -20,7 +20,15 @@ class Wrapper implements IWrapper
     
     public function readDirectory($path)
     {
-        return array_diff(scandir($path,  SCANDIR_SORT_NONE), ['.', '..']);
+        $names = array_diff(scandir($path,  SCANDIR_SORT_NONE), ['.', '..']);
+        
+        $paths = [];
+        
+        foreach ($names as $name) {
+            $paths[] = $path . '/' . $name;
+        }
+        
+        return $paths;
     }
 
     public function writeFile($path, $content)
