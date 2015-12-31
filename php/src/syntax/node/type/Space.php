@@ -40,8 +40,8 @@ final class Space implements ISpace
             
             $typeNodes = $this->rootNode->getNodes();
             foreach ($typeNodes as $typeNode) {
-                $type = $typeNode->getValue();
-                $this->nodes[$type] = $typeNode;
+                $currentType = $typeNode->getValue();
+                $this->nodes[$currentType] = $typeNode;
             }
             
         }
