@@ -1,7 +1,6 @@
 <?php
 namespace Comode\syntax\node;
 
-use Comode\graph\INode;
 use Comode\graph\IFactory as IGraphFactory;
 
 interface IFactory

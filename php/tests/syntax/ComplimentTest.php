@@ -46,19 +46,15 @@ class ComplimentTest extends \PHPUnit_Framework_TestCase
     {
         $compliment = new Compliment($this->clauseFactory, $this->argumentFactory, $this->answerFactory, $this->node);
         
-        $clauseNode = $this->getMockBuilder('Comode\syntax\node\IClause')
+        $complimentSequence = $this->getMockBuilder('Comode\syntax\node\sequence\ICompliment')
                             ->disableOriginalConstructor()
                             ->getMock();
                             
-        $this->node->expects($this->once())
-                    ->method('addNode')
-                    ->with($clauseNode);
-                    
-        $clauseNode->expects($this->once())
-                    ->method('addNode')
+        $complimentSequence->expects($this->once())
+                    ->method('append')
                     ->with($this->node);
-        
-        $compliment->addClause($clauseNode);
+
+        $compliment->addClause($complimentSequence);
     }
     
     public function testItFetchesClauses()

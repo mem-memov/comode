@@ -1,9 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-use Comode\graph\INode;
-
-abstract class Node
+abstract class Node implements INode
 {
     private $node;
 

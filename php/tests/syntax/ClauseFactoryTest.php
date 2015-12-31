@@ -27,6 +27,13 @@ class ClauseFactoryTest extends \PHPUnit_Framework_TestCase
         
         $this->nodeFactory->method('createClauseNode')
                         ->willReturn($clauseNode);
+                        
+        $complimentSequence = $this->getMockBuilder('Comode\syntax\node\sequence\ICompliment')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+ 
+        $this->nodeFactory->method('getComplimentSequence')
+                        ->willReturn($complimentSequence);
  
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                     ->disableOriginalConstructor()
@@ -44,6 +51,13 @@ class ClauseFactoryTest extends \PHPUnit_Framework_TestCase
         $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
                     ->disableOriginalConstructor()
                     ->getMock();
+                    
+        $complimentSequence = $this->getMockBuilder('Comode\syntax\node\sequence\ICompliment')
+                            ->disableOriginalConstructor()
+                            ->getMock();
+ 
+        $this->nodeFactory->method('getComplimentSequence')
+                        ->willReturn($complimentSequence);
 
         $clauseNode = $this->getMockBuilder('Comode\syntax\node\IClause')
                     ->disableOriginalConstructor()

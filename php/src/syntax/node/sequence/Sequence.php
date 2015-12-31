@@ -5,7 +5,7 @@ use Comode\syntax\node\INode;
 use Comode\syntax\node\type\ICreator;
 use Comode\syntax\node\type\IFilter;
 
-final class Sequence implements ISequence
+abstract class Sequence implements ISequence
 {
     private static $next = 'next';
     private static $previous = 'previous';

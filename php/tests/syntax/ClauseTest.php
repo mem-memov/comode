@@ -5,6 +5,7 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
 {
     protected $node;
     protected $complimentFactory;
+    protected $complimentSequence;
     
     protected function setUp()
     {
@@ -15,11 +16,15 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
         $this->complimentFactory = $this->getMockBuilder('Comode\syntax\IComplimentFactory')
                             ->disableOriginalConstructor()
                             ->getMock();
+                            
+        $this->complimentSequence = $this->getMockBuilder('Comode\syntax\node\sequence\ICompliment')
+                            ->disableOriginalConstructor()
+                            ->getMock();
     }
     
     public function testItSuppliesId()
     {
-        $clause = new Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->complimentSequence, $this->node);
         
         $id = 7773;
         
@@ -34,26 +39,22 @@ class ClauseTest extends \PHPUnit_Framework_TestCase
     
     public function testItGetsLinkedToCompliments()
     {
-        $clause = new Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->complimentSequence, $this->node);
         
-        $complimentNode = $this->getMockBuilder('Comode\syntax\node\ICompliment')
+        $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()
                             ->getMock();
                             
-        $this->node->expects($this->once())
-                    ->method('addNode')
-                    ->with($complimentNode);
-                    
-        $complimentNode->expects($this->once())
-                    ->method('addNode')
-                    ->with($this->node);
-        
-        $clause->addCompliment($complimentNode);
+        $compliment->expects($this->once())
+                    ->method('addClause')
+                    ->with($this->complimentSequence);
+
+        $clause->addCompliment($compliment);
     }
     
     public function testItProvidesCompliments()
     {
-        $clause = new Clause($this->complimentFactory, $this->node);
+        $clause = new Clause($this->complimentFactory, $this->complimentSequence, $this->node);
         
         $compliment = $this->getMockBuilder('Comode\syntax\ICompliment')
                             ->disableOriginalConstructor()

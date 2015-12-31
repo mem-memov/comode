@@ -19,11 +19,13 @@ final class ClauseFactory implements IClauseFactory
     {
         $clauseNode = $this->nodeFactory->createClauseNode();
         
+        $clause = $this->makeClause($clauseNode);
+        
         foreach ($compliments as $compliment) {
-            $compliment->addClause($clauseNode);
+            $clause->addCompliment($compliment);
         }
         
-        return $this->makeClause($clauseNode);
+        return $clause;
     }
     
     public function fetchClausesByCompliment(node\ICompliment $complimentNode)
@@ -46,8 +48,8 @@ final class ClauseFactory implements IClauseFactory
     
     private function makeClause(node\IClause $clauseNode)
     {
-        $complimentSequence = $nodeFactory->getComplimentSequence($clauseNode);
-        
+        $complimentSequence = $this->nodeFactory->getComplimentSequence($clauseNode);
+
         return new Clause(
             $this->complimentFactory,
             $complimentSequence,
