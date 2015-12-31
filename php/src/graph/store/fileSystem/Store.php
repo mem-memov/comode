@@ -46,12 +46,12 @@ class Store implements IStore {
 
     public function linkNodes($fromId, $toId)
     {
-        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStore->directory($fromId);
         $link = $fromDirectory->link($toId);
 
         if (!$link->exists()) {
             
-            $toDirectory = $this->nodeStoreDirectory->directory($toId);
+            $toDirectory = $this->nodeStore->directory($toId);
             $link->create($toDirectory->path());
             
         }
@@ -59,7 +59,7 @@ class Store implements IStore {
     
     public function separateNodes($fromId, $toId)
     {
-        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStore->directory($fromId);
         $link = $fromDirectory->link($toId);
 
         if ($link->exists()) {
@@ -71,7 +71,7 @@ class Store implements IStore {
         
     public function isLinkedToNode($fromId, $toId)
     {
-        $fromDirectory = $this->nodeStoreDirectory->directory($fromId);
+        $fromDirectory = $this->nodeStore->directory($fromId);
         $link = $fromDirectory->directory($toId);
 
         return $link->exists();
@@ -79,7 +79,7 @@ class Store implements IStore {
     
     public function getLinkedNodes($nodeId)
     {
-        $nodeDirectory = $this->nodeStoreDirectory->directory($nodeId);
+        $nodeDirectory = $this->nodeStore->directory($nodeId);
 
         $nodeIds = $nodeDirectory->names();
 

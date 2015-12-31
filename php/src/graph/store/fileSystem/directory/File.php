@@ -33,4 +33,9 @@ class File implements IFile
     {
         return $this->fileSystem->readFile($this->path);
     }
+    
+    public function write($string)
+    {
+        return $this->fileSystem->writeFile($this->path, $string);
+    }
 }

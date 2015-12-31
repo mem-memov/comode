@@ -1,8 +1,6 @@
 <?php
 namespace Comode\syntax;
 
-use Comode\graph\INode;
-
 final class Question implements IQuestion
 {
     private $argumentFactory;
@@ -10,7 +8,7 @@ final class Question implements IQuestion
 
     public function __construct(
         IArgumentFactory $argumentFactory,
-        INode $node
+        node\IQuestion $node
     ) {
         $this->argumentFactory = $argumentFactory;
         $this->node = $node;

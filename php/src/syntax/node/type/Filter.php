@@ -14,7 +14,7 @@ final class Filter implements IFilter
     
     public function byType(INode $node, $type)
     {
-        $linkedNodes = $this->node->getNodes();
+        $linkedNodes = $node->getNodes();
 
         $selectedNodes = [];
         
@@ -25,10 +25,5 @@ final class Filter implements IFilter
         }
         
         return $selectedNodes;
-    }
-    
-    public function byNode()
-    {
-        
     }
 }

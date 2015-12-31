@@ -18,7 +18,7 @@ final class Creator implements ICreator
     {
         $node = $this->graphFactory->makeNode(null, $value);
 
-        $this->typeChecker->addType($node, $type);
+        $this->typeChecker->setType($node, $type);
 
         return $node;
     }

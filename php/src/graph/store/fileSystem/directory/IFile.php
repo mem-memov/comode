@@ -6,4 +6,5 @@ interface IFile
     public function path();
     public function name();
     public function read();
+    public function write($string);
 }

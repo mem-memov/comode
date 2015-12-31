@@ -36,6 +36,10 @@ class Store implements IStore
     
     public function bindValue($nodeId, IDirectory $valueDirectory)
     {
+        if (!$this->valueIndex->directory($nodeId)->exists()) {
+            $this->valueIndex->directory($nodeId)->create();
+        }
+        
         $this->valueIndex
             ->directory($nodeId)
             ->link($valueDirectory->name())

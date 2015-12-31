@@ -26,8 +26,17 @@ class Store implements IStore
         return $valueHash;
     }
     
+    public function directory($valueHash)
+    {
+        return $this->valueRoot->directory($valueHash);
+    }
+    
     public function bindNode($valueHash, IDirectory $nodeDirectory)
     {
+        if (!$this->nodeIndex->directory($valueHash)->exists()) {
+            $this->nodeIndex->directory($valueHash)->create();
+        }
+        
         $this->nodeIndex
             ->directory($valueHash)
             ->link($nodeDirectory->name())
@@ -38,18 +47,24 @@ class Store implements IStore
     {
         $valueHash = md5($value);
         
-        $nodeIds = $this->nodeIndex->directory($valueHash)->names();
-        
-        $nodeCount = count($nodeIds);
-
-        if ($nodeCount == 0) {
-            $nodeId = null;
-        } elseif ($nodeCount == 1) {
-            $nodeId = (int)$nodeIds[0];
+        if ($this->nodeIndex->directory($valueHash)->exists()) {
+            
+            $nodeIds = $this->nodeIndex->directory($valueHash)->names();
+            
+            $nodeCount = count($nodeIds);
+    
+            if ($nodeCount == 0) {
+                $nodeId = null;
+            } elseif ($nodeCount == 1) {
+                $nodeId = (int)$nodeIds[0];
+            } else {
+                throw new ValueMustBeLinkedToOneNode('Value with content ' . $value . ' has too many nodes: ' . $nodeCount);
+            }
+            
         } else {
-            throw new ValueMustBeLinkedToOneNode('Value with content ' . $json . ' has too many nodes: ' . $nodeCount);
+            $nodeId = null;
         }
-        
+
         return $nodeId;
     }
 }

@@ -32,6 +32,7 @@ final class Space implements ISpace
                 $this->rootNode = $this->graphFactory->makeNode();
                 $rootId = $this->rootNode->getId();
                 $fileContent = '<?php return ' . var_export($rootId, true) . ';';
+                file_put_contents($this->spaceFile, $fileContent);
             } else {
                 $rootId = require($this->spaceFile);
                 $this->rootNode = $this->graphFactory->makeNode($rootId);

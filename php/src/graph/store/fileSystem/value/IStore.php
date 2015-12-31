@@ -6,6 +6,7 @@ use Comode\graph\store\fileSystem\directory\IDirectory;
 interface IStore
 {
     public function create($value);
+    public function directory($valueHash);
     public function bindNode($valueHash, IDirectory $nodeDirectory);
     public function getNode($value);
 }

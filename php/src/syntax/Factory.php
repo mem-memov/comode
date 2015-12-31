@@ -3,7 +3,7 @@ namespace Comode\syntax;
 
 use Comode\graph\IFactory as IGraphFactory;
 
-final class Factory implements IFactory
+class Factory implements IFactory
 {
     private $clauseFactory;
     

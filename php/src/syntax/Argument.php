@@ -14,7 +14,7 @@ final class Argument implements IArgument
         IPredicateFactory $predicateFactory,
         IQuestionFactory $questionFactory,
         IComplimentFactory $complimentFactory, 
-        INode $node
+        node\IArgument $node
     ) {
         $this->predicateFactory = $predicateFactory;
         $this->questionFactory = $questionFactory;

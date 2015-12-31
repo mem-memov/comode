@@ -3,7 +3,7 @@ namespace Comode\syntax\node;
 
 use Comode\syntax\node\INode;
 
-final class Factory implements IFactory
+class Factory implements IFactory
 {
     private static $clause = 'clause';
     private static $predicate = 'predicate';

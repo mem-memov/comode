@@ -254,8 +254,8 @@ abstract class Sequence implements ISequence
         try {
             list($lastNextNode, $lastPreviousNode, $typeNode) = $this->lastNodePath();
 
-            $nextNode = $this->creator->createNode(self::next);
-            $previousNode = $this->creator->createNode(self::$previous);
+            $nextNode = $this->makeItem(self::$next);
+            $previousNode = $this->makeItem(self::$previous);
             
             $lastNextNode->addNode($nextNode);
             $previousNode->addNode($lastPreviousNode);
@@ -274,8 +274,8 @@ abstract class Sequence implements ISequence
 
         } catch(exception\Missing $e) {
             
-            $nextNode = $this->creator->createNode(self::next);
-            $previousNode = $this->creator->createNode(self::$previous);
+            $nextNode = $this->makeItem(self::$next);
+            $previousNode = $this->makeItem(self::$previous);
             
             $nextNode->addNode($previousNode);
             $previousNode->addNode($nextNode);
@@ -289,5 +289,12 @@ abstract class Sequence implements ISequence
             $node->addNode($this->commonNode);
             $this->commonNode->addNode($node);
         }
+    }
+    
+    private function makeItem($type)
+    {
+        $itemNode = $this->creator->createNode(self::$previous);
+        
+        return new Item($itemNode);
     }
 }
