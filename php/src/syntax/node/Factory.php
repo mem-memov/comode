@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node;
 
-use Comode\syntax\node\INode;
+use Comode\graph\IFactory as IGraphFactory;
 
 class Factory implements IFactory
 {
@@ -12,12 +12,15 @@ class Factory implements IFactory
     private static $compliment = 'compliment';
     private static $answer = 'answer';
 
+    private $checker;
     private $creator;
     private $filter;
     private $sequenceFactory;
     
-    public function __construct(type\ICreator $creator, type\IFilter $filter, sequence\IFactory $sequenceFactory)
+    public function __construct(IGraphFactory $graphFactory, type\IChecker $checker, type\ICreator $creator, type\IFilter $filter, sequence\IFactory $sequenceFactory)
     {
+        $this->graphFactory = $graphFactory;
+        $this->checker = $checker;
         $this->creator = $creator;
         $this->filter = $filter;
         $this->sequenceFactory = $sequenceFactory;
@@ -26,6 +29,17 @@ class Factory implements IFactory
     public function createClauseNode()
     {
         $node = $this->creator->createNode(self::$clause);
+
+        return new Clause($node);
+    }
+    
+    public function fetchClauseNode($id)
+    {
+        $node = $this->graphFactory->makeNode($id);
+
+        if (!$this->checker->ofType($node, self::$clause)) {
+            throw new exception\NodeOfWrongType($id, self::$clause);
+        }
 
         return new Clause($node);
     }

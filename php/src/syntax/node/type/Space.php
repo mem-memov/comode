@@ -45,7 +45,7 @@ final class Space implements ISpace
             }
             
         }
-        
+
         // add new type
         if (!isset($this->nodes[$type])) {
             $newTypeNode = $this->graphFactory->makeNode(null, $type);

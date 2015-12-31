@@ -35,7 +35,6 @@ final class Checker implements IChecker
     public function ofType(INode $node, $type)
     {
         $typeNode = $this->typeSpace->getTypeNode($type);
-        
         return $node->hasNode($typeNode);
     }
 }

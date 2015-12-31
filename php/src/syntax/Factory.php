@@ -56,5 +56,10 @@ class Factory implements IFactory
     {
         return $this->clauseFactory->createClause($compliments);
     }
+    
+    public function fetchClause($id)
+    {
+        return $this->clauseFactory->fetchClause($id);
+    }
 
 }
