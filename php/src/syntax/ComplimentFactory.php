@@ -48,6 +48,34 @@ final class ComplimentFactory implements IComplimentFactory
         return $this->makeCompliments($complimentNodes);
     }
 
+    public function provideFirstComplimentInClause(node\sequence\ICompliment $complimentSequence)
+    {
+        list($firstPreviousNode, $firstNextNode, $complimentNode) = $complimentSequence->firstNodePath();
+        
+        return $this->makeCompliment($complimentNode);
+    }
+
+    public function provideLastComplimentInClause(node\sequence\ICompliment $complimentSequence)
+    {
+        list($lastNextNode, $lastPreviousNode, $complimentNode) = $complimentSequence->lastNodePath();
+        
+        return $this->makeCompliment($complimentNode);
+    }
+
+    public function provideNextComplimentInClause(node\sequence\ICompliment $complimentSequence, node\ICompliment $complimentNode)
+    {
+        list($originNode, $originNextNode, $targetNextNode, $targetNode) = $complimentSequence->nextNodePath($complimentNode);
+        
+        return $this->makeCompliment($targetNode);
+    }
+
+    public function providePreviousComplimentInClause(node\sequence\ICompliment $complimentSequence, node\ICompliment $complimentNode)
+    {
+        list($originNode, $originPreviousNode, $targetPreviousNode, $targetNode) = $complimentSequence->previousNodePath($complimentNode);
+        
+        return $this->makeCompliment($targetNode);
+    }
+
     public function provideComplimentsByArgument(node\IArgument $argumentNode)
     {
         $complimentNodes = $this->nodeFactory->getComplimentNodes($argumentNode);

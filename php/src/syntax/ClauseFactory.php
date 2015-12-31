@@ -46,8 +46,11 @@ final class ClauseFactory implements IClauseFactory
     
     private function makeClause(node\IClause $clauseNode)
     {
+        $complimentSequence = $nodeFactory->getComplimentSequence($clauseNode);
+        
         return new Clause(
             $this->complimentFactory,
+            $complimentSequence,
             $clauseNode
         );
     }

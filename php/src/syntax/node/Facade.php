@@ -11,8 +11,9 @@ final class Facade extends Factory
         $typeChecker = new type\Checker($typeSpace);
         $creator = new type\Creator($graphFactory, $typeChecker);
         $filter = new type\Filter($typeChecker);
+        $sequenceFactory = new sequence\Factory($creator, $filter);
         
-        parent::__construct($creator, $filter);
+        parent::__construct($creator, $filter, $sequenceFactory);
     }
     
 }

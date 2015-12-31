@@ -2,7 +2,6 @@
 namespace Comode\syntax\node;
 
 use Comode\syntax\node\INode;
-use Comode\graph\IFactory as IGraphFactory;
 
 final class Factory implements IFactory
 {
@@ -15,11 +14,13 @@ final class Factory implements IFactory
 
     private $creator;
     private $filter;
+    private $sequenceFactory;
     
-    public function __construct(type\ICreator $creator, type\IFilter $filter)
+    public function __construct(type\ICreator $creator, type\IFilter $filter, sequence\IFactory $sequenceFactory)
     {
         $this->creator = $creator;
         $this->filter = $filter;
+        $this->sequenceFactory = $sequenceFactory;
     }
     
     public function createClauseNode()
@@ -84,7 +85,7 @@ final class Factory implements IFactory
     
     public function getComplimentSequence(INode $node)
     {
-        return new Sequence($node, self::$compliment);
+        return $this->sequenceFactory->getComplimentSequence($node, self::$compliment);
     }
 
     public function createAnswerNode($value)

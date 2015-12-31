@@ -25,10 +25,19 @@ final class Compliment implements ICompliment
         return $this->node->getId();
     }
 
-    public function addClause(node\IClause $clauseNode)
+    public function addClause(node\sequence\ICompliment $complimentSequence)
     {
-        $clauseNode->addNode($this->node);
-        $this->node->addNode($clauseNode);
+        $complimentSequence->append($this->node);
+    }
+    
+    public function provideNextInClause(node\sequence\ICompliment $complimentSequence, IComplimentFactory $complimentFactory)
+    {
+        return $complimentFactory->provideNextComplimentInClause($complimentSequence, $this->node);
+    }
+    
+    public function providePreviousInClause(node\sequence\ICompliment $complimentSequence, IComplimentFactory $complimentFactory)
+    {
+        return $complimentFactory->providePreviousComplimentInClause($complimentSequence, $this->node);
     }
     
     public function fetchClauses()

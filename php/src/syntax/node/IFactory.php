@@ -20,6 +20,7 @@ interface IFactory
     
     public function createComplimentNode();
     public function getComplimentNodes(INode $node);
+    public function getComplimentSequence(INode $node);
     
     public function createAnswerNode($value);
     public function getAnswerNodes(INode $node);
