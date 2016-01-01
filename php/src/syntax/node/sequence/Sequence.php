@@ -1,24 +1,32 @@
 <?php
 namespace Comode\syntax\node\sequence;
 
+use Comode\graph\IFactory as IGraphFactory;
 use Comode\syntax\node\INode;
-use Comode\syntax\node\type\ICreator;
-use Comode\syntax\node\type\IFilter;
+use Comode\syntax\node\type\IChecker as ITypeChecker;
+use Comode\syntax\node\type\IFilter as ITypeFilter;
 
 abstract class Sequence implements ISequence
 {
     private static $next = 'next';
     private static $previous = 'previous';
     
-    private $creator;
+    private $graphFactory;
+    private $checker;
     private $filter;
 
     private $commonNode;
     private $type;
     
-    public function __construct(ICreator $creator, IFilter $filter, INode $commonNode, $type)
-    {
-        $this->creator = $creator;
+    public function __construct(
+        IGraphFactory $graphFactory, 
+        ITypeChecker $checker,
+        ITypeFilter $filter, 
+        INode $commonNode, 
+        $type
+    ) {
+        $this->graphFactory = $graphFactory;
+        $this->checker = $checker;
         $this->filter = $filter;
 
         $this->commonNode = $commonNode;
@@ -28,7 +36,7 @@ abstract class Sequence implements ISequence
     public function firstNodePath()
     {
         $nextNodes = $this->filter->byType($this->commonNode, self::$next);
-        
+
         $firstNextNodes = [];
         foreach ($nextNodes as $nextNode) {
             
@@ -273,7 +281,7 @@ abstract class Sequence implements ISequence
             $this->commonNode->addNode($node);
 
         } catch(exception\Missing $e) {
-            
+
             $nextNode = $this->makeItem(self::$next);
             $previousNode = $this->makeItem(self::$previous);
             

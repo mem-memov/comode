@@ -6,6 +6,8 @@ if ($_GET['id']) {
     $clauseId = $_GET['id'];
     
     $clause = $syntax->fetchClause($clauseId);
+
+    $firstCompliment = $clause->provideFirstCompliment();
     
-    echo $clause->getId();
+    echo $firstCompliment->getId();
 }

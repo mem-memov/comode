@@ -1,8 +1,6 @@
 <?php
 namespace Comode\syntax\node;
 
-use Comode\graph\IFactory as IGraphFactory;
-
 interface IFactory
 {
     public function createClauseNode();

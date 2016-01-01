@@ -12,36 +12,43 @@ class Factory implements IFactory
     private static $compliment = 'compliment';
     private static $answer = 'answer';
 
+    private $graphFactory;
     private $checker;
-    private $creator;
     private $filter;
     private $sequenceFactory;
     
-    public function __construct(IGraphFactory $graphFactory, type\IChecker $checker, type\ICreator $creator, type\IFilter $filter, sequence\IFactory $sequenceFactory)
-    {
+    public function __construct(
+        IGraphFactory $graphFactory, 
+        type\IChecker $checker, 
+        type\IFilter $filter, 
+        sequence\IFactory $sequenceFactory
+    ) {
         $this->graphFactory = $graphFactory;
         $this->checker = $checker;
-        $this->creator = $creator;
         $this->filter = $filter;
         $this->sequenceFactory = $sequenceFactory;
     }
     
     public function createClauseNode()
     {
-        $node = $this->creator->createNode(self::$clause);
+        $node = $this->graphFactory->makeNode();
+        $clause = new Clause($node);
+        $this->checker->setType($clause, self::$clause);
 
-        return new Clause($node);
+        return $clause;
     }
     
     public function fetchClauseNode($id)
     {
         $node = $this->graphFactory->makeNode($id);
+        
+        $clause = new Clause($node);
 
-        if (!$this->checker->ofType($node, self::$clause)) {
+        if (!$this->checker->ofType($clause, self::$clause)) {
             throw new exception\NodeOfWrongType($id, self::$clause);
         }
 
-        return new Clause($node);
+        return $clause;
     }
     
     public function getClauseNodes(INode $node)
@@ -57,9 +64,11 @@ class Factory implements IFactory
     
     public function createPredicateNode($value)
     {
-        $node = $this->creator->createNode(self::$predicate, $value);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $predicate = new Predicate($node);
+        $this->checker->setType($predicate, self::$predicate);
 
-        return new Predicate($node);
+        return $predicate;
     }
     
     public function getPredicateNodes(INode $node)
@@ -75,9 +84,11 @@ class Factory implements IFactory
     
     public function createArgumentNode()
     {
-        $node = $this->creator->createNode(self::$argument);
+        $node = $this->graphFactory->makeNode();
+        $argument = new Argument($node);
+        $this->checker->setType($argument, self::$argument);
 
-        return new Argument($node);
+        return $argument;
     }
     
     public function getArgumentNodes(INode $node)
@@ -93,9 +104,11 @@ class Factory implements IFactory
     
     public function createQuestionNode($value)
     {
-        $node = $this->creator->createNode(self::$question, $value);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $question = new Question($node);
+        $this->checker->setType($question, self::$question);
 
-        return new Question($node);
+        return $question;
     }
     
     public function getQuestionNodes(INode $node)
@@ -111,9 +124,11 @@ class Factory implements IFactory
     
     public function createComplimentNode()
     {
-        $node = $this->creator->createNode(self::$compliment);
+        $node = $this->graphFactory->makeNode();
+        $compliment = new Compliment($node);
+        $this->checker->setType($compliment, self::$compliment);
 
-        return new Compliment($node);
+        return $compliment;
     }
 
     public function getComplimentNodes(INode $node)
@@ -134,9 +149,11 @@ class Factory implements IFactory
 
     public function createAnswerNode($value)
     {
-        $node = $this->creator->createNode(self::$answer, $value);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $answer = new Answer($node);
+        $this->checker->setType($answer, self::$answer);
 
-        return new Answer($node);
+        return $answer;
     }
 
     public function getAnswerNodes(INode $node)

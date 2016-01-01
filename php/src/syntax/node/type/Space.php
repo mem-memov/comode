@@ -29,26 +29,26 @@ final class Space implements ISpace
             }
             
             if (!file_exists($this->spaceFile)) {
-                $this->rootNode = $this->graphFactory->makeNode();
+                $this->rootNode = new Node($this->graphFactory->makeNode());
                 $rootId = $this->rootNode->getId();
                 $fileContent = '<?php return ' . var_export($rootId, true) . ';';
                 file_put_contents($this->spaceFile, $fileContent);
             } else {
                 $rootId = require($this->spaceFile);
-                $this->rootNode = $this->graphFactory->makeNode($rootId);
+                $this->rootNode = new Node($this->graphFactory->makeNode($rootId));
             }
             
             $typeNodes = $this->rootNode->getNodes();
             foreach ($typeNodes as $typeNode) {
                 $currentType = $typeNode->getValue();
-                $this->nodes[$currentType] = $typeNode;
+                $this->nodes[$currentType] = new Node($typeNode);
             }
             
         }
 
         // add new type
         if (!isset($this->nodes[$type])) {
-            $newTypeNode = $this->graphFactory->makeNode(null, $type);
+            $newTypeNode = new Node($this->graphFactory->makeNode(null, $type));
             $newTypeNode->addNode($this->rootNode);
             $this->rootNode->addNode($newTypeNode);
             $this->nodes[$type] = $newTypeNode;

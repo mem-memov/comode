@@ -9,11 +9,10 @@ final class Facade extends Factory
     {
         $typeSpace = new type\Space($graphFactory, $spaceDirectory.'/syntaxSpace.php');
         $typeChecker = new type\Checker($typeSpace);
-        $creator = new type\Creator($graphFactory, $typeChecker);
         $filter = new type\Filter($typeChecker);
-        $sequenceFactory = new sequence\Factory($creator, $filter);
+        $sequenceFactory = new sequence\Factory($graphFactory, $typeChecker, $filter);
         
-        parent::__construct($graphFactory, $typeChecker, $creator, $filter, $sequenceFactory);
+        parent::__construct($graphFactory, $typeChecker, $filter, $sequenceFactory);
     }
     
 }

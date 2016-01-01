@@ -1,7 +1,7 @@
 <?php
 namespace Comode\syntax\node\type;
 
-use Comode\graph\INode;
+use Comode\syntax\node\INode;
 
 final class Checker implements IChecker
 {

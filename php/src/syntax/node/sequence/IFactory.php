@@ -5,5 +5,5 @@ use Comode\syntax\node\INode;
 
 interface IFactory
 {
-    public function getComplimentSequence(INode $node);
+    public function getComplimentSequence(INode $node, $complimentType);
 }

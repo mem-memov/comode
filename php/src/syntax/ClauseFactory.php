@@ -30,7 +30,9 @@ final class ClauseFactory implements IClauseFactory
     
     public function fetchClause($id)
     {
-        return $this->nodeFactory->fetchClauseNode($id);
+        $clauseNode = $this->nodeFactory->fetchClauseNode($id);
+        $clause = $this->makeClause($clauseNode);
+        return $clause;
     }
     
     public function fetchClausesByCompliment(node\ICompliment $complimentNode)
