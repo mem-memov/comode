@@ -5,5 +5,5 @@ use Comode\syntax\node\INode;
 
 interface IFilter
 {
-    public function byType(INode $node, $type);
+    public function byType(INode $node, $type, $class);
 }

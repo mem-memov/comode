@@ -31,8 +31,9 @@ class Factory implements IFactory
     
     public function createClauseNode()
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$clause);
         $node = $this->graphFactory->makeNode();
-        $clause = new Clause($node);
+        $clause = new $class($node);
         $this->checker->setType($clause, self::$clause);
 
         return $clause;
@@ -42,7 +43,8 @@ class Factory implements IFactory
     {
         $node = $this->graphFactory->makeNode($id);
         
-        $clause = new Clause($node);
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$clause);
+        $clause = new $class($node);
 
         if (!$this->checker->ofType($clause, self::$clause)) {
             throw new exception\NodeOfWrongType($id, self::$clause);
@@ -53,19 +55,15 @@ class Factory implements IFactory
     
     public function getClauseNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$clause);
-        
-        $clauses = [];
-        foreach ($nodes as $node) {
-            $clauses[] = new Clause($node);
-        }
-        return $clauses;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$clause);
+        return $this->filter->byType($node, self::$clause, $class);
     }
     
     public function createPredicateNode($value)
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$predicate);
         $node = $this->graphFactory->makeNode(null, $value);
-        $predicate = new Predicate($node);
+        $predicate = new $class($node);
         $this->checker->setType($predicate, self::$predicate);
 
         return $predicate;
@@ -73,19 +71,15 @@ class Factory implements IFactory
     
     public function getPredicateNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$predicate);
-        
-        $predicates = [];
-        foreach ($nodes as $node) {
-            $predicates[] = new Predicate($node);
-        }
-        return $predicates;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$predicate);
+        return $this->filter->byType($node, self::$predicate, $class);
     }
     
     public function createArgumentNode()
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$argument);
         $node = $this->graphFactory->makeNode();
-        $argument = new Argument($node);
+        $argument = new $class($node);
         $this->checker->setType($argument, self::$argument);
 
         return $argument;
@@ -93,19 +87,15 @@ class Factory implements IFactory
     
     public function getArgumentNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$argument);
-        
-        $arguments = [];
-        foreach ($nodes as $node) {
-            $arguments[] = new Argument($node);
-        }
-        return $arguments;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$argument);
+        return $this->filter->byType($node, self::$argument, $class);
     }
     
     public function createQuestionNode($value)
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$question);
         $node = $this->graphFactory->makeNode(null, $value);
-        $question = new Question($node);
+        $question = new $class($node);
         $this->checker->setType($question, self::$question);
 
         return $question;
@@ -113,19 +103,15 @@ class Factory implements IFactory
     
     public function getQuestionNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$question);
-        
-        $questions = [];
-        foreach ($nodes as $node) {
-            $questions[] = new Question($node);
-        }
-        return $questions;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$question);
+        return $this->filter->byType($node, self::$question, $class);
     }
     
     public function createComplimentNode()
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$compliment);
         $node = $this->graphFactory->makeNode();
-        $compliment = new Compliment($node);
+        $compliment = new $class($node);
         $this->checker->setType($compliment, self::$compliment);
 
         return $compliment;
@@ -133,24 +119,21 @@ class Factory implements IFactory
 
     public function getComplimentNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$compliment);
-        
-        $compliments = [];
-        foreach ($nodes as $node) {
-            $compliments[] = new Compliment($node);
-        }
-        return $compliments;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$compliment);
+        return $this->filter->byType($node, self::$compliment, $class);
     }
     
     public function getComplimentSequence(INode $node)
     {
-        return $this->sequenceFactory->getComplimentSequence($node, self::$compliment);
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$compliment);
+        return $this->sequenceFactory->getComplimentSequence($node, self::$compliment, $class);
     }
 
     public function createAnswerNode($value)
     {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$answer);
         $node = $this->graphFactory->makeNode(null, $value);
-        $answer = new Answer($node);
+        $answer = new $class($node);
         $this->checker->setType($answer, self::$answer);
 
         return $answer;
@@ -158,12 +141,7 @@ class Factory implements IFactory
 
     public function getAnswerNodes(INode $node)
     {
-        $nodes = $this->filter->byType($node, self::$answer);
-        
-        $answers = [];
-        foreach ($nodes as $node) {
-            $answers[] = new Answer($node);
-        }
-        return $answers;
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$answer);
+        return $this->filter->byType($node, self::$answer, $class);
     }
 }

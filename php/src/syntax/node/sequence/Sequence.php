@@ -17,13 +17,15 @@ abstract class Sequence implements ISequence
 
     private $commonNode;
     private $type;
+    private $typeClass;
     
     public function __construct(
         IGraphFactory $graphFactory, 
         ITypeChecker $checker,
         ITypeFilter $filter, 
         INode $commonNode, 
-        $type
+        $type,
+        $typeClass
     ) {
         $this->graphFactory = $graphFactory;
         $this->checker = $checker;
@@ -31,17 +33,21 @@ abstract class Sequence implements ISequence
 
         $this->commonNode = $commonNode;
         $this->type = $type;
+        $this->typeClass = $typeClass;
     }
 
     public function firstNodePath()
     {
-        $nextNodes = $this->filter->byType($this->commonNode, self::$next);
+        $nextClass = __NAMESPACE__ . '\\'. ucfirst(self::$next);
+        $previousClass = __NAMESPACE__ . '\\'. ucfirst(self::$previous);
+        
+        $nextNodes = $this->filter->byType($this->commonNode, self::$next, $nextClass);
 
         $firstNextNodes = [];
         foreach ($nextNodes as $nextNode) {
             
-            $previousNodes = $this->filter->byType($nextNode, self::$previous);
-            
+            $previousNodes = $this->filter->byType($nextNode, self::$previous, $previousClass);
+
             $previousNodeCount = count($previousNodes);
             
             if ($previousNodeCount == 0) {
@@ -52,9 +58,9 @@ abstract class Sequence implements ISequence
                 throw new exception\malformed\NextPreviousNodeNotOne($this->commonNode, $this->type, $nextNode, $previousNodeCount);
             }
             
-            $firstPreviousNode = $previousNode[0];
+            $firstPreviousNode = $previousNodes[0];
 
-            $nodesBefore = $this->filter->byType($firstPreviousNode, self::$previous);
+            $nodesBefore = $this->filter->byType($firstPreviousNode, self::$previous, $previousClass);
             
             if (count($nodesBefore) == 0) {
                 $firstNextNodes[] = $nextNode;
@@ -74,7 +80,7 @@ abstract class Sequence implements ISequence
         
         $firstNextNode = $firstNextNodes[0];
         
-        $typeNodes = $this->filter->byType($firstNextNode, $this->type);
+        $typeNodes = $this->filter->byType($firstNextNode, $this->type, $this->typeClass);
         
         $typeNodeCount = count($typeNodes);
         
@@ -93,12 +99,15 @@ abstract class Sequence implements ISequence
     
     public function lastNodePath()
     {
-        $previousNodes = $this->filter->byType($this->commonNode, self::$previous);
+        $nextClass = __NAMESPACE__ . '\\'. ucfirst(self::$next);
+        $previousClass = __NAMESPACE__ . '\\'. ucfirst(self::$previous);
+        
+        $previousNodes = $this->filter->byType($this->commonNode, self::$previous, $previousClass);
         
         $lastPreviousNodes = [];
         foreach ($previousNodes as $previousNode) {
             
-            $nextNodes = $this->filter->byType($previousNode, self::$next);
+            $nextNodes = $this->filter->byType($previousNode, self::$next, $nextClass);
             
             $nextNodeCount = count($nextNodes);
             
@@ -110,9 +119,9 @@ abstract class Sequence implements ISequence
                 throw new exception\malformed\PreviousNextNodeNotOne($this->commonNode, $this->type, $previousNode, $nextNodeCount);
             }
             
-            $lastNextNode = $nextNode[0];
+            $lastNextNode = $nextNodes[0];
 
-            $nodesBefore = $this->filter->byType($lastNextNode, self::$next);
+            $nodesBefore = $this->filter->byType($lastNextNode, self::$next, $nextClass);
             
             if (count($nodesBefore) == 0) {
                 $lastPreviousNodes[] = $previousNode;
@@ -123,7 +132,7 @@ abstract class Sequence implements ISequence
         $lastPreviousNodeCount = count($lastPreviousNodes);
         
         if ($lastPreviousNodeCount == 0) {
-            throw new exception\Missing($this->commonNode, $this->type);
+            throw new exception\Missing($this->commonNode, $this->type, $this->typeClass);
         }
         
         if ($lastPreviousNodeCount > 1) {
@@ -132,7 +141,7 @@ abstract class Sequence implements ISequence
         
         $lastPreviousNode = $lastPreviousNodes[0];
         
-        $typeNodes = $this->filter->byType($lastPreviousNode, $this->type);
+        $typeNodes = $this->filter->byType($lastPreviousNode, $this->type, $this->typeClass);
         
         $typeNodeCount = count($typeNodes);
         
@@ -151,7 +160,10 @@ abstract class Sequence implements ISequence
     
     public function nextNodePath(INode $originNode)
     {
-        $nextNodes = $this->filter->byType($this->commonNode, self::$next);
+        $nextClass = __NAMESPACE__ . '\\'. ucfirst(self::$next);
+        $previousClass = __NAMESPACE__ . '\\'. ucfirst(self::$previous);
+        
+        $nextNodes = $this->filter->byType($this->commonNode, self::$next, $nextClass);
         
         $originNextNodes = [];
         foreach ($nextNodes as $nextNode) {
@@ -172,7 +184,7 @@ abstract class Sequence implements ISequence
         
         $originNextNode = $originNextNodes[0];
         
-        $targetNextNodes = $this->filter->byType($originNextNode, self::$next);
+        $targetNextNodes = $this->filter->byType($originNextNode, self::$next, $nextClass);
         
         $targetNextNodeCount = count($targetNextNodes);
         
@@ -186,7 +198,7 @@ abstract class Sequence implements ISequence
         
         $targetNextNode = $targetNextNodes[0];
         
-        $targetNodes = $this->filter->byType($targetNextNode, $this->type);
+        $targetNodes = $this->filter->byType($targetNextNode, $this->type, $this->typeClass);
         
         $targetNodeCount = count($targetNodes);
         
@@ -205,7 +217,10 @@ abstract class Sequence implements ISequence
 
     public function previousNodePath(INode $originNode)
     {
-        $previousNodes = $this->filter->byType($this->commonNode, self::$previous);
+        $nextClass = __NAMESPACE__ . '\\'. ucfirst(self::$next);
+        $previousClass = __NAMESPACE__ . '\\'. ucfirst(self::$previous);
+        
+        $previousNodes = $this->filter->byType($this->commonNode, self::$previous, $previousClass);
         
         $originPreviousNodes = [];
         foreach ($previousNodes as $previousNode) {
@@ -226,7 +241,7 @@ abstract class Sequence implements ISequence
         
         $originPreviousNode = $originPreviousNodes[0];
         
-        $targetPreviousNodes = $this->filter->byType($originPreviousNode, self::$previous);
+        $targetPreviousNodes = $this->filter->byType($originPreviousNode, self::$previous, $previousClass);
         
         $targetPreviousNodeCount = count($targetPreviousNodes);
         
@@ -240,7 +255,7 @@ abstract class Sequence implements ISequence
         
         $targetPreviousNode = $targetPreviousNodes[0];
         
-        $targetNodes = $this->filter->byType($targetPreviousNode, $this->type);
+        $targetNodes = $this->filter->byType($targetPreviousNode, $this->type, $this->typeClass);
         
         $targetNodeCount = count($targetNodes);
         
@@ -262,8 +277,8 @@ abstract class Sequence implements ISequence
         try {
             list($lastNextNode, $lastPreviousNode, $typeNode) = $this->lastNodePath();
 
-            $nextNode = $this->makeItem(self::$next);
-            $previousNode = $this->makeItem(self::$previous);
+            $nextNode = $this->makeNextNode();
+            $previousNode = $this->makePreviousNode();
             
             $lastNextNode->addNode($nextNode);
             $previousNode->addNode($lastPreviousNode);
@@ -282,8 +297,8 @@ abstract class Sequence implements ISequence
 
         } catch(exception\Missing $e) {
 
-            $nextNode = $this->makeItem(self::$next);
-            $previousNode = $this->makeItem(self::$previous);
+            $nextNode = $this->makeNextNode();
+            $previousNode = $this->makePreviousNode();
             
             $nextNode->addNode($previousNode);
             $previousNode->addNode($nextNode);
@@ -299,10 +314,23 @@ abstract class Sequence implements ISequence
         }
     }
     
-    private function makeItem($type)
+    private function makeNextNode()
     {
-        $itemNode = $this->creator->createNode(self::$previous);
-        
-        return new Item($itemNode);
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$next);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $nextNode = new $class($node);
+        $this->checker->setType($nextNode, self::$next);
+
+        return $nextNode;
+    }
+    
+    private function makePreviousNode()
+    {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$previous);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $previousNode = new $class($node);
+        $this->checker->setType($previousNode, self::$previous);
+
+        return $previousNode;
     }
 }

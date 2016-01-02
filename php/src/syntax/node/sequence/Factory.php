@@ -22,8 +22,8 @@ final class Factory implements IFactory
         $this->filter = $filter;
     }
     
-    public function getComplimentSequence(INode $node, $complimentType)
+    public function getComplimentSequence(INode $node, $complimentType, $complimentClass)
     {
-        return new Compliment($this->graphFactory, $this->checker, $this->filter, $node, $complimentType);
+        return new Compliment($this->graphFactory, $this->checker, $this->filter, $node, $complimentType, $complimentClass);
     }
 }

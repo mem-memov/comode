@@ -3,7 +3,7 @@ namespace Comode\syntax\node\sequence;
 
 use Comode\syntax\node\INode;
 
-interface IItem  extends INode
+interface INext  extends INode
 {
     
 }

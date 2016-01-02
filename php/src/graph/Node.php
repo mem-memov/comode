@@ -75,13 +75,7 @@ class Node implements INode
         
     public function getValue()
     {
-        try {
-        
-            return $this->store->getNodeValue($this->id);
-
-        } catch(store\exception\ValueNotFound $e) {
-            throw new exception\SomeNodesHasNoValue('Node ' . $this->id . ' can\'t supply a value.');
-        }
+        return $this->store->getNodeValue($this->id);
     }
     
     public function getCommonNodes(INode $node)

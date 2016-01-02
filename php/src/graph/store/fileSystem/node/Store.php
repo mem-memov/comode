@@ -53,7 +53,7 @@ class Store implements IStore
         $links = $nodeIndexDirectory->links();
 
         if (empty($links)) {
-            throw new ValueNotFound();
+            return null;
         }
 
         $valueDirectory = $links[0]->directory();
