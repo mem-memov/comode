@@ -9,5 +9,18 @@ if ($_GET['id']) {
 
     $firstCompliment = $clause->provideFirstCompliment();
     
-    echo $firstCompliment->getId();
+    $argument = $firstCompliment->provideArgument();
+    
+    $predicate = $argument->providePredicate();
+    
+    $question = $argument->provideQuestion();
+    
+    $answer = $firstCompliment->provideAnswer();
+    
+    header('Content-Type: text/html; charset=utf-8');
+    
+    $response = [];
+    $response[$question->getValue()] = $answer->getValue();
+    
+    echo json_encode($response);
 }
