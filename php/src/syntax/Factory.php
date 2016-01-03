@@ -3,48 +3,33 @@ namespace Comode\syntax;
 
 use Comode\graph\IFactory as IGraphFactory;
 
-class Factory implements IFactory
+abstract class Factory implements IFactory
 {
+    private $wordFactory;
+    private $argumentFactory;
+    private $complimentFactory;
     private $clauseFactory;
     
-    public function __construct(array $config, IGraphFactory $graphFactory)
+    public function __construct(
+        IWordFactory $wordFactory,
+        IArgumentFactory $argumentFactory,
+        IComplimentFactory $complimentFactory,
+        IClauseFactory $clauseFactory
+    ) {
+        $this->wordFactory = $wordFactory;
+        $this->argumentFactory = $argumentFactory;
+        $this->complimentFactory = $complimentFactory;
+        $this->clauseFactory = $clauseFactory;
+    }
+    
+    public function provideWord($value)
     {
-        $nodeFactory = new node\Facade($graphFactory, $config['spaceDirectory']);
+        return $this->wordFactory->provideWord($value);
+    }
 
-        $this->questionFactory = new QuestionFactory($nodeFactory);
-        $this->predicateFactory = new PredicateFactory($nodeFactory);
-        $this->answerFactory = new AnswerFactory($nodeFactory);
-        
-        $this->argumentFactory = new ArgumentFactory($nodeFactory, $this->predicateFactory, $this->questionFactory);
-        $this->questionFactory->setArgumentFactory($this->argumentFactory);
-        $this->predicateFactory->setArgumentFactory($this->argumentFactory);
-        
-        $this->complimentFactory = new ComplimentFactory($nodeFactory, $this->argumentFactory, $this->answerFactory);
-        $this->answerFactory->setComplimentFactory($this->complimentFactory);
-        $this->argumentFactory->setComplimentFactory($this->complimentFactory);
-        
-        $this->clauseFactory = new ClauseFactory($nodeFactory, $this->complimentFactory);
-        $this->complimentFactory->setClauseFactory($this->clauseFactory);
-    }
-    
-    public function providePredicate($value)
-    {
-        return $this->predicateFactory->providePredicate($value);
-    }
-    
-    public function provideQuestion($value)
-    {
-        return $this->questionFactory->provideQuestion($value);
-    }
-    
     public function provideArgument(IPredicate $predicate, IQuestion $question)
     {
         return $this->argumentFactory->provideArgument($predicate, $question);
-    }
-    
-    public function provideAnswer($value)
-    {
-        return $this->answerFactory->provideAnswer($value);
     }
 
     public function provideCompliment(IArgument $argument, IAnswer $answer)

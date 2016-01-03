@@ -19,6 +19,11 @@ final class Answer implements IAnswer
         return $this->node->getId();
     }
     
+    public function provideWord()
+    {
+        return $this->wordFactory->provideWordByAnswer($this->node);
+    }
+    
     public function addCompliment(node\ICompliment $complimentNode)
     {
         $complimentNode->addNode($this->node);
@@ -28,10 +33,5 @@ final class Answer implements IAnswer
     public function provideCompliments()
     {
         return $this->complimentFactory->provideComplimentsByAnswer($this->node);
-    }
-
-    public function getValue()
-    {
-        return $this->node->getValue();
     }
 }

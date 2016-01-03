@@ -2,9 +2,11 @@
 namespace Comode\syntax\node;
 
 use Comode\graph\IFactory as IGraphFactory;
+use Comode\syntax\node\type\exception\NodeHasNoType;
 
 class Factory implements IFactory
 {
+    private static $word = 'word';
     private static $clause = 'clause';
     private static $predicate = 'predicate';
     private static $argument = 'argument';
@@ -27,6 +29,22 @@ class Factory implements IFactory
         $this->checker = $checker;
         $this->filter = $filter;
         $this->sequenceFactory = $sequenceFactory;
+    }
+    
+    public function createWordNode($value)
+    {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$word);
+        $node = $this->graphFactory->makeNode(null, $value);
+        $word = new $class($node);
+        $this->checker->setType($word, self::$word);
+
+        return $word;
+    }
+    
+    public function getWordNodes(INode $node)
+    {
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$word);
+        return $this->filter->byType($node, self::$word, $class);
     }
     
     public function createClauseNode()
@@ -59,12 +77,20 @@ class Factory implements IFactory
         return $this->filter->byType($node, self::$clause, $class);
     }
     
-    public function createPredicateNode($value)
+    public function createPredicateNode()
     {
         $class = __NAMESPACE__ . '\\'. ucfirst(self::$predicate);
-        $node = $this->graphFactory->makeNode(null, $value);
+        $node = $this->graphFactory->makeNode();
         $predicate = new $class($node);
-        $this->checker->setType($predicate, self::$predicate);
+        
+        try {
+            $type = $this->checker->getType($predicate);
+            if ($type != self::$predicate) {
+                
+            }
+        } catch (NodeHasNoType $exception) {
+            $this->checker->setType($predicate, self::$predicate);
+        }
 
         return $predicate;
     }
@@ -91,10 +117,10 @@ class Factory implements IFactory
         return $this->filter->byType($node, self::$argument, $class);
     }
     
-    public function createQuestionNode($value)
+    public function createQuestionNode()
     {
         $class = __NAMESPACE__ . '\\'. ucfirst(self::$question);
-        $node = $this->graphFactory->makeNode(null, $value);
+        $node = $this->graphFactory->makeNode();
         $question = new $class($node);
         $this->checker->setType($question, self::$question);
 
@@ -129,10 +155,10 @@ class Factory implements IFactory
         return $this->sequenceFactory->getComplimentSequence($node, self::$compliment, $class);
     }
 
-    public function createAnswerNode($value)
+    public function createAnswerNode()
     {
         $class = __NAMESPACE__ . '\\'. ucfirst(self::$answer);
-        $node = $this->graphFactory->makeNode(null, $value);
+        $node = $this->graphFactory->makeNode();
         $answer = new $class($node);
         $this->checker->setType($answer, self::$answer);
 

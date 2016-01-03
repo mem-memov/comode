@@ -4,12 +4,15 @@ namespace Comode\syntax;
 final class AnswerFactory implements IAnswerFactory
 {
     private $nodeFactory;
+    private $wordFactory;
     private $complimentFactory;
     
     public function __construct(
-        node\IFactory $nodeFactory
+        node\IFactory $nodeFactory,
+        IWordFactory $wordFactory
     ) {
         $this->nodeFactory = $nodeFactory;
+        $this->wordFactory = $wordFactory;
     }
     
     public function setComplimentFactory(IComplimentFactory $complimentFactory)
@@ -17,9 +20,23 @@ final class AnswerFactory implements IAnswerFactory
         $this->complimentFactory = $complimentFactory;
     }
     
-    public function provideAnswer($value)
+    public function provideAnswerByWord(node\IWord $wordNode)
     {
-        $answerNode = $this->nodeFactory->createAnswerNode($value);
+        $answerNodes = $this->nodeFactory->getAnswerNodes($wordNode);
+        
+        $answerNodeCount = count($answerNodes);
+        
+        if ($answerNodeCount > 1) {
+            throw new exception\WordMayHaveOneAnswer($wordNode, $answerNodeCount);
+        }
+        
+        if ($answerNodeCount == 0) {
+            $answerNode = $this->nodeFactory->createAnswerNode();
+            $answerNode->addNode($wordNode);
+            $wordNode->addNode($answerNode);
+        } else {
+            $answerNode = $answerNodes[0];
+        }
 
         return $this->makeAnswer($answerNode);
     }

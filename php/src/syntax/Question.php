@@ -19,17 +19,17 @@ final class Question implements IQuestion
         return $this->node->getId();
     }
     
+    public function provideWord()
+    {
+        return $this->wordFactory->provideWordByQuestion($this->node);
+    }
+    
     public function addArgument(node\IArgument $argumentNode)
     {
         $argumentNode->addNode($this->node);
         $this->node->addNode($argumentNode);
     }
-    
-    public function getValue()
-    {
-        return $this->node->getValue();
-    }
-    
+
     public function provideArguments()
     {
         return $this->argumentFactory->provideArgumentsByQuestion($this->node);

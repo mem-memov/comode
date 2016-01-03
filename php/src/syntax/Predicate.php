@@ -19,11 +19,11 @@ final class Predicate implements IPredicate
         return $this->node->getId();
     }
     
-    public function getValue()
+    public function provideWord()
     {
-        return $this->node->getValue();
+        return $this->wordFactory->provideWordByPredicate($this->node);
     }
-    
+
     public function addArgument(node\IArgument $argumentNode)
     {
         $argumentNode->addNode($this->node);

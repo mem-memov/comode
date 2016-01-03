@@ -4,12 +4,15 @@ namespace Comode\syntax;
 final class PredicateFactory implements IPredicateFactory
 {
     private $nodeFactory;
+    private $wordFactory;
     private $argumentFactory;
 
     public function __construct(
-        node\IFactory $nodeFactory
+        node\IFactory $nodeFactory,
+        IWordFactory $wordFactory
     ) {
         $this->nodeFactory = $nodeFactory;
+        $this->wordFactory = $wordFactory;
     }
     
     public function setArgumentFactory(IArgumentFactory $argumentFactory)
@@ -17,11 +20,25 @@ final class PredicateFactory implements IPredicateFactory
         $this->argumentFactory = $argumentFactory;
     }
 
-    public function providePredicate($value)
+    public function providePredicateByWord(node\IWord $wordNode)
     {
-        $node = $this->nodeFactory->createPredicateNode($value);
+        $predicateNodes = $this->nodeFactory->getPredicateNodes($wordNode);
+        
+        $predicateNodeCount = count($predicateNodes);
+        
+        if ($predicateNodeCount > 1) {
+            throw new exception\WordMayHaveOnePredicate($wordNode, $predicateNodeCount);
+        }
+        
+        if ($predicateNodeCount == 0) {
+            $predicateNode = $this->nodeFactory->createPredicateNode();
+            $predicateNode->addNode($wordNode);
+            $wordNode->addNode($predicateNode);
+        } else {
+            $predicateNode = $predicateNodes[0];
+        }
 
-        return $this->makePredicate($node);
+        return $this->makePredicate($predicateNode);
     }
     
     public function providePredicatesByArgument(node\IArgument $argumentNode)

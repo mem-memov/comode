@@ -4,12 +4,15 @@ namespace Comode\syntax;
 final class QuestionFactory implements IQuestionFactory
 {
     private $nodeFactory;
+    private $wordFactory;
     private $argumentFactory;
     
     public function __construct(
-        node\IFactory $nodeFactory
+        node\IFactory $nodeFactory,
+        IWordFactory $wordFactory
     ) {
         $this->nodeFactory = $nodeFactory;
+        $this->wordFactory = $wordFactory;
     }
     
     public function setArgumentFactory(IArgumentFactory $argumentFactory)
@@ -17,13 +20,25 @@ final class QuestionFactory implements IQuestionFactory
         $this->argumentFactory = $argumentFactory;
     }
     
-    public function provideQuestion($value)
+    public function provideQuestionByWord(node\IWord $wordNode)
     {
-        $questionNode = $this->nodeFactory->createQuestionNode($value);
-
-        $question = $this->makeQuestion($questionNode);
+        $questionNodes = $this->nodeFactory->getQuestionNodes($wordNode);
         
-        return $question;
+        $questionNodeCount = count($questionNodes);
+        
+        if ($questionNodeCount > 1) {
+            throw new exception\WordMayHaveOneQuestion($wordNode, $questionNodeCount);
+        }
+        
+        if ($questionNodeCount == 0) {
+            $questionNode = $this->nodeFactory->createQuestionNode();
+            $questionNode->addNode($wordNode);
+            $wordNode->addNode($questionNode);
+        } else {
+            $questionNode = $questionNodes[0];
+        }
+
+        return $this->makeQuestion($questionNode);
     }
     
     public function provideQuestionsByArgument(node\IArgument $argumentNode)

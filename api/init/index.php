@@ -1,11 +1,14 @@
 <?php
 require __DIR__ . '/../../php/main.php';
 
-$predicate = $syntax->providePredicate('работает');
+$predicateWord = $syntax->provideWord('работать');
+$predicate = $predicateWord->providePredicate();
 
-$question = $syntax->provideQuestion('что');
+$questionWord = $syntax->provideWord('что');
+$question = $questionWord->provideQuestion();
 
-$answer = $syntax->provideAnswer('система');
+$answerWord = $syntax->provideWord('система');
+$answer = $answerWord->provideAnswer();
 
 $argument = $syntax->provideArgument($predicate, $question);
 

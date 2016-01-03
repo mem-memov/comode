@@ -2,6 +2,7 @@
 namespace Comode\syntax\node\type;
 
 use Comode\graph\IFactory as IGraphFactory;
+use Comode\syntax\node\INode;
 
 final class Space implements ISpace
 {
@@ -55,5 +56,29 @@ final class Space implements ISpace
         }
 
         return $this->nodes[$type];
+    }
+    
+    public function findTypeNode(INode $node)
+    {
+        $typeNodes = [];
+        foreach ($this->nodes as $currentTypeNode) {
+            if ($node->hasNode($currentTypeNode)) {
+                $typeNodes[] = $currentTypeNode;
+            }
+        }
+        
+        $typeNodeCount = count($typeNodes);
+        
+        if ($typeNodeCount == 0) {
+            throw new exception\NodeHasNoType($node);
+        }
+        
+        if ($typeNodeCount > 1) {
+            throw new exception\NodeCanNotHaveMultipleTypes($node, $typeNodeCount);
+        }
+        
+        $typeNode = $typeNodes[0];
+        
+        return $typeNode;
     }
 }

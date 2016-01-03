@@ -5,6 +5,7 @@ use Comode\syntax\node\INode;
 
 interface IChecker
 {
+    public function getType(INode $node);
     public function setType(INode $node, $type);
     public function removeType(INode $node, $type);
     public function ofType(INode $node, $type);

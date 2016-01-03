@@ -12,6 +12,13 @@ final class Checker implements IChecker
         $this->typeSpace = $typeSpace;
     }
     
+    public function getType(INode $node)
+    {
+        $typeNode = $this->typeSpace->findTypeNode($node);
+        
+        return $typeNode->getValue();
+    }
+    
     public function setType(INode $node, $type)
     {
         if ($this->ofType($node, $type)) {
