@@ -86,7 +86,7 @@ class Factory implements IFactory
         try {
             $type = $this->checker->getType($predicate);
             if ($type != self::$predicate) {
-                
+                throw new exception\NodeOfWrongType($node->getId(), self::$predicate);
             }
         } catch (NodeHasNoType $exception) {
             $this->checker->setType($predicate, self::$predicate);

@@ -12,7 +12,8 @@ if (!isset($request['value'])) {
         'error' => 'value parameter missing'
     ];
 } else {
-    $predicate = $syntax->providePredicate($request['value']);
+    $predicateWord = $syntax->provideWord($request['value']);
+    $predicate = $predicateWord->providePredicate();
     $response = [
         'predicateId' => $predicate->getId()
     ];
