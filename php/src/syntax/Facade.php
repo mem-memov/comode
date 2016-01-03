@@ -34,6 +34,9 @@ final class Facade extends Factory
 
         parent::__construct(
             $wordFactory, 
+            $predicateFactory,
+            $questionFactory,
+            $answerFactory,
             $argumentFactory, 
             $complimentFactory, 
             $clauseFactory

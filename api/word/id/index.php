@@ -7,15 +7,14 @@ if (isset($_REQUEST['json'])) {
     $request = $_REQUEST;
 }
 
-if (!isset($request['word'])) {
+if (!isset($request['value'])) {
     $response = [
-        'error' => 'word parameter missing'
+        'error' => 'value parameter missing'
     ];
 } else {
-    $predicateWord = $syntax->provideWord($request['word']);
-    $predicate = $predicateWord->providePredicate();
+    $word = $syntax->provideWord($request['value']);
     $response = [
-        'id' => $predicate->getId()
+        'id' => $word->getId(),
     ];
 }
 

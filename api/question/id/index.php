@@ -12,10 +12,10 @@ if (!isset($request['word'])) {
         'error' => 'word parameter missing'
     ];
 } else {
-    $predicateWord = $syntax->provideWord($request['word']);
-    $predicate = $predicateWord->providePredicate();
+    $questionWord = $syntax->provideWord($request['word']);
+    $question = $questionWord->provideQuestion();
     $response = [
-        'id' => $predicate->getId()
+        'id' => $question->getId()
     ];
 }
 

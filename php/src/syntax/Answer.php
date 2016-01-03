@@ -3,15 +3,18 @@ namespace Comode\syntax;
 
 final class Answer implements IAnswer
 {
-    private  $complimentFactory;
-    private  $node;
+    private $wordFactory;
+    private $complimentFactory;
+    private $node;
 
     public function __construct(
+        IWordFactory $wordFactory,
         IComplimentFactory $complimentFactory, 
         node\IAnswer $node
     ) {
-        $this->node = $node;
+        $this->wordFactory = $wordFactory;
         $this->complimentFactory = $complimentFactory;
+        $this->node = $node;
     }
     
     public function getId()

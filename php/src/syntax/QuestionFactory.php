@@ -20,6 +20,12 @@ final class QuestionFactory implements IQuestionFactory
         $this->argumentFactory = $argumentFactory;
     }
     
+    public function fetchQuestion($id)
+    {
+        $questionNode = $this->nodeFactory->fetchQuestionNode($id);
+        return $this->makeQuestion($questionNode);
+    }
+    
     public function provideQuestionByWord(node\IWord $wordNode)
     {
         $questionNodes = $this->nodeFactory->getQuestionNodes($wordNode);
@@ -56,6 +62,10 @@ final class QuestionFactory implements IQuestionFactory
     
     private function makeQuestion(node\IQuestion $questionNode)
     {
-        return new Question($this->argumentFactory, $questionNode);
+        return new Question(
+            $this->wordFactory, 
+            $this->argumentFactory, 
+            $questionNode
+        );
     }
 }

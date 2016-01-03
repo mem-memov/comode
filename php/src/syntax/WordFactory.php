@@ -36,6 +36,12 @@ final class WordFactory implements IWordFactory
         return $word;
     }
     
+    public function fetchWord($id)
+    {
+        $wordNode = $this->nodeFactory->fetchWordNode($id);
+        return $this->makeWord($wordNode);
+    }
+    
     public function provideWordByPredicate(node\IPredicate $predicateNode)
     {
         $wordNodes = $this->nodeFactory->getWordNodes($predicateNode);

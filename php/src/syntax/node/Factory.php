@@ -41,6 +41,20 @@ class Factory implements IFactory
         return $word;
     }
     
+    public function fetchWordNode($id)
+    {
+        $node = $this->graphFactory->makeNode($id);
+        
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$word);
+        $word = new $class($node);
+
+        if (!$this->checker->ofType($word, self::$word)) {
+            throw new exception\NodeOfWrongType($id, self::$word);
+        }
+
+        return $word;
+    }
+    
     public function getWordNodes(INode $node)
     {
         $class = __NAMESPACE__ . '\\'. ucfirst(self::$word);
@@ -95,6 +109,20 @@ class Factory implements IFactory
         return $predicate;
     }
     
+    public function fetchPredicateNode($id)
+    {
+        $node = $this->graphFactory->makeNode($id);
+        
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$predicate);
+        $predicate = new $class($node);
+
+        if (!$this->checker->ofType($predicate, self::$predicate)) {
+            throw new exception\NodeOfWrongType($id, self::$predicate);
+        }
+
+        return $predicate;
+    }
+    
     public function getPredicateNodes(INode $node)
     {
         $class = __NAMESPACE__ . '\\'. ucfirst(self::$predicate);
@@ -123,6 +151,20 @@ class Factory implements IFactory
         $node = $this->graphFactory->makeNode();
         $question = new $class($node);
         $this->checker->setType($question, self::$question);
+
+        return $question;
+    }
+    
+    public function fetchQuestionNode($id)
+    {
+        $node = $this->graphFactory->makeNode($id);
+        
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$question);
+        $question = new $class($node);
+
+        if (!$this->checker->ofType($question, self::$question)) {
+            throw new exception\NodeOfWrongType($id, self::$question);
+        }
 
         return $question;
     }
@@ -161,6 +203,20 @@ class Factory implements IFactory
         $node = $this->graphFactory->makeNode();
         $answer = new $class($node);
         $this->checker->setType($answer, self::$answer);
+
+        return $answer;
+    }
+
+    public function fetchAnswerNode($id)
+    {
+        $node = $this->graphFactory->makeNode($id);
+        
+        $class = __NAMESPACE__ . '\\'. ucfirst(self::$answer);
+        $answer = new $class($node);
+
+        if (!$this->checker->ofType($answer, self::$answer)) {
+            throw new exception\NodeOfWrongType($id, self::$answer);
+        }
 
         return $answer;
     }

@@ -19,6 +19,12 @@ final class PredicateFactory implements IPredicateFactory
     {
         $this->argumentFactory = $argumentFactory;
     }
+    
+    public function fetchPredicate($id)
+    {
+        $predicateNode = $this->nodeFactory->fetchPredicateNode($id);
+        return $this->makePredicate($predicateNode);
+    }
 
     public function providePredicateByWord(node\IWord $wordNode)
     {
@@ -56,6 +62,10 @@ final class PredicateFactory implements IPredicateFactory
     
     private function makePredicate(node\IPredicate $node)
     {
-        return new Predicate($this->argumentFactory, $node);
+        return new Predicate(
+            $this->wordFactory, 
+            $this->argumentFactory, 
+            $node
+        );
     }
 }

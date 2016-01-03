@@ -7,6 +7,7 @@ interface IWordFactory
     public function setQuestionFactory(IQuestionFactory $questionFactory);
     public function setAnswerFactory(IAnswerFactory $answerFactory);
     public function provideWord($value);
+    public function fetchWord($id);
     public function provideWordByPredicate(node\IPredicate $predicateNode);
     public function provideWordByQuestion(node\IQuestion $questionNode);
     public function provideWordByAnswer(node\IAnswer $answerNode);

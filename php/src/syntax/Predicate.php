@@ -3,13 +3,16 @@ namespace Comode\syntax;
 
 final class Predicate implements IPredicate
 {
+    private $wordFactory;
     private $argumentFactory;
     private $node;
 
     public function __construct(
+        IWordFactory $wordFactory,
         IArgumentFactory $argumentFactory,
         node\IPredicate $node
     ) {
+        $this->wordFactory = $wordFactory;
         $this->argumentFactory = $argumentFactory;
         $this->node = $node;
     }

@@ -20,6 +20,12 @@ final class AnswerFactory implements IAnswerFactory
         $this->complimentFactory = $complimentFactory;
     }
     
+    public function fetchAnswer($id)
+    {
+        $answerNode = $this->nodeFactory->fetchAnswerNode($id);
+        return $this->makeAnswer($answerNode);
+    }
+    
     public function provideAnswerByWord(node\IWord $wordNode)
     {
         $answerNodes = $this->nodeFactory->getAnswerNodes($wordNode);
@@ -56,6 +62,10 @@ final class AnswerFactory implements IAnswerFactory
     
     private function makeAnswer(node\IAnswer $answerNode)
     {
-        return new Answer($this->complimentFactory, $answerNode);
+        return new Answer(
+            $this->wordFactory, 
+            $this->complimentFactory, 
+            $answerNode
+        );
     }
 }
