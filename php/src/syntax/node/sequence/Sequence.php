@@ -106,7 +106,7 @@ abstract class Sequence implements ISequence
         
         $lastPreviousNodes = [];
         foreach ($previousNodes as $previousNode) {
-            
+           
             $nextNodes = $this->filter->byType($previousNode, self::$next, $nextClass);
             
             $nextNodeCount = count($nextNodes);
@@ -299,7 +299,7 @@ abstract class Sequence implements ISequence
 
             $nextNode = $this->makeNextNode();
             $previousNode = $this->makePreviousNode();
-            
+
             $nextNode->addNode($previousNode);
             $previousNode->addNode($nextNode);
             

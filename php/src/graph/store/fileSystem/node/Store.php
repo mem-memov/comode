@@ -49,6 +49,10 @@ class Store implements IStore
     public function getValue($nodeId)
     {
         $nodeIndexDirectory = $this->valueIndex->directory($nodeId);
+        
+        if (!$nodeIndexDirectory->exists()) {
+            return null;
+        }
 
         $links = $nodeIndexDirectory->links();
 
