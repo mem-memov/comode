@@ -1,5 +1,5 @@
 <?php
-namespace Comode\syntax\node\sequence\malformed\exception;
+namespace Comode\syntax\node\sequence\exception\malformed;
 
 use Comode\syntax\node\INode;
 

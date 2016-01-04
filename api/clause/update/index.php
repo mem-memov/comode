@@ -7,21 +7,20 @@ if (isset($_REQUEST['json'])) {
     $request = $_REQUEST;
 }
 
-if (!isset($request['predicate'])) {
+if (!isset($request['id'])) {
     $response = [
-        'error' => 'predicate parameter missing'
+        'error' => 'id parameter missing'
     ];
-} elseif (!isset($request['question'])) {
+}elseif (!isset($request['question'])) {
     $response = [
         'error' => 'question parameter missing'
     ];
-} elseif (!isset($request['answer'])) {
+}elseif (!isset($request['answer'])) {
     $response = [
         'error' => 'answer parameter missing'
     ];
 } else {
-    $predicateWord = $syntax->provideWord($request['predicate']);
-    $predicate = $predicateWord->providePredicate();
+    $clause = $syntax->fetchClause($request['id']);
     
     $questionWord = $syntax->provideWord($request['question']);
     $question = $questionWord->provideQuestion();
@@ -29,11 +28,15 @@ if (!isset($request['predicate'])) {
     $answerWord = $syntax->provideWord($request['answer']);
     $answer = $answerWord->provideAnswer();
     
+    $firstCompliment = $clause->provideFirstCompliment();
+    $firstArgument = $firstCompliment->provideArgument();
+    $predicate = $firstArgument->providePredicate();
+    
     $argument = $syntax->provideArgument($predicate, $question);
     
     $compliment = $syntax->provideCompliment($argument, $answer);
 
-    $clause = $syntax->createClause([$compliment]);
+    $clause->addCompliment($compliment);
     
     $response = [
         'id' => $clause->getId()

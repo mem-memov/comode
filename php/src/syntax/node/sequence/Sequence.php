@@ -167,7 +167,7 @@ abstract class Sequence implements ISequence
         
         $originNextNodes = [];
         foreach ($nextNodes as $nextNode) {
-            if ($nextNode->has($originNode)) {
+            if ($nextNode->hasNode($originNode)) {
                 $originNextNodes[] = $nextNode;
             }
         }
@@ -224,7 +224,7 @@ abstract class Sequence implements ISequence
         
         $originPreviousNodes = [];
         foreach ($previousNodes as $previousNode) {
-            if ($previousNode->has($originNode)) {
+            if ($previousNode->hasNode($originNode)) {
                 $originPreviousNodes[] = $previousNode;
             }
         }
